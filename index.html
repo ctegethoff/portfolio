@@ -6,54 +6,55 @@
   <title>Chris Tegethoff Portfolio</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/homepage.css" />
+  <style>
+    @media (max-width: 768px) {
+      .hero-image.mobile {
+        display: block;
+        width: 100%;
+        height: auto;
+      }
+      .hero-image.desktop {
+        display: none;
+      }
+      .carousel-controls button {
+        background: none;
+        border: none;
+        width: 48px;
+        height: 48px;
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+      }
+      #prevBtn {
+        background-image: url('left_arrow.svg');
+      }
+      #nextBtn {
+        background-image: url('right_arrow.svg');
+      }
+      .carousel-controls {
+        align-items: center;
+      }
+      .carousel-container {
+        text-align: center;
+      }
+      .footer {
+        text-align: center;
+      }
+      .footer a {
+        text-decoration: underline;
+      }
+    }
+  </style>
 </head>
 <body>
-  <header class="hero" id="heroPanel" onclick="togglePanel()">
-    <div id="panelContainer" style="width: 100%; height: 100%; position: relative;">
-      <img class="hero-image" id="panelImage" src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746214685/panel_1_mnuf4g.svg" alt="Hero graphic" style="width: 100%; height: 100%; object-fit: cover; cursor: pointer;" />
-    </div>
+  <header class="hero">
+    <img class="hero-image mobile" src="brain.svg" alt="Hero mobile graphic" />
   </header>
 
-  <script>
-  let panelIndex = 0;
-  const panelContainer = document.getElementById("panelContainer");
-
-  const panels = [
-    `<img class="hero-image" id="panelImage" src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746214685/panel_1_mnuf4g.svg" alt="Hero graphic" style="width: 100%; height: 100%; object-fit: cover; cursor: pointer; transition: transform 0.5s ease; transform: translateX(100%);" />`,
-
-    `<div style="position: relative; width: 100%; height: 100%;">
-  <video muted loop playsinline autoplay style="width: 100%; height: auto; z-index: 0;">
-    <source src="https://res.cloudinary.com/dlbnlilfj/video/upload/v1746251899/panel_2_tn3y2f.mp4" type="video/mp4">
-  </video>
-  <div class="overlay-text" style="position: absolute; z-index: 1; top: 0%; left: 0%; width: 100%; color: white; font-family: 'Montserrat', sans-serif; font-weight: 400;">
-    <img class="hero-image" id="panelImage" src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746372364/Panel_2_text_jacy08.svg" alt="Hero graphic" />
-  </div>
-</div>`,
-
-    `<img class="hero-image" src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746214687/panel_3_xtkepd.svg" alt="Hero graphic" style="width: 100%; height: 100%; object-fit: cover; cursor: pointer; transition: transform 0.5s ease; transform: translateX(100%);" />`
-  ];
-
-  function togglePanel() {
-    panelIndex = (panelIndex + 1) % panels.length;
-    panelContainer.innerHTML = panels[panelIndex];
-    requestAnimationFrame(() => {
-      const children = panelContainer.children;
-      for (let i = 0; i < children.length; i++) {
-        const el = children[i];
-        if (el.tagName === 'VIDEO' || el.tagName === 'IMG' || el.tagName === 'DIV') {
-          el.style.transform = 'translateX(100%)';
-          requestAnimationFrame(() => {
-            el.style.transition = 'transform 0.5s ease';
-            el.style.transform = 'translateX(0)';
-          });
-        }
-      }
-    });
-  }
-</script>
-
   <main class="section">
-    <h2 class="projects-title" style="text-align: left; padding-left: 0;">Projects</h2>
+    <h2 class="projects-title">Projects <span id="carousel-indicator">(1 of X)</span></h2>
+
+    <!-- Desktop grid layout -->
     <div class="grid">
       <div class="thumbnail">
         <a href="ads_dp.html"><img src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746214686/thumbnail_1_eni5er.webp" alt="Roku Ad Platform"></a>
@@ -63,51 +64,67 @@
         <a href="notifications_dp.html"><img src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746214687/thumbnail_2_sbr6pz.webp" alt="Notifications Framework"></a>
         <p>Notifications Framework</p>
       </div>
-      <div class="thumbnail">
-        <a href="roku_os_dp.html"><img src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746214687/thumbnail_3_lk0csu.webp" alt="Roku OS"></a>
-        <p>Roku OS</p>
-      </div>
-      <div class="thumbnail">
-        <a href="nike_os_dp.html"><img src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746214687/thumbnail_4_sfjdnq.webp" alt="Nike Training OS"></a>
-        <p>Nike Training OS</p>
-      </div>
-      <div class="thumbnail">
-        <a href="ftux_dp.html"><img src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746214687/thumbnail_5_mxttyb.webp" alt="FTUX Google Play Games"></a>
-        <p>FTUX Google Play Games</p>
-      </div>
-      <div class="thumbnail">
-        <a href="settings_dp.html"><img src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746214688/thumbnail_6_vktn9n.webp" alt="Settings Over Video"></a>
-        <p>Settings Over Video</p>
-      </div>
-      <div class="thumbnail">
-        <a href="misc_projects.html"><img src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746214688/thumbnail_7_vl5w9l.webp" alt="Misc UX"></a>
-        <p>Misc UX</p>
-      </div>
-      <div class="thumbnail">
-        <img src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746214688/thumbnail_8_isquni.webp" alt="AI In-game Help">
-        <p>AI In-game Help</p>
+    </div>
+
+    <!-- Mobile carousel layout -->
+    <div class="carousel-container">
+      <div class="carousel-controls">
+        <button id="prevBtn"></button>
+        <div class="carousel">
+          <div class="carousel-item">
+            <a href="ads_dp.html"><img src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746214686/thumbnail_1_eni5er.webp" alt="Roku Ad Platform"></a>
+            <p>Roku Ad Platform</p>
+          </div>
+          <div class="carousel-item">
+            <a href="notifications_dp.html"><img src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746214687/thumbnail_2_sbr6pz.webp" alt="Notifications Framework"></a>
+            <p>Notifications Framework</p>
+          </div>
+        </div>
+        <button id="nextBtn"></button>
       </div>
     </div>
   </main>
 
   <footer class="footer section">
-    <div style="color: var(--grey); font-size: 24pt; font-weight: 400; margin-bottom: 32px;">Contact</div>
-    <div style="font-size: 24pt; font-weight: 400; line-height: 1.5;">
-      Chris Tegethoff<br />
-      <a href="mailto:ctegethoff@gmail.com" style="color: var(--white); text-decoration: none;">ctegethoff@gmail.com</a><br />
+    <div>Chris Tegethoff<br />
+      <a href="mailto:ctegethoff@gmail.com">ctegethoff@gmail.com</a><br />
       503-806-1461
     </div>
-    <div style="margin-top: 40px; font-size: 24pt; font-weight: 400;">
-      <a href="https://drive.google.com/file/d/1bOVBcVUzmDVa5FMh-eLXwv2CFx6ZV5Tc/view?usp=sharing" target="_blank" style="color: var(--white); text-decoration: none;">Resume (PDF)</a>
-      <div style="margin-top: 34.5px; display: flex; gap: 32px; align-items: center;">
+    <div style="margin-top: 20px;">
+      <a href="https://drive.google.com/file/d/1bOVBcVUzmDVa5FMh-eLXwv2CFx6ZV5Tc/view?usp=sharing" target="_blank">Resume (PDF)</a>
+      <div style="margin-top: 20px; display: flex; justify-content: center; gap: 20px;">
         <a href="https://www.linkedin.com/in/chris-t-0430222/" target="_blank">
-          <img src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746214685/LinkedIn_tumvhy.svg" alt="LinkedIn" width="48">
+          <img src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746214685/LinkedIn_tumvhy.svg" alt="LinkedIn" width="40">
         </a>
         <a href="https://dribbble.com/ChrisTegethoff" target="_blank">
-          <img src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746214685/Dribble_dn2j06.svg" alt="Dribbble" width="48">
+          <img src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746214685/Dribble_dn2j06.svg" alt="Dribbble" width="40">
         </a>
       </div>
     </div>
   </footer>
+
+  <script>
+    const carousel = document.querySelector('.carousel');
+    const items = document.querySelectorAll('.carousel-item');
+    const indicator = document.getElementById('carousel-indicator');
+    let currentIndex = 0;
+
+    function updateCarousel() {
+      carousel.style.transform = `translateX(-${currentIndex * 100}%)`;
+      indicator.textContent = `( ${currentIndex + 1} of ${items.length} )`;
+    }
+
+    document.getElementById('prevBtn').addEventListener('click', () => {
+      currentIndex = (currentIndex - 1 + items.length) % items.length;
+      updateCarousel();
+    });
+
+    document.getElementById('nextBtn').addEventListener('click', () => {
+      currentIndex = (currentIndex + 1) % items.length;
+      updateCarousel();
+    });
+
+    updateCarousel();
+  </script>
 </body>
 </html>
