@@ -8,13 +8,56 @@
   <link rel="stylesheet" href="css/homepage.css" />
   <style>
     @media (max-width: 768px) {
+      .hero {
+        display: none;
+      }
+      .mobile-hero {
+        display: block;
+        width: 100%;
+      }
       .projects-title {
         text-align: left;
         padding: 0 16px;
         margin-bottom: 12px;
       }
+      .carousel-item {
+        padding: 0 16px;
+      }
+      .carousel-item img {
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        object-fit: cover;
+        display: block;
+        margin: 0 auto;
+      }
       .carousel-item p {
-        padding-left: 16px;
+        padding-top: 12px;
+        font-size: 18px;
+      }
+      .carousel-controls {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 16px;
+      }
+      #prevBtn {
+        background-image: url('https://res.cloudinary.com/dlbnlilfj/image/upload/v1746465207/left_arrow_u9u3jw.svg');
+      }
+      #nextBtn {
+        background-image: url('https://res.cloudinary.com/dlbnlilfj/image/upload/v1746465207/right_arrow_uiefwc.svg');
+      }
+      .carousel-controls button {
+        background: none;
+        border: none;
+        width: 32px;
+        height: 32px;
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+      }
+      #carousel-indicator {
+        font-size: 16px;
+        font-weight: 400;
       }
       .footer {
         padding: 40px 16px;
@@ -24,19 +67,21 @@
         text-decoration: none;
         color: inherit;
       }
-      #prevBtn {
-        background-image: url('https://res.cloudinary.com/dlbnlilfj/image/upload/v1746465207/left_arrow_u9u3jw.svg');
-      }
-      #nextBtn {
-        background-image: url('https://res.cloudinary.com/dlbnlilfj/image/upload/v1746465207/right_arrow_uiefwc.svg');
+    }
+    @media (min-width: 769px) {
+      .mobile-hero {
+        display: none;
       }
     }
   </style>
 </head>
 <body>
-  <header class="hero">
-    <img class="hero-image mobile" src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746465207/brain_ccdisp.svg" alt="Hero mobile graphic" />
+  <header class="hero" id="heroPanel" onclick="togglePanel()">
+    <div id="panelContainer" style="width: 100%; height: 100%; position: relative;">
+      <img class="hero-image" id="panelImage" src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746214685/panel_1_mnuf4g.svg" alt="Hero graphic" style="width: 100%; height: 100%; object-fit: cover; cursor: pointer;" />
+    </div>
   </header>
+  <img class="mobile-hero" src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746465207/brain_ccdisp.svg" alt="Hero mobile graphic" />
 
   <main class="section">
     <h2 class="projects-title">Projects <span id="carousel-indicator">(1 of X)</span></h2>
@@ -57,17 +102,17 @@
     <div class="carousel-container">
       <div class="carousel-controls">
         <button id="prevBtn"></button>
-        <div class="carousel">
-          <div class="carousel-item">
-            <a href="ads_dp.html"><img src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746214686/thumbnail_1_eni5er.webp" alt="Roku Ad Platform"></a>
-            <p>Roku Ad Platform</p>
-          </div>
-          <div class="carousel-item">
-            <a href="notifications_dp.html"><img src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746214687/thumbnail_2_sbr6pz.webp" alt="Notifications Framework"></a>
-            <p>Notifications Framework</p>
-          </div>
-        </div>
         <button id="nextBtn"></button>
+      </div>
+      <div class="carousel">
+        <div class="carousel-item">
+          <a href="ads_dp.html"><img src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746214686/thumbnail_1_eni5er.webp" alt="Roku Ad Platform"></a>
+          <p>Roku Ad Platform</p>
+        </div>
+        <div class="carousel-item">
+          <a href="notifications_dp.html"><img src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746214687/thumbnail_2_sbr6pz.webp" alt="Notifications Framework"></a>
+          <p>Notifications Framework</p>
+        </div>
       </div>
     </div>
   </main>
@@ -112,6 +157,17 @@
     });
 
     updateCarousel();
+
+    function togglePanel() {
+      const panelImages = [
+        "https://res.cloudinary.com/dlbnlilfj/image/upload/v1746214685/panel_1_mnuf4g.svg",
+        "https://res.cloudinary.com/dlbnlilfj/image/upload/v1746372364/Panel_2_text_jacy08.svg",
+        "https://res.cloudinary.com/dlbnlilfj/image/upload/v1746214687/panel_3_xtkepd.svg"
+      ];
+      panelIndex = (panelIndex + 1) % panelImages.length;
+      document.getElementById("panelImage").src = panelImages[panelIndex];
+    }
+    let panelIndex = 0;
   </script>
 </body>
 </html>
