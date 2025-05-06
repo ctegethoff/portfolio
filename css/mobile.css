@@ -1,121 +1,72 @@
-/* ========== VARIABLES ========== */
+/* ========== MOBILE DETAIL PAGE STYLES ========== */
+
 :root {
   --dark: #202022;
-  --grey: #64646A;
-  --white: #FFFFFF;
-}
-
-/* ========== BASE RESET ========== */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+  --white: #ffffff;
 }
 
 body {
   font-family: 'Montserrat', sans-serif;
-  font-size: 18pt;
+  font-size: 15pt;
   background-color: var(--white);
   color: var(--dark);
-  line-height: 1.5;
+  margin: 0;
 }
 
-/* ========== TOP CAP ========== */
-.top-cap {
-  position: fixed;
-  top: 0;
-  left: 0;
+.text-block {
+  max-width: 512px;
+  margin: 32px auto 32px 50px;
+  font-size: 15pt;
+}
+
+.top-cap,
+.bottom-cap {
   height: 80px;
   width: 100%;
   background-color: var(--dark);
-  z-index: 100;
-  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.top-cap-inner,
+.bottom-cap-inner {
+  width: 100%;
+  max-width: 640px;
   display: flex;
   align-items: center;
-  padding: 0 30px;
 }
 
-.top-cap::before {
-  content: '';
+.back-arrow {
   width: 32px;
   height: 32px;
-  background: url('https://res.cloudinary.com/dlbnlilfj/image/upload/v1746471566/back_arrow_mxfrl6.svg') no-repeat center center;
-  background-size: contain;
+  cursor: pointer;
+  padding-left: 24px;
 }
 
-/* Invisible spacer below fixed top-cap */
-.header-spacer {
-  height: 80px;
-}
-
-/* ========== LAYOUT ========== */
-.title-section {
-  width: 100%;
-  height: auto;
-  background-size: cover;
-  background-position: center;
-}
-
-/* Main content layout */
-.content {
-  padding: 0;
-}
-
-/* Full-width sections */
 .highlight {
   display: flex;
   flex-direction: column;
-  margin-bottom: 60px;
 }
 
-/* Full bleed media */
 .media img,
 .media video {
   width: 100%;
   height: auto;
   display: block;
-  object-fit: cover;
-}
-
-/* Centered media (non-full-bleed) */
-.media .centered-media {
-  display: block;
+  max-width: 640px;
   margin: 0 auto;
-  max-width: 100%;
-  object-fit: contain;
 }
 
-/* Text block */
-.text {
-  padding: 30px;
+.title-section {
+  width: 100%;
+  background-size: cover;
+  background-position: center;
 }
 
-/* Ensure all videos autoplay inline */
-video {
-  autoplay: true;
-  muted: true;
-  loop: true;
-  playsinline: true;
-}
-
-/* ========== OPTIONAL: MEDIA QUERIES FOR TABLET-UP ========== */
 @media (min-width: 768px) {
-  .highlight {
-    flex-direction: row;
-    column-gap: 42px;
-    align-items: center;
-  }
-
-  .highlight:nth-of-type(even) {
-    flex-direction: row-reverse;
-  }
-
-  .media {
-    max-width: 640px;
-  }
-
-  .text {
-    max-width: 580px;
-    padding: 60px;
+  .text-block {
+    font-size: 16pt;
+    margin: 32px auto;
   }
 }
