@@ -48,10 +48,11 @@
       margin: 0 auto;
     }
     .misc-image-wrapper img {
-  width: 100%;
-  height: auto;
-  display: block;
-}
+      width: 100%;
+      height: auto;
+      display: block;
+      transition: transform 200ms ease-in-out;
+    }
     .hover-overlay {
       position: absolute;
       top: 0;
@@ -75,17 +76,17 @@
       font-size: 70pt;
       font-weight: 400;
     }
-  .misc-image-wrapper img {
-  transition: transform 200ms ease-in-out;
-}
-
-</style>
+  </style>
 </head>
 <body>
   <div class="top-cap">
     <div class="close-button" onclick="window.location.href='index.html'"></div>
   </div>
   <div class="misc-container">
+    <div class="misc-image-wrapper">
+      <img src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746736301/iot-smart-home-ux_pch1h9.webp" alt="IOT Mobile App" />
+      <div class="hover-overlay"><span>IOT Mobile App</span></div>
+    </div>
     <div class="misc-image-wrapper">
       <img src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746215240/MS_Surface_Music_App_drtojj.webp" alt="MS Surface Music App" />
       <div class="hover-overlay"><span>MS Surface Music App</span></div>
@@ -126,5 +127,3 @@
   <div style="width: 100%; max-width: 1440px; margin: 100px auto;">
     <img src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746215250/THE_END_dylo5r.svg" alt="The End" style="width: 100%; height: auto; display: block;" />
   </div>
-</body>
-</html>
