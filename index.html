@@ -4,8 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Chris Tegethoff Portfolio</title>
-  <link rel="stylesheet" href="css/homepage.css" />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/homepage.css" />
 </head>
 <body>
   <header class="hero" id="heroPanel" onclick="togglePanel()">
@@ -15,70 +15,78 @@
   </header>
 
   <script>
-    let panelIndex = 0;
-    const panelContainer = document.getElementById("panelContainer");
+  let panelIndex = 0;
+  const panelContainer = document.getElementById("panelContainer");
 
-    const panels = [
-      `<img class="hero-image" id="panelImage" src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746214685/panel_1_mnuf4g.svg" alt="Hero graphic" style="width: 100%; height: 100%; object-fit: cover; cursor: pointer; transition: transform 0.5s ease; transform: translateX(100%);" />`,
-      `<div style="position: relative; width: 100%; height: 100%;">
-        <video muted loop playsinline autoplay style="width: 100%; height: auto; z-index: 0;">
-          <source src="https://res.cloudinary.com/dlbnlilfj/video/upload/v1746251899/panel_2_tn3y2f.mp4" type="video/mp4">
-        </video>
-        <div class="overlay-text" style="position: absolute; z-index: 1; top: 0%; left: 0%; width: 100%; color: white; font-family: 'Montserrat', sans-serif; font-weight: 400;">
-          <img class="hero-image" id="panelImage" src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746372364/Panel_2_text_jacy08.svg" alt="Hero graphic" />
-        </div>
-      </div>`,
-      `<img class="hero-image" src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746214687/panel_3_xtkepd.svg" alt="Hero graphic" style="width: 100%; height: 100%; object-fit: cover; cursor: pointer; transition: transform 0.5s ease; transform: translateX(100%);" />`
-    ];
+  const panels = [
+    `<img class="hero-image" id="panelImage" src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746214685/panel_1_mnuf4g.svg" alt="Hero graphic" style="width: 100%; height: 100%; object-fit: cover; cursor: pointer; transition: transform 0.5s ease; transform: translateX(100%);" />`,
 
-    function togglePanel() {
-      panelIndex = (panelIndex + 1) % panels.length;
-      panelContainer.innerHTML = panels[panelIndex];
-      requestAnimationFrame(() => {
-        const children = panelContainer.children;
-        for (let i = 0; i < children.length; i++) {
-          const el = children[i];
-          if (el.tagName === 'VIDEO' || el.tagName === 'IMG' || el.tagName === 'DIV') {
-            el.style.transform = 'translateX(100%)';
-            requestAnimationFrame(() => {
-              el.style.transition = 'transform 0.5s ease';
-              el.style.transform = 'translateX(0)';
-            });
-          }
+    `<div style="position: relative; width: 100%; height: 100%;">
+  <video muted loop playsinline autoplay style="width: 100%; height: auto; z-index: 0;">
+    <source src="https://res.cloudinary.com/dlbnlilfj/video/upload/v1746251899/panel_2_tn3y2f.mp4" type="video/mp4">
+  </video>
+  <div class="overlay-text" style="position: absolute; z-index: 1; top: 0%; left: 0%; width: 100%; color: white; font-family: 'Montserrat', sans-serif; font-weight: 400;">
+    <img class="hero-image" id="panelImage" src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746372364/Panel_2_text_jacy08.svg" alt="Hero graphic" />
+  </div>
+</div>`,
+
+    `<img class="hero-image" src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746214687/panel_3_xtkepd.svg" alt="Hero graphic" style="width: 100%; height: 100%; object-fit: cover; cursor: pointer; transition: transform 0.5s ease; transform: translateX(100%);" />`
+  ];
+
+  function togglePanel() {
+    panelIndex = (panelIndex + 1) % panels.length;
+    panelContainer.innerHTML = panels[panelIndex];
+    requestAnimationFrame(() => {
+      const children = panelContainer.children;
+      for (let i = 0; i < children.length; i++) {
+        const el = children[i];
+        if (el.tagName === 'VIDEO' || el.tagName === 'IMG' || el.tagName === 'DIV') {
+          el.style.transform = 'translateX(100%)';
+          requestAnimationFrame(() => {
+            el.style.transition = 'transform 0.5s ease';
+            el.style.transform = 'translateX(0)';
+          });
         }
-      });
-    }
-  </script>
+      }
+    });
+  }
+</script>
 
   <main class="section">
-    <h2 class="projects-title">Projects</h2>
-
-    <!-- Mobile Carousel -->
-    <div class="carousel-container">
-      <div class="carousel-track" id="carouselTrack">
-        <div class="carousel-item"><img src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746214686/thumbnail_1_eni5er.webp" alt="Roku Ad Platform"><p>Roku Ad Platform</p></div>
-        <div class="carousel-item"><img src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746214687/thumbnail_2_sbr6pz.webp" alt="Notifications Framework"><p>Notifications Framework</p></div>
-        <div class="carousel-item"><img src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746214687/thumbnail_3_lk0csu.webp" alt="Roku OS"><p>Roku OS</p></div>
-        <div class="carousel-item"><img src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746214687/thumbnail_4_sfjdnq.webp" alt="Nike Training OS"><p>Nike Training OS</p></div>
-        <div class="carousel-item"><img src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746214687/thumbnail_5_mxttyb.webp" alt="FTUX"><p>FTUX Google Play Games</p></div>
-        <div class="carousel-item"><img src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746214688/thumbnail_6_vktn9n.webp" alt="Settings"><p>Settings Over Video</p></div>
-        <div class="carousel-item"><img src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746214688/thumbnail_7_vl5w9l.webp" alt="Misc UX"><p>Misc UX</p></div>
-      </div>
-      <div class="carousel-controls">
-        <button onclick="moveCarousel(-1)">&larr;</button>
-        <button onclick="moveCarousel(1)">&rarr;</button>
-      </div>
-    </div>
-
-    <!-- Desktop Grid -->
+    <h2 class="projects-title" style="text-align: left; padding-left: 0;">Projects</h2>
     <div class="grid">
-      <div class="thumbnail"><a href="ads_dp.html"><img src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746214686/thumbnail_1_eni5er.webp" alt="Roku Ad Platform"></a><p>Roku Ad Platform</p></div>
-      <div class="thumbnail"><a href="notifications_dp.html"><img src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746214687/thumbnail_2_sbr6pz.webp" alt="Notifications Framework"></a><p>Notifications Framework</p></div>
-      <div class="thumbnail"><a href="roku_os_dp.html"><img src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746214687/thumbnail_3_lk0csu.webp" alt="Roku OS"></a><p>Roku OS</p></div>
-      <div class="thumbnail"><a href="nike_os_dp.html"><img src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746214687/thumbnail_4_sfjdnq.webp" alt="Nike Training OS"></a><p>Nike Training OS</p></div>
-      <div class="thumbnail"><a href="ftux_dp.html"><img src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746214687/thumbnail_5_mxttyb.webp" alt="FTUX"></a><p>FTUX Google Play Games</p></div>
-      <div class="thumbnail"><a href="settings_dp.html"><img src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746214688/thumbnail_6_vktn9n.webp" alt="Settings"></a><p>Settings Over Video</p></div>
-      <div class="thumbnail"><a href="misc_projects.html"><img src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746214688/thumbnail_7_vl5w9l.webp" alt="Misc UX"></a><p>Misc UX</p></div>
+      <div class="thumbnail">
+        <a href="ads_dp.html"><img src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746214686/thumbnail_1_eni5er.webp" alt="Roku Ad Platform"></a>
+        <p>Roku Ad Platform</p>
+      </div>
+      <div class="thumbnail">
+        <a href="notifications_dp.html"><img src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746214687/thumbnail_2_sbr6pz.webp" alt="Notifications Framework"></a>
+        <p>Notifications Framework</p>
+      </div>
+      <div class="thumbnail">
+        <a href="roku_os_dp.html"><img src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746214687/thumbnail_3_lk0csu.webp" alt="Roku OS"></a>
+        <p>Roku OS</p>
+      </div>
+      <div class="thumbnail">
+        <a href="nike_os_dp.html"><img src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746214687/thumbnail_4_sfjdnq.webp" alt="Nike Training OS"></a>
+        <p>Nike Training OS</p>
+      </div>
+      <div class="thumbnail">
+        <a href="ftux_dp.html"><img src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746214687/thumbnail_5_mxttyb.webp" alt="FTUX Google Play Games"></a>
+        <p>FTUX Google Play Games</p>
+      </div>
+      <div class="thumbnail">
+        <a href="settings_dp.html"><img src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746214688/thumbnail_6_vktn9n.webp" alt="Settings Over Video"></a>
+        <p>Settings Over Video</p>
+      </div>
+      <div class="thumbnail">
+        <a href="misc_projects.html"><img src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746214688/thumbnail_7_vl5w9l.webp" alt="Misc UX"></a>
+        <p>Misc UX</p>
+      </div>
+      <div class="thumbnail">
+        <img src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746214688/thumbnail_8_isquni.webp" alt="AI In-game Help">
+        <p>AI In-game Help</p>
+      </div>
     </div>
   </main>
 
@@ -97,3 +105,9 @@
         </a>
         <a href="https://dribbble.com/ChrisTegethoff" target="_blank">
           <img src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746214685/Dribble_dn2j06.svg" alt="Dribbble" width="48">
+        </a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
