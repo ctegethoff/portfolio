@@ -1,72 +1,97 @@
-/* Homepage Styles (Mobile and Base) */
-
 :root {
   --dark: #202022;
-  --white: #ffffff;
+  --grey: #64646A;
+  --white: #FFFFFF;
+  --max-width: 1440px;
 }
-
 body {
+  margin: 0;
   font-family: 'Montserrat', sans-serif;
-  font-size: 15pt;
   background-color: var(--white);
   color: var(--dark);
-  margin: 0;
 }
-
-.text-block {
-  max-width: 512px;
-  margin: 32px auto 32px 50px;
-  font-size: 15pt;
-}
-
-.top-cap,
-.bottom-cap {
-  height: 80px;
+.top-cap {
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
+  height: 150px;
   background-color: var(--dark);
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  z-index: 10;
 }
-
-.top-cap-inner,
-.bottom-cap-inner {
-  width: 100%;
-  max-width: 640px;
-  display: flex;
-  align-items: center;
-}
-
-.back-arrow {
-  width: 32px;
-  height: 32px;
+.close-button {
+  position: absolute;
+  top: 48px;
+  right: 48px;
+  width: 52px;
+  height: 52px;
   cursor: pointer;
-  padding-left: 24px;
+  background: url('https://res.cloudinary.com/dlbnlilfj/image/upload/v1745994664/Close_Button_jor3b2.svg') no-repeat center center;
+  background-size: contain;
 }
-
+.close-button:hover {
+  filter: invert(1);
+}
+.title-section {
+  width: 1440px;
+  height: 378px;
+  margin: 150px auto 60px auto;
+  background-size: cover;
+}
+.content {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 60px;
+  box-sizing: border-box;
+}
 .highlight {
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  margin-bottom: 40px;
+  column-gap: 60px;
+  row-gap: 100px;
 }
-
-.media img,
-.media video {
-  width: 100%;
-  height: auto;
-  display: block;
+.highlight .media {
   max-width: 640px;
-  margin: 0 auto;
+  width: 640px;
+}
+.highlight .text {
+  max-width: 580px;
+}
+.highlight:nth-of-type(even) {
+  flex-direction: row-reverse;
+}
+.highlight:nth-of-type(even) .text {
+  text-align: right;
+  padding-right: 16px;
+}
+.highlight:nth-of-type(even) .media {
+  text-align: left;
+}
+.highlight:nth-of-type(odd) .text {
+  text-align: left;
+  padding-left: 16px;
+}
+.highlight:nth-of-type(odd) .media {
+  text-align: right;
 }
 
-.title-section {
-  width: 100%;
-  background-size: cover;
-  background-position: center;
+.highlight img,
+.highlight video,
+.highlight svg {
+  width: auto;
+  max-height: 360px;
+  height: auto;
 }
-
-@media (min-width: 768px) {
-  .text-block {
-    font-size: 16pt;
-    margin: 32px auto;
-  }
+.highlight p {
+  font-size: 19pt;
+  line-height: 1.25;
+}
+.quote {
+  font-size: 28pt;
+  color: rebeccapurple;
+  font-weight: bold;
+  text-align: center;
+  margin: 100px auto;
+  max-width: 800px;
 }
