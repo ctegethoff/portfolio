@@ -76,6 +76,25 @@
       opacity: 0;
       transition: opacity 300ms ease;
     }
+    /* Mobile specific aka <= 640 px */
+    @media (max-width: 640px) {  
+      .top-cap {
+        height: 80px;
+      }
+      .close-button {
+        top: 18px;
+        right: 48px;
+        width: 32px;
+        height: 32px;
+        background: url('https://res.cloudinary.com/dlbnlilfj/image/upload/v1746471566/back_arrow_mxfrl6.svg') no-repeat center center;
+      }
+      .misc-container {
+        margin-top: 80px;
+      }    
+      .misc-image-wrapper {
+        width: 80%;
+      }
+    }
   </style>
 </head>
 <body>

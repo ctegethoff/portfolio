@@ -1,106 +1,136 @@
 :root {
-      --dark: #202022;
-      --grey: #64646A;
-      --white: #FFFFFF;
-      --max-width: 1440px;
-      --gutter: 120px;
-    }
+  --dark: #202022;
+  --grey: #64646A;
+  --white: #FFFFFF;
+  --max-width: 1440px;
+}
+html {
+  display: table;
+  margin: auto;
+}
 
-    body {
-      margin: 0;
-      font-family: 'Montserrat', sans-serif;
-      background-color: var(--white);
-      color: var(--dark);
-    }
+body {
+  display: table-cell;
+  vertical-align: middle;
+  margin: 0 auto;
+  min-width: fit-content;
+  font-family: 'Montserrat', sans-serif;
+  background-color: var(--white);
+  color: var(--dark);
+}
 
-    .section {
-      max-width: var(--max-width);
-      margin: 0 auto;
-      padding: 0 var(--gutter);
-      box-sizing: border-box;
-    }
+.header-panel {
+  max-width: var(--max-width);
+  box-sizing: border-box;
+  width: 100%; 
+  height: 100%; 
+  position: relative;
+}
 
-    .hero {
-      background-color: var(--dark);
-      padding: 0;
-      height: 535px;
-      width: 1440px;
-      max-width: 100%;
-      overflow: hidden;
-      margin: 0 auto;
-      display: flex;
-      justify-content: center;
-    }
+.content {
+  max-width: var(--max-width);
+  box-sizing: border-box;
+}
 
-    .projects-title {
-      font-size: 24pt;
-      font-weight: 400;
-      margin: 120px 0 40px;
-      text-align: center;
-    }
+.hero {
+  background-color: var(--dark);
+  padding: 0;
+  max-width: var(--max-width);
+  width: 100%;
+  height: auto;
+  overflow: hidden;
+  display: flex;
+}
+.hero-image {
+  width: 100%;
+}
 
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      row-gap: 100px;
-      column-gap: 100px;
-      justify-content: center;
-      margin: 60px 0;
-    }
+.projects-title {
+  font-size: 24pt;
+  font-weight: 400;
+  margin: 120px 0 40px;
+  text-align: center;
+}
 
-    .thumbnail {
-      text-align: left;
-    }
+.grid {
+  display: grid;
+}
 
-    .thumbnail img {
-      width: 100%;
-      transition: transform 0.2s ease;
-      transform-origin: center;
-    }
+.thumbnail {
+  text-align: left;
+}
 
-    .thumbnail:hover img {
-      transform: scale(1.30);
-    }
+.thumbnail img {
+  width: 100%;
+  transition: transform 0.2s ease;
+  transform-origin: center;
+}
 
-    .thumbnail p {
-      font-size: 18pt;
-      margin-top: 16px;
-      font-weight: 400;
-    }
+.thumbnail:hover img {
+  transform: scale(1.30);
+}
 
-    .footer {
-      height: 535px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding: 0 var(--gutter);
-      background-color: var(--dark);
-      color: var(--white);
-    }
+.thumbnail p {
+  font-size: 18pt;
+  margin-top: 16px;
+  font-weight: 400;
+}
 
-    .footer a:hover {
-      text-decoration: underline;
-    }
+.footer {
+  font-size: 24pt; 
+  font-weight: 400;
+  line-height: 1.5;
+  height: 535px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: var(--dark);
+  color: var(--white);
+  max-width: var(--max-width);
+}
 
-    .footer small {
-      font-size: 24pt;
-      display: block;
-      margin-top: 34.5px;
-    }
+.footer a:hover {
+  text-decoration: underline;
+}
 
-    @media (max-width: 1024px) {
-      .grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
+@media (min-width: 641px) { 
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    row-gap: 100px;
+    column-gap: 100px;
+    justify-content: center;
+    margin: 60px 0;
+  }   
+  .content {
+    padding: 120px;
+  }  
+  .footer-section {
+    padding: 20px 120px;
+  }  
+}
 
-    @media (max-width: 768px) {
-      .hero {
-        flex-direction: column;
-        text-align: center;
-      }
+@media (max-width: 640px) {  
+  .projects-title {
+    font-size: 16pt;
+    font-weight: 400;
+    margin: 20px 0 20px;
+    text-align: center;
+  }
 
-      .grid {
-        grid-template-columns: 1fr;
-      }
-    }
+  .thumbnail p {
+    font-size: 16pt;
+  }
+    
+  .content {
+    padding: 40px;
+  }  
+  .footer {
+    font-size: 18pt; 
+    height: 400px;
+    font-weight: 400;
+  }  
+  .footer-section {
+    padding: 10px 20px;
+  }  
+}
