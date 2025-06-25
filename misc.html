@@ -115,7 +115,7 @@
             width: 100%;
             height: auto;
             object-fit: cover; /* Ensures video covers its area without distortion */
-            border-radius: 0.5rem; /* Matches Tailwind's rounded-md */
+            /* Removed border-radius */
         }
     </style>
 </head>
@@ -124,7 +124,7 @@
     <div class="w-full">
         <!-- START: Applied Top Cap Header from FTUX -->
         <header class="sticky top-0 h-20 w-full bg-black z-50">
-            <div class="max-w-8xl mx-auto h-full flex items-center px-8 md:px-16">
+            <div class="max-w-5xl mx-auto h-full flex items-center">
                 <!-- Back Arrow -->
                 <a href="index.html" class="text-white hover:opacity-75 transition-opacity" aria-label="Back to Home">
                     <svg width="26" height="52" viewBox="0 0 26 52" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -142,7 +142,7 @@
                   <div class="hover-overlay">
                     <p class="overlay-content">
                       <span class="project-title">IOT Mobile App</span><br>
-                      <span class="project-roles">Roles: Interaction design, rapid prototypes, research</span>
+                      <span class="project-roles">Interaction design, rapid prototypes, research</span>
                     </p>
                   </div>
                 </div>
@@ -151,7 +151,7 @@
                   <div class="hover-overlay">
                     <p class="overlay-content">
                       <span class="project-title">MS Surface Music App</span><br>
-                      <span class="project-roles">Roles: Visual design</span>
+                      <span class="project-roles">Visual design</span>
                     </p>
                   </div>
                 </div>
@@ -160,7 +160,7 @@
                   <div class="hover-overlay">
                     <p class="overlay-content">
                       <span class="project-title">360 Interactive Surface</span><br>
-                      <span class="project-roles">Roles: Interaction design</span>
+                      <span class="project-roles">Interaction design, motion</span>
                     </p>
                   </div>
                 </div>
@@ -169,16 +169,38 @@
                   <div class="hover-overlay">
                     <p class="overlay-content">
                       <span class="project-title">Roku Mobile Design</span><br>
-                      <span class="project-roles">Roles: Visual & interaction design, prototypes</span>
+                      <span class="project-roles">Visual & interaction design, prototypes</span>
                     </p>
                   </div>
                 </div>
+                <!-- NEW VIDEO PROJECT STARTS HERE -->
+                <div class="misc-image-wrapper max-w-5xl w-full">
+                  <video id="rokuOsVideo" src="https://res.cloudinary.com/dlbnlilfj/video/upload/v1750800947/Slideshow_yrussz.mp4" 
+                         loop playsinline preload="auto" muted 
+                         class="w-full h-auto object-cover">
+                    Your browser does not support the video tag.
+                  </video>
+                  <div class="hover-overlay">
+                    <p class="overlay-content">
+                      <span class="project-title">Roku OS</span><br>
+                      <span class="project-roles">Design, design systems, A11y, i18n</span>
+                    </p>
+                  </div>
+                  <!-- Mute/Unmute button for video -->
+                  <button id="muteToggleButtonRoku" class="absolute bottom-5 right-5 p-2 rounded-full bg-black bg-opacity-50 text-white z-10 hidden md:block">
+                    <!-- Volume On Icon (initially visible) -->
+                    <svg id="volumeOnIconRoku" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-volume-2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M23.31 1.69a16 16 0 0 1 0 20.62"/></svg>
+                    <!-- Volume Off Icon (initially hidden) -->
+                    <svg id="volumeOffIconRoku" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-volume-x hidden"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="22" x2="16" y1="9" y2="15"/><line x1="16" x2="22" y1="9" y2="15"/></svg>
+                  </button>
+                </div>
+                <!-- NEW VIDEO PROJECT ENDS HERE -->
                 <div class="misc-image-wrapper max-w-5xl w-full">
                   <img src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746215242/Nike_Kids_Storyboard_ay53y9.webp" alt="Nike Kids Storyboard" class="w-full h-auto"/>
                   <div class="hover-overlay">
                     <p class="overlay-content">
                       <span class="project-title">Nike Kids Storyboard</span><br>
-                      <span class="project-roles">Roles: Concept, storyboarding</span>
+                      <span class="project-roles">Concept, storyboarding</span>
                     </p>
                   </div>
                 </div>
@@ -187,38 +209,38 @@
                   <div class="hover-overlay">
                     <p class="overlay-content">
                       <span class="project-title">Nike Kids Concept</span><br>
-                      <span class="project-roles">Roles: Visual & interaction design, prototypes</span>
+                      <span class="project-roles">Visual & interaction design, prototypes</span>
                     </p>
                   </div>
                 </div>
-                <!-- NEW VIDEO PROJECT STARTS HERE -->
+                <!-- EXISTING NIKE VIDEO PROJECT -->
                 <div class="misc-image-wrapper max-w-5xl w-full">
                   <video id="nikeTrainingVideo" src="https://res.cloudinary.com/dlbnlilfj/video/upload/v1750702214/nike_sst_a5kygz.mp4" 
                          loop playsinline preload="auto" muted 
-                         class="w-full h-auto object-cover rounded-md">
+                         class="w-full h-auto object-cover">
                     Your browser does not support the video tag.
                   </video>
                   <div class="hover-overlay">
                     <p class="overlay-content">
                       <span class="project-title">Nike Training OS</span><br>
-                      <span class="project-roles">Roles: Interaction design, motion, development</span>
+                      <span class="project-roles">Interaction design, motion, development</span>
                     </p>
                   </div>
                   <!-- Mute/Unmute button for video -->
-                  <button id="muteToggleButton" class="absolute bottom-5 right-5 p-2 rounded-full bg-black bg-opacity-50 text-white z-10 hidden md:block">
+                  <button id="muteToggleButtonNike" class="absolute bottom-5 right-5 p-2 rounded-full bg-black bg-opacity-50 text-white z-10 hidden md:block">
                     <!-- Volume On Icon (initially visible) -->
-                    <svg id="volumeOnIcon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-volume-2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M23.31 1.69a16 16 0 0 1 0 20.62"/></svg>
+                    <svg id="volumeOnIconNike" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-volume-2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M23.31 1.69a16 16 0 0 1 0 20.62"/></svg>
                     <!-- Volume Off Icon (initially hidden) -->
-                    <svg id="volumeOffIcon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-volume-x hidden"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="22" x2="16" y1="9" y2="15"/><line x1="16" x2="22" y1="9" y2="15"/></svg>
+                    <svg id="volumeOffIconNike" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-volume-x hidden"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="22" x2="16" y1="9" y2="15"/><line x1="16" x2="22" y1="9" y2="15"/></svg>
                   </button>
                 </div>
-                <!-- NEW VIDEO PROJECT ENDS HERE -->
+                <!-- EXISTING NIKE VIDEO PROJECT ENDS HERE -->
                 <div class="misc-image-wrapper max-w-5xl w-full">
                   <img src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746215246/Printer_UX_uph85f.webp" alt="Printer UX" class="w-full h-auto"/>
                   <div class="hover-overlay">
                     <p class="overlay-content">
                       <span class="project-title">Printer app</span><br>
-                      <span class="project-roles">Roles: Creative direction, icon design</span>
+                      <span class="project-roles">Creative direction, icon design</span>
                     </p>
                   </div>
                 </div>
@@ -227,7 +249,7 @@
                   <div class="hover-overlay">
                     <p class="overlay-content">
                       <span class="project-title">Iconography</span><br>
-                      <span class="project-roles">Roles: Icon design</span>
+                      <span class="project-roles">Icon design</span>
                     </p>
                   </div>
                 </div>
@@ -240,7 +262,7 @@
                   <div class="hover-overlay">
                     <p class="overlay-content">
                       <span class="project-title">Roku Design Systems</span><br>
-                      <span class="project-roles">Roles: Component creation, documentation</span>
+                      <span class="project-roles">Component creation, documentation</span>
                     </p>
                   </div>
                 </div>
@@ -286,47 +308,88 @@
                 });
             }
 
-            // Video Playback with Intersection Observer
-            const videoElement = document.getElementById('nikeTrainingVideo');
-            const muteToggleButton = document.getElementById('muteToggleButton');
-            const volumeOnIcon = document.getElementById('volumeOnIcon');
-            const volumeOffIcon = document.getElementById('volumeOffIcon');
+            // Video Playback with Intersection Observer for Nike Training OS video
+            const nikeVideoElement = document.getElementById('nikeTrainingVideo');
+            const nikeMuteToggleButton = document.getElementById('muteToggleButtonNike');
+            const nikeVolumeOnIcon = document.getElementById('volumeOnIconNike');
+            const nikeVolumeOffIcon = document.getElementById('volumeOffIconNike');
 
-            if (videoElement) {
-                const observerOptions = {
+            if (nikeVideoElement) {
+                const nikeObserverOptions = {
                     root: null, // Use the viewport as the root
                     rootMargin: '0px',
                     threshold: 0.6 // Trigger when 60% of the video is visible
                 };
 
-                const observerCallback = (entries, observer) => {
+                const nikeObserverCallback = (entries, observer) => {
                     entries.forEach(entry => {
                         if (entry.isIntersecting) {
-                            // If the video is visible, play it (muted by default)
-                            videoElement.play().catch(error => {
-                                console.warn('Video autoplay prevented:', error);
+                            nikeVideoElement.play().catch(error => {
+                                console.warn('Nike video autoplay prevented:', error);
                             });
                         } else {
-                            // If the video is not visible, pause it
-                            videoElement.pause();
+                            nikeVideoElement.pause();
                         }
                     });
                 };
 
-                const videoObserver = new IntersectionObserver(observerCallback, observerOptions);
-                videoObserver.observe(videoElement);
+                const nikeVideoObserver = new IntersectionObserver(nikeObserverCallback, nikeObserverOptions);
+                nikeVideoObserver.observe(nikeVideoElement);
             }
 
-            // Mute/Unmute functionality
-            if (muteToggleButton && videoElement) {
-                muteToggleButton.addEventListener('click', () => {
-                    videoElement.muted = !videoElement.muted; // Toggle mute state
-                    if (videoElement.muted) {
-                        volumeOnIcon.classList.add('hidden');
-                        volumeOffIcon.classList.remove('hidden');
+            // Mute/Unmute functionality for Nike Training OS video
+            if (nikeMuteToggleButton && nikeVideoElement) {
+                nikeMuteToggleButton.addEventListener('click', () => {
+                    nikeVideoElement.muted = !nikeVideoElement.muted; // Toggle mute state
+                    if (nikeVideoElement.muted) {
+                        nikeVolumeOnIcon.classList.add('hidden');
+                        nikeVolumeOffIcon.classList.remove('hidden');
                     } else {
-                        volumeOnIcon.classList.remove('hidden');
-                        volumeOffIcon.classList.add('hidden');
+                        nikeVolumeOnIcon.classList.remove('hidden');
+                        nikeVolumeOffIcon.classList.add('hidden');
+                    }
+                });
+            }
+
+            // Video Playback with Intersection Observer for Roku OS video (newly added)
+            const rokuVideoElement = document.getElementById('rokuOsVideo');
+            const rokuMuteToggleButton = document.getElementById('muteToggleButtonRoku');
+            const rokuVolumeOnIcon = document.getElementById('volumeOnIconRoku');
+            const rokuVolumeOffIcon = document.getElementById('volumeOffIconRoku');
+
+            if (rokuVideoElement) {
+                const rokuObserverOptions = {
+                    root: null, // Use the viewport as the root
+                    rootMargin: '0px',
+                    threshold: 0.6 // Trigger when 60% of the video is visible
+                };
+
+                const rokuObserverCallback = (entries, observer) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            rokuVideoElement.play().catch(error => {
+                                console.warn('Roku video autoplay prevented:', error);
+                            });
+                        } else {
+                            rokuVideoElement.pause();
+                        }
+                    });
+                };
+
+                const rokuVideoObserver = new IntersectionObserver(rokuObserverCallback, rokuObserverOptions);
+                rokuVideoObserver.observe(rokuVideoElement);
+            }
+
+            // Mute/Unmute functionality for Roku OS video (newly added)
+            if (rokuMuteToggleButton && rokuVideoElement) {
+                rokuMuteToggleButton.addEventListener('click', () => {
+                    rokuVideoElement.muted = !rokuVideoElement.muted; // Toggle mute state
+                    if (rokuVideoElement.muted) {
+                        rokuVolumeOnIcon.classList.add('hidden');
+                        rokuVolumeOffIcon.classList.remove('hidden');
+                    } else {
+                        rokuVolumeOnIcon.classList.remove('hidden');
+                        rokuVolumeOffIcon.classList.add('hidden');
                     }
                 });
             }
