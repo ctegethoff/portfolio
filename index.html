@@ -2,490 +2,635 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chris Tegethoff - Minimal Portfolio</title>
-    <!-- Tailwind CSS CDN for basic utilities -->
+    <meta name="viewport" content="width=device-width, initial-1.0">
+    <title>Miscellaneous Projects - Chris Tegethoff</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts - Montserrat -->
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
+    <script>
+        // Custom configuration for Tailwind
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'montserrat': ['Montserrat', 'sans-serif'],
+                    },
+                    maxWidth: {
+                        '8xl': '1440px',
+                    },
+                    // Ensure the height '90' is still available if used elsewhere
+                    height: {
+                        '90': '90px',
+                        '120': '120px', 
+                    },
+                    keyframes: { /* Merged from FTUX top cap */
+                        scrollLeft: {
+                            '0%': { transform: 'translateX(100vw)' },
+                            '100%': { transform: 'translateX(-100%)' },
+                        }
+                    },
+                    animation: { /* Merged from FTUX top cap */
+                        'scroll-left': 'scrollLeft linear infinite',
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        /* Universal box-sizing for consistent layout calculations */
-        * {
-            box-sizing: border-box;
-        }
-
         body {
-            font-family: 'Montserrat', sans-serif;
             margin: 0;
-            padding: 0;
-            min-height: 100vh;
-            background-color: white;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            overflow-x: hidden; /* Prevent horizontal scroll for fixed elements */
-        }
-
-        /* Main content wrapper to limit width and center content */
-        .main-content-wrapper {
-            width: 100%;
-            max-width: 1440px; /* Max width constraint */
-            margin: 0 auto; /* Center the main content */
-            background-color: white; /* Stays white */
-            box-shadow: none; /* Removed box-shadow */
-            min-height: 100vh; /* Keep enough height for testing */
-            padding: 2.77vw; /* Proportional padding: 40px at 1440px width */
-            padding-top: 20px; /* Keeping vertical padding fixed unless specified */
-            padding-bottom: 20px; /* Keeping vertical padding fixed unless specified */
-            margin-top: 0;
-
-            @media (max-width: 768px) {
-                padding-left: 5.33vw; /* 20px at 375px mobile width, scaling proportionately */
-                padding-right: 5.33vw; /* 20px at 375px mobile width, scaling proportionately */
-            }
-        }
-
-        /* Styling for the top header section */
-        .top-header {
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-            padding-top: 40px;
-            padding-bottom: 40px;
-            /* Removed padding-left and padding-right here; main-content-wrapper now handles it */
-            position: relative; /* Context for precise icon positioning */
-            width: 100%; /* Ensure it takes full width within its parent's padding */
-
-            /* Mobile adjustments for top-header */
-            @media (max-width: 768px) {
-                flex-direction: row; /* Stack items horizontally on mobile */
-                align-items: center; /* Vertically center items on mobile */
-                justify-content: space-between; /* Push name left, icon right */
-                /* Removed padding-left and padding-right here; main-content-wrapper now handles it */
-                padding-top: 20px;
-                padding-bottom: 20px;
-            }
-        }
-
-        .name-text {
-            font-size: 72pt;
-            font-weight: 100; /* Montserrat Thin is usually font-weight: 100 */
-            color: #333;
-            line-height: 1;
-            margin-right: 0; /* Removed margin-right */
-            margin: 0; /* Ensure no default margin on H1 */
-            padding: 0; /* Ensure no default padding on H1 */
-
-            /* Mobile adjustments for name-text */
-            @media (max-width: 768px) {
-                font-size: 10vw; /* Scales proportionately for mobile */
-                /* margin-bottom: 10px; -- Removed as they are now row-aligned */
-            }
-        }
-
-        /* Info Icon Shape (white square with rounded corners and stroke) */
-        .info-icon-shape {
-            width: 75px;
-            height: 75px;
-            border-radius: 40px; /* 40pt radius */
-            border: 1px solid black; /* 1 pixel black stroke */
-            background-color: white; /* Default white background */
-            margin-left: 30px; /* 30 pixels to the right of the name */
-            flex-shrink: 0; /* Prevent shrinking in flex container */
-            cursor: pointer;
-            display: flex; /* Use flex to center any content inside */
-            justify-content: center;
-            align-items: center;
-            /* Default transition for larger screens */
-            transition: background-color 250ms ease-in-out; 
-            z-index: 1001; /* Ensure it's above animating shape when visible */
-
-            /* Mobile adjustments for info-icon-shape */
-            @media (max-width: 768px) {
-                margin-left: 0; /* No explicit left margin; handled by parent's justify-content: space-between */
-                width: 60px; /* Smaller size for mobile */
-                height: 60px;
-                border-radius: 30px; /* Adjust border-radius for smaller size */
-                transition: none; /* Disable hover transition on mobile */
-                background-color: white !important; /* Force white background on mobile, disable hover color */
-                border: 1px solid black !important; /* Force black border on mobile */
-            }
-        }
-        .info-icon-shape img {
-            width: auto;
-            height: auto;
-            max-height: 33.2px;
-            display: block;
-            object-fit: contain;
-            /* Default transition for larger screens */
-            transition: filter 250ms ease-in-out, opacity 0.2s ease-out;
-
-            /* Mobile adjustments for info-icon-shape img */
-            @media (max-width: 768px) {
-                filter: invert(0%) !important; /* Ensure black icon on white background, disable hover color */
-                opacity: 1 !important; /* Ensure visible */
-                transition: none; /* Disable hover transition on mobile */
-                max-height: 25px; /* Smaller icon on mobile */
-            }
-        }
-
-        /* Hover effects for the info-icon-shape (ONLY for larger screens) */
-        @media (min-width: 769px) {
-            .info-icon-shape:hover {
-                background-color: black; /* Change background to black on hover */
-            }
-            .info-icon-shape:hover img {
-                filter: invert(100%); /* Invert 'i' icon color on hover (black to white) */
-            }
-        }
-
-
-        /* Animated Overlay Shape (the one that pops out from top right) */
-        .animated-overlay-shape {
-            position: fixed; /* Fixed to viewport for floating above everything */
-            background-color: black; /* Solid black */
-            overflow: hidden; /* Hide content until expanded */
-            cursor: pointer;
-            z-index: 9999; /* HIGHEST z-index to be above all other content/layers */
-
-            /* Initial state (will be reset by JS for precise positioning) */
-            width: 75px;
-            height: 75px;
-            border-radius: 40px; /* Initial rounded corners */
-            opacity: 0; /* Hidden initially */
-            visibility: hidden;
-            
-            top: 20px; /* Consistent top position */
-            right: 20px; /* Consistent right position */
-            
-            /* Animation properties for expansion */
-            transform-origin: top right; /* CRITICAL: Animation originates from top right */
-            transition: width 400ms cubic-bezier(0.175, 0.885, 0.32, 1.275), /* width with bounce */
-                        height 400ms cubic-bezier(0.175, 0.885, 0.32, 1.275), /* height with bounce */
-                        border-radius 150ms ease-out 250ms, /* Delay border-radius change */
-                        opacity 400ms ease-in-out, visibility 400ms ease-in-out; /* Overall fade-in/out */
-
-            /* Mobile adjustments for animated overlay shape */
-            @media (max-width: 768px) {
-                /* On mobile, align to top-right of the viewport as its fixed */
-                width: 100%; /* Take full width for a simpler mobile overlay */
-                height: 100%; /* Take full height for a simpler mobile overlay */
-                border-radius: 0; /* No border radius */
-                top: 0; /* Full screen */
-                left: 0;
-                right: auto; /* Remove right constraint */
-                bottom: auto; /* Remove bottom constraint */
-                /* Disable expansion animation on mobile if full screen is desired immediately */
-                transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
-            }
-        }
-
-        .animated-overlay-shape.active {
-            width: 360px; /* Target width */
-            height: 360px; /* Target height */
-            border-radius: 0; /* Target square */
-            opacity: 1; /* Fade in */
-            visibility: visible;
-
-            /* Mobile active state (full screen) */
-            @media (max-width: 768px) {
-                width: 100%;
-                height: 100%;
-                border-radius: 0;
-            }
-        }
-
-        /* Contact Box Content (inside the animated overlay shape) */
-        .contact-box-content {
-            color: white;
             font-family: 'Montserrat', sans-serif;
-            font-weight: 400;
-            font-size: 1.25rem;
-            line-height: 1.5;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            padding: 40px; /* Internal padding of the expanded box */
-            text-align: left;
-            width: 100%; /* Fill parent's width (minus padding) */
-            height: 100%; /* Fill parent's height (minus padding) */
-            justify-content: center; /* Center content vertically */
-            
-            /* Initial state for content fade - ENSURE HIDDEN AT START */
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.2s ease-in-out; /* Content fades in/out */
-
-            /* Mobile adjustments for content padding/font-size */
-            @media (max-width: 768px) {
-                padding: 20px; /* Reduce padding for mobile */
-                font-size: 1rem; /* Smaller font size for mobile contact info */
-            }
+            font-weight: 300;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            background-color: #ffffff;
+        }
+        .misc-image-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: block; 
+            text-decoration: none; 
+            color: inherit; 
+            background-color: #e0e0e0; 
+            opacity: 0; /* Initially invisible for fade-in */
+            transition: opacity 1s ease-in; /* Fade-in transition */
+        }
+        /* When the panel has loaded and is in view, make it visible */
+        .misc-image-wrapper.is-loaded {
+            opacity: 1;
         }
 
-        .animated-overlay-shape.active .contact-box-content {
-            opacity: 1;
-            visibility: visible;
-            transition-delay: 0.15s; /* Delay content appearance slightly */
+        .misc-image-wrapper img,
+        .misc-image-wrapper video { 
+            transition: transform 0.3s ease;
+        }
+
+        /* Scale image/video only when .overlay-active class is present on the wrapper */
+        .misc-image-wrapper.overlay-active img,
+        .misc-image-wrapper.overlay-active video { 
+            transform: scale(1.1);
+        }
+
+        .hover-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            color: white;
+            display: flex; 
+            flex-direction: column; 
+            justify-content: flex-end; 
+            align-items: flex-start; 
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none; 
+            padding: 20px; 
+            box-sizing: border-box; 
+        }
+
+        .overlay-content {
+            margin: 0; 
+            text-align: left; 
+            font-weight: 300; 
+            font-size: 1.5rem; 
+            line-height: 1.4; 
+        }
+
+        .overlay-content .project-title {
+            font-size: 2rem; 
+            font-weight: 400; 
+            display: block; 
+            margin-bottom: 0px; 
+        }
+
+        .overlay-content .project-roles {
+            font-size: 1.4rem; 
+            font-weight: 300; 
+            display: block; 
+            margin-top: -22.5px; 
         }
         
-        .contact-box-content a {
-            color: white;
-            text-decoration: none;
-            transition: text-decoration 0.2s ease-in-out;
-        }
-        .contact-box-content a:hover {
-            text-decoration: underline;
-        }
-        .contact-box-content img {
-            width: 32px;
-            height: auto;
-            margin-top: 10px;
-            display: inline-block;
-            vertical-align: middle;
-            filter: invert(100%);
+        /* Specific styles for the Google Play Games Notifications overlay */
+        .overlay-right-align-top { 
+            justify-content: flex-start; 
+            align-items: flex-end;   
         }
 
-        /* Portfolio Grid Section (for the 2x2 layout) */
-        .portfolio-grid-section {
-            /* Removed padding-left and padding-right as main-content-wrapper handles it */
-            padding-bottom: 80px; /* Space below the grid */
-            margin-top: 25px; /* Space below the header section */
-            width: 100%; /* Ensure it spans the full width of its container */
-            display: flex; /* Kept flex to allow centering of the grid itself if needed */
-            justify-content: flex-start; /* Aligned to the left within main-content-wrapper */
-
-            /* Mobile adjustments for grid section */
-            @media (max-width: 768px) {
-                /* Removed padding-left and padding-right as main-content-wrapper handles it */
-                padding-bottom: 40px;
-                margin-top: 20px;
-                justify-content: center; /* Center items for mobile */
-            }
+        .overlay-right-align-top .project-title,
+        .overlay-right-align-top .project-roles {
+            text-align: right; 
         }
 
-        .portfolio-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr); /* 2 columns for larger screens */
-            row-gap: 2.77vw;    /* Proportional vertical gap: 40px at 1440px width */
-            column-gap: 2.77vw; /* Proportional horizontal gap: 40px at 1440px width */
-            max-width: 960px; /* Fixed max-width to 960px as requested */
-            width: 100%; /* Ensure it scales within its max-width */
-
-            /* Mobile responsiveness: single column */
-            @media (max-width: 768px) {
-                grid-template-columns: 1fr; /* Single column for mobile */
-                row-gap: 5.33vw;    /* Proportional vertical gap for mobile: 20px at 375px mobile width */
-                column-gap: 5.33vw; /* Proportional horizontal gap for mobile: 20px at 375px mobile width */
-                max-width: calc(100% - 10.66vw); /* Adjusted for 20px padding on each side of main-content-wrapper (2*5.33) */
-            }
-        }
-
-        /* Styling for the portfolio cards (grid items) */
-        .portfolio-card {
-            background-color: white;
-            box-shadow: none; /* No box-shadow initially */
-            border: none; /* No border */
-            overflow: hidden; /* Important to contain internal elements */
-            cursor: pointer;
-            text-align: center;
+        /* Styles for the information icon */
+        .info-icon {
+            position: absolute;
+            bottom: 20px; 
+            right: 20px; 
+            width: 80px; 
+            height: 80px; 
             display: flex;
-            flex-direction: column;
-            align-items: center; /* Center content within the card */
-            justify-content: flex-start; /* Align content to the top */
-            /* Default transition for larger screens */
-            transition: transform 0.15s ease-out, box-shadow 0.15s ease-out; /* Made faster */
-            max-width: 500px; /* Approximate max-width of cards for better layout control */
-
-            /* On mobile, ensure cards take full width */
-            @media (max-width: 768px) {
-                width: 100%; /* Changed to 100% to let parent padding handle spacing */
-                max-width: none; /* Remove max-width constraint for mobile */
-                /* Disable hover effects on mobile */
-                transition: none; /* Remove all transitions for mobile */
-                transform: none; /* Reset any active transforms */
-                box-shadow: none; /* Remove any active box shadows */
-            }
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%; 
+            cursor: pointer;
+            z-index: 10; 
+            transition: background-color 0.3s ease;
         }
 
-        .portfolio-card img {
-            width: 100%; /* Image fills its card width */
+        .info-icon:hover {
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+
+        .info-icon svg {
+            width: 48px; 
+            height: 48px; 
+            color: #4a4a4a; 
+            transition: color 0.3s ease; 
+        }
+
+        .info-icon:hover svg {
+            color: white; 
+        }
+
+        /* Mute button styles */
+        .mute-toggle-button {
+            position: absolute;
+            bottom: 20px; 
+            right: 110px; 
+            color: white; 
+            z-index: 10; 
+            transition: background-color 0.3s ease;
+            border-radius: 50%; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 80px; 
+            height: 80px; 
+        }
+        .mute-toggle-button:hover {
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+        .mute-toggle-button svg {
+            width: 48px; 
+            height: 48px; 
+            color: #4a4a4a; 
+            transition: color 0.3s ease; 
+        }
+        .mute-toggle-button:hover svg {
+            color: white; 
+        }
+
+        /* Styles for "Click for case study" text within the overlay */
+        .case-study-text { 
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 300; 
+            font-size: 2rem; 
+            color: white;
+            text-align: center;
+            text-decoration: none; 
+            opacity: 0;
+            pointer-events: none; 
+            transition: opacity 0.3s ease;
+            z-index: 9; 
+            white-space: nowrap; 
+        }
+
+        /* Show case study text when overlay is active */
+        .misc-image-wrapper.overlay-active .case-study-text {
+            opacity: 1;
+            pointer-events: auto; 
+        }
+
+        /* Overlay visibility controlled by 'overlay-active' class on wrapper */
+        .misc-image-wrapper.overlay-active .hover-overlay {
+            opacity: 1; /* Increased opacity for active hover overlay */
+            pointer-events: auto; 
+        }
+
+        /* Styling for the video element */
+        .misc-image-wrapper video {
+            display: block; 
+            width: 100%;
             height: auto;
-            display: block;
-            object-fit: contain;
-            /* No transform transition on image to prevent scaling */
-
-            /* Disable image scaling on mobile hover */
-            @media (max-width: 768px) {
-                transform: none; /* Reset any active transforms */
-                transition: none; /* Remove transition on mobile */
-            }
-        }
-
-        /* Hover effect for portfolio cards (ONLY for larger screens) */
-        @media (min-width: 769px) { /* Apply hover only from tablet/desktop size up */
-            .portfolio-card:hover {
-                transform: translateY(-5px); /* Lift slightly */
-                box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* Subtle and more obvious dropshadow */
-            }
-
-            .portfolio-card:hover img {
-                /* Ensured no scaling on image hover */
-            }
+            object-fit: cover; 
         }
     </style>
 </head>
-<body>
-    <div class="main-content-wrapper">
-        <!-- Top Header with Name and Icon Shape -->
-        <div id="top-header" class="top-header">
-            <h1 class="name-text">Chris Tegethoff</h1>
-            <div id="infoIconShape" class="info-icon-shape">
-                <img id="infoIconImg" src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1750615175/i_iezehx.svg" alt="Info Icon">
-            </div>
-        </div>
+<body class="bg-white">
 
-        <!-- Portfolio Grid Section -->
-        <div id="portfolio-grid-section" class="portfolio-grid-section">
-            <div class="portfolio-grid">
-                <!-- Card 1: Google Play Games FTUX -->
-                <a href="ftux.html" class="portfolio-card">
-                    <img src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1750607737/ftux_card_ton3du.webp" alt="Google Play Games FTUX">
+    <div class="w-full">
+        <!-- START: Applied Top Cap Header from FTUX -->
+        <header class="sticky top-0 h-20 w-full bg-black z-50">
+            <div class="max-w-5xl mx-auto h-full flex items-center justify-between">
+                <!-- Name and Title -->
+                <a href="https://drive.google.com/file/d/1bOVBcVUzmDVa5FMh-eLXwv2CFx6ZV5Tc/view?usp=sharing" target="_blank" class="text-white text-2xl font-montserrat font-normal hover:opacity-75 transition-opacity">Chris Tegethoff &bull; Resume</a>
+            </div>
+        </header>
+        <!-- END: Applied Top Cap Header from FTUX -->
+
+        <main>
+            <div class="flex flex-col items-center">
+                <!-- IOT Mobile App -->
+                <div class="misc-image-wrapper max-w-5xl w-full">
+                  <img data-src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746736301/iot-smart-home-ux_pch1h9.webp" alt="IOT Mobile App" class="w-full h-auto"/>
+                  <div class="hover-overlay">
+                    <p class="overlay-content">
+                      <span class="project-title">IOT Mobile App</span><br>
+                      <span class="project-roles">Interaction design, rapid prototypes, research</span>
+                    </p>
+                  </div>
+                  <button class="info-icon" aria-label="More information about IOT Mobile App">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-info">
+                        <circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>
+                    </svg>
+                  </button>
+                </div>
+                <!-- ROKU AD PLATFORM VIDEO PROJECT -->
+                <a href="ad.html" class="misc-image-wrapper max-w-5xl w-full">
+                  <video id="rokuAdPlatformVideo" data-src="https://res.cloudinary.com/dlbnlilfj/video/upload/v1750959843/ad_crawl_uvkeig.mp4" 
+                         loop playsinline preload="auto" muted 
+                         class="w-full h-auto object-cover">
+                    Your browser does not support the video tag.
+                  </video>
+                  <div class="hover-overlay"> 
+                    <p class="overlay-content">
+                      <span class="project-title">Roku Ad Platform</span><br>
+                      <span class="project-roles">Concept, motion, execution</span>
+                    </p>
+                  </div>
+                  <span class="case-study-text">Click for case study</span>
+                  <button class="info-icon" aria-label="More information about Roku Ad Platform">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-info">
+                        <circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>
+                    </svg>
+                  </button>
                 </a>
-
-                <!-- Card 2: Roku Ad Platform -->
-                <a href="ad.html" class="portfolio-card">
-                    <img src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1750607308/ad_card_tjtujo.webp" alt="Roku Ad Platform">
+                <!-- MS Surface Music App -->
+                <div class="misc-image-wrapper max-w-5xl w-full">
+                  <img data-src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746215240/MS_Surface_Music_App_drtojj.webp" alt="MS Surface Music App" class="w-full h-auto"/>
+                  <div class="hover-overlay">
+                    <p class="overlay-content">
+                      <span class="project-title">MS Surface Music App</span><br>
+                      <span class="project-roles">Visual design</span>
+                    </p>
+                  </div>
+                  <button class="info-icon" aria-label="More information about MS Surface Music App">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucude-info">
+                        <circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>
+                    </svg>
+                  </button>
+                </div>
+                <!-- 360 Interactive Surface -->
+                <div class="misc-image-wrapper max-w-5xl w-full">
+                  <img data-src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746215238/MS_Surface_360_UX_aqsahi.webp" alt="360 Touch Surface" class="w-full h-auto"/>
+                  <div class="hover-overlay">
+                    <p class="overlay-content">
+                      <span class="project-title">360 Interactive Surface</span><br>
+                      <span class="project-roles">Interaction design, motion</span>
+                    </p>
+                  </div>
+                  <button class="info-icon" aria-label="More information about 360 Interactive Surface">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-info">
+                        <circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>
+                    </svg>
+                  </button>
+                </div>
+                <!-- Roku Mobile Design -->
+                <div class="misc-image-wrapper max-w-5xl w-full">
+                  <img data-src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746215248/Roku_Mobile_Design_tlqemb.webp" alt="Roku Mobile Design" class="w-full h-auto"/>
+                  <div class="hover-overlay">
+                    <p class="overlay-content">
+                      <span class="project-title">Roku Mobile Design</span><br>
+                      <span class="project-roles">Visual & interaction design, prototypes</span>
+                    </p>
+                  </div>
+                  <button class="info-icon" aria-label="More information about Roku Mobile Design">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-info">
+                        <circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>
+                    </svg>
+                  </button>
+                </div>
+                <!-- Roku OS VIDEO PROJECT -->
+                <div class="misc-image-wrapper max-w-5xl w-full">
+                  <video id="rokuOsVideo" data-src="https://res.cloudinary.com/dlbnlilfj/video/upload/v1750800947/Slideshow_yrussz.mp4" 
+                         loop playsinline preload="auto" muted 
+                         class="w-full h-auto object-cover">
+                    Your browser does not support the video tag.
+                  </video>
+                  <div class="hover-overlay">
+                    <p class="overlay-content">
+                      <span class="project-title">Roku OS</span><br>
+                      <span class="project-roles">Design, design systems, A11y, i18n</span>
+                    </p>
+                  </div>
+                  <button class="info-icon" aria-label="More information about Roku OS">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-info">
+                        <circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>
+                    </svg>
+                  </button>
+                </div>
+                <!-- GOOGLE PLAY GAMES NOTIFICATIONS VIDEO PROJECT -->
+                <div class="misc-image-wrapper max-w-5xl w-full">
+                  <video id="googlePlayNotificationsVideo" data-src="https://res.cloudinary.com/dlbnlilfj/video/upload/v1750912734/Notif_sequence_Main_3_qelvwb.mp4" 
+                         loop playsinline preload="auto" muted 
+                         class="w-full h-auto object-cover">
+                    Your browser does not support the video tag.
+                  </video>
+                  <div class="hover-overlay overlay-right-align-top">
+                    <p class="overlay-content">
+                      <span class="project-title">Google Play Games Notifications</span><br>
+                      <span class="project-roles">Strategy, design, motion</span>
+                    </p>
+                  </div>
+                  <button class="info-icon" aria-label="More information about Google Play Games Notifications">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-info">
+                        <circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>
+                    </svg>
+                  </button>
+                </div>
+                <!-- GOOGLE PLAY GAMES FTUX VIDEO PROJECT -->
+                <a href="ftux.html" class="misc-image-wrapper max-w-5xl w-full">
+                  <video id="googlePlayFTUXVideo" data-src="https://res.cloudinary.com/dlbnlilfj/video/upload/v1750962662/FTUX_xfdlqi.mp4" 
+                         loop playsinline preload="auto" muted 
+                         class="w-full h-auto object-cover">
+                    Your browser does not support the video tag.
+                  </video>
+                  <div class="hover-overlay">
+                    <p class="overlay-content">
+                      <span class="project-title">Google Play Games FTUX</span><br>
+                      <span class="project-roles">Strategy, concept, design, motion</span>
+                    </p>
+                  </div>
+                  <span class="case-study-text">Click for case study</span>
+                  <button class="info-icon" aria-label="More information about Google Play Games FTUX">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-info">
+                        <circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>
+                    </svg>
+                  </button>
                 </a>
-
-                <!-- Card 3: Roku Settings Over Video -->
-                <a href="settings.html" class="portfolio-card">
-                    <img src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1750607332/settings_card_xxgubl.webp" alt="Roku Settings Over Video">
+                <!-- Nike Kids Storyboard -->
+                <div class="misc-image-wrapper max-w-5xl w-full">
+                  <img data-src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746215242/Nike_Kids_Storyboard_ay53y9.webp" alt="Nike Kids Storyboard" class="w-full h-auto"/>
+                  <div class="hover-overlay">
+                    <p class="overlay-content">
+                      <span class="project-title">Nike Kids Storyboard</span><br>
+                      <span class="project-roles">Concept, storyboarding</span>
+                    </p>
+                  </div>
+                  <button class="info-icon" aria-label="More information about Nike Kids Storyboard">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-info">
+                        <circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>
+                    </svg>
+                  </button>
+                </div>
+                <!-- Nike Kids Concept -->
+                <div class="misc-image-wrapper max-w-5xl w-full">
+                  <img data-src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746215244/Nike_Kids_Website_Concept_bgrali.webp" alt="Nike Kids Website Concept" class="w-full h-auto"/>
+                  <div class="hover-overlay">
+                    <p class="overlay-content">
+                      <span class="project-title">Nike Kids Concept</span><br>
+                      <span class="project-roles">Visual & interaction design, prototypes</span>
+                    </p>
+                  </div>
+                  <button class="info-icon" aria-label="More information about Nike Kids Concept">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-info">
+                        <circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>
+                    </svg>
+                  </button>
+                </div>
+                <!-- SETTINGS OVER VIDEO PROJECT -->
+                <a href="settings.html" class="misc-image-wrapper max-w-5xl w-full">
+                  <video id="settingsOverVideo" data-src="https://res.cloudinary.com/dlbnlilfj/video/upload/v1750964252/settings_dkyc1y.mp4" 
+                         loop playsinline preload="auto" muted 
+                         class="w-full h-auto object-cover">
+                    Your browser does not support the video tag.
+                  </video>
+                  <div class="hover-overlay">
+                    <p class="overlay-content">
+                      <span class="project-title">Settings Over Video</span><br>
+                      <span class="project-roles">Design, new pattern development, research, rapid prototyping</span>
+                    </p>
+                  </div>
+                  <span class="case-study-text">Click for case study</span>
+                  <button class="info-icon" aria-label="More information about Settings Over Video">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-info">
+                        <circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>
+                    </svg>
+                  </button>
                 </a>
-
-                <!-- Card 4: Miscellaneous Projects -->
-                <a href="misc.html" class="portfolio-card">
-                    <img src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1750607333/misc_card_sfiwbw.webp" alt="Miscellaneous Projects">
-                </a>
-            </div>
-        </div>
-    </div>
-
-    <!-- The Animated Overlay Shape (pops out on click) -->
-    <div id="animatedOverlayShape" class="animated-overlay-shape">
-        <div id="contactBoxContent" class="contact-box-content">
-            <div class="contact-item">
-                <a href="mailto:ctegethoff@gmail.com" target="_blank" rel="noopener noreferrer">ctegethoff@gmail.com</a>
-            </div>
-            <div class="contact-item">
-                <span>503-806-1461</span>
-            </div>
-            <div class="contact-item">
-                <a href="https://www.linkedin.com/in/chris-t-0430222/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-            </div>
-            <div class="contact-item">
-                <a href="https://drive.google.com/file/d/1bOVBcVUzmDVa5FMh-eLXwv2CFx6ZV5Tc/view" target="_blank" rel="noopener noreferrer">Resume (PDF)</a>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        const infoIconShape = document.getElementById('infoIconShape');
-        const infoIconImg = document.getElementById('infoIconImg');
-        const animatedOverlayShape = document.getElementById('animatedOverlayShape');
-        const contactBoxContent = document.getElementById('contactBoxContent');
-
-        // Function to open the animated contact box
-        function openAnimatedContactBox() {
-            // Immediately fade out the 'i' icon image
-            infoIconImg.style.opacity = '0';
-            infoIconImg.style.visibility = 'hidden'; // Ensure it's fully gone
-
-            // Set initial position and size for the animated overlay shape to match infoIconShape
-            // Crucial for it to start *exactly* where the icon is
-            const rect = infoIconShape.getBoundingClientRect();
-            animatedOverlayShape.style.left = `${rect.left}px`;
-            animatedOverlayShape.style.top = `${rect.top}px`;
-            animatedOverlayShape.style.width = `${rect.width}px`;
-            animatedOverlayShape.style.height = `${rect.height}px`;
-            animatedOverlayShape.style.borderRadius = `${infoIconShape.style.borderRadius}`; // Copy icon's border-radius
-            
-            // Make the animated shape visible before triggering its expansion
-            animatedOverlayShape.style.opacity = '1';
-            animatedOverlayShape.style.visibility = 'visible';
-            animatedOverlayShape.classList.add('active'); // Add active class immediately for proper state
-
-            // Trigger the expansion animation
-            // Use a tiny delay to ensure initial state is rendered before animation starts
-            setTimeout(() => {
-                // To expand leftwards from top right, `top` stays same, `width` increases, and `left` changes
-                // `left` needs to move left by the difference in target width vs initial width
-                animatedOverlayShape.style.left = `${rect.left - (360 - rect.width)}px`; /* Move left by the increase in width */
-                animatedOverlayShape.style.width = '360px'; // Target width
-                animatedOverlayShape.style.height = '360px'; // Target height
-                animatedOverlayShape.style.borderRadius = '0'; /* Morph to square */
+                <!-- EXISTING NIKE VIDEO PROJECT -->
+                <div class="misc-image-wrapper max-w-5xl w-full">
+                  <video id="nikeTrainingVideo" data-src="https://res.cloudinary.com/dlbnlilfj/video/upload/v1750702214/nike_sst_a5kygz.mp4" 
+                         loop playsinline preload="auto" muted 
+                         class="w-full h-auto object-cover">
+                    Your browser does not support the video tag.
+                  </video>
+                  <div class="hover-overlay">
+                    <p class="overlay-content">
+                      <span class="project-title">Nike Training OS</span><br>
+                      <span class="project-roles">Interaction design, motion, development</span>
+                    </p>
+                  </div>
+                  <!-- Mute/Unmute button for video -->
+                  <button id="muteToggleButtonNike" class="mute-toggle-button" aria-label="Toggle mute for Nike Training OS video">
+                    <!-- Volume On Icon (initially visible) -->
+                    <svg id="volumeOnIconNike" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-volume-2 hidden"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M23.31 1.69a16 16 0 0 1 0 20.62"/></svg>
+                    <!-- Volume Off Icon (initially hidden) -->
+                    <svg id="volumeOffIconNike" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-volume-x"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="22" x2="16" y1="9" y2="15"/><line x1="16" x2="22" y1="9" y2="15"/></svg>
+                  </button>
+                  <button class="info-icon" aria-label="More information about Nike Training OS">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-info">
+                        <circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>
+                    </svg>
+                  </button>
+                </div>
+                <!-- Printer app -->
+                <div class="misc-image-wrapper max-w-5xl w-full">
+                  <img data-src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746215246/Printer_UX_uph85f.webp" alt="Printer UX" class="w-full h-auto"/>
+                  <div class="hover-overlay">
+                    <p class="overlay-content">
+                      <span class="project-title">Printer app</span><br>
+                      <span class="project-roles">Creative direction, icon design</span>
+                    </p>
+                  </div>
+                  <button class="info-icon" aria-label="More information about Printer app">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-info">
+                        <circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>
+                    </svg>
+                  </button>
+                </div>
+                <!-- Iconography -->
+                <div class="misc-image-wrapper max-w-5xl w-full">
+                  <img data-src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746215236/Iconography_j2j3m6.webp" alt="Iconography" class="w-full h-auto"/>
+                  <div class="hover-overlay">
+                    <p class="overlay-content">
+                      <span class="project-title">Iconography</span><br>
+                      <span class="project-roles">Icon design</span>
+                    </p>
+                  </div>
+                  <button class="info-icon" aria-label="More information about Iconography">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-info">
+                        <circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>
+                    </svg>
+                  </button>
+                </div>
+                <!-- Icon Sketches -->
+                <div class="misc-image-wrapper max-w-5xl w-full">
+                  <img data-src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746215235/Icon_Sketches_t9zci1.webp" alt="Icon Sketches" class="w-full h-auto"/>
+                  <div class="hover-overlay"><span>Icon Sketches</span></div>
+                  <button class="info-icon" aria-label="More information about Icon Sketches">
+                    <svg xmlns="http://www.w3.org/2003/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-info">
+                        <circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>
+                    </svg>
+                  </button>
+                </div>
+                <!-- Roku Design Systems -->
+                <div class="misc-image-wrapper max-w-5xl w-full">
+                  <img data-src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746215233/Design_Systems_m2mzen.webp" alt="Design System" class="w-full h-auto"/>
+                  <div class="hover-overlay">
+                    <p class="overlay-content">
+                      <span class="project-title">Roku Design Systems</span><br>
+                      <span class="project-roles">Component creation, documentation</span>
+                    </p>
+                  </div>
+                  <button class="info-icon" aria-label="More information about Roku Design Systems">
+                    <svg xmlns="http://www.w3.org/2003/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-info">
+                        <circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>
+                    </svg>
+                  </button>
+                </div>
                 
-                // Show contact info content after the box animation has substantially completed
-                setTimeout(() => {
-                    contactBoxContent.style.opacity = '1';
-                    contactBoxContent.style.visibility = 'visible';
-                }, 300); // Delay text fade-in (e.g., 300ms after 400ms animation starts)
-            }, 10); // Tiny delay to allow initial positioning to render
-        }
+                <div class="max-w-5xl w-full my-16">
+                    <img data-src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746215250/THE_END_dylo5r.svg" alt="The End" class="w-full h-auto">
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const isTouchDevice = () => {
+                return 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+            };
 
-        // Function to close the animated contact box
-        function closeAnimatedContactBox() {
-            // Only close if it's currently active/visible
-            if (!animatedOverlayShape.classList.contains('active')) {
-                return; // Do nothing if not active
-            }
+            const miscImageWrappers = document.querySelectorAll('.misc-image-wrapper');
 
-            // Hide contact info content immediately
-            contactBoxContent.style.opacity = '0';
-            contactBoxContent.style.visibility = 'hidden';
+            const lazyLoadObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const wrapper = entry.target;
+                        const mediaElement = wrapper.querySelector('img, video');
+                        if (mediaElement && mediaElement.dataset.src) {
+                            mediaElement.src = mediaElement.dataset.src;
+                            // For videos, also handle autoplay once loaded
+                            if (mediaElement.tagName === 'VIDEO') {
+                                mediaElement.play().catch(error => console.warn(`Video autoplay prevented for ${mediaElement.id}:`, error));
+                            }
+                            mediaElement.removeAttribute('data-src'); // Remove data-src to prevent re-loading
+                        }
+                        // Add class to trigger fade-in
+                        wrapper.classList.add('is-loaded');
+                        observer.unobserve(wrapper); // Stop observing once loaded
+                    }
+                });
+            }, {
+                root: null, // Use the viewport as the root
+                rootMargin: '0px',
+                threshold: 0.1 // Trigger when 10% of the element is visible
+            });
 
-            // Get the target position and size (from the infoIconShape) for collapse
-            const rect = infoIconShape.getBoundingClientRect();
+            miscImageWrappers.forEach(wrapper => {
+                lazyLoadObserver.observe(wrapper);
 
-            // Set final state for collapse animation
-            animatedOverlayShape.style.left = `${rect.left}px`; /* Move back to icon's left */
-            animatedOverlayShape.style.top = `${rect.top}px`; /* Move back to icon's top */
-            animatedOverlayShape.style.width = `${rect.width}px`; // Shrink to initial size
-            animatedOverlayShape.style.height = `${rect.height}px`;
-            animatedOverlayShape.style.borderRadius = `${infoIconShape.style.borderRadius}`; // Morph back to rounded
-            animatedOverlayShape.classList.remove('active'); // Remove active class
+                const infoIcon = wrapper.querySelector('.info-icon');
+                const muteButton = wrapper.querySelector('.mute-toggle-button'); 
 
-            // After collapse animation, hide and reset the animated shape
-            setTimeout(() => {
-                animatedOverlayShape.style.opacity = '0';
-                animatedOverlayShape.style.visibility = 'hidden';
+                if (infoIcon) {
+                    const toggleOverlayAndScale = (force) => {
+                        miscImageWrappers.forEach(otherWrapper => {
+                            if (otherWrapper !== wrapper) {
+                                otherWrapper.classList.remove('overlay-active');
+                            }
+                        });
+                        if (typeof force === 'boolean') {
+                            wrapper.classList.toggle('overlay-active', force);
+                        } else {
+                            wrapper.classList.toggle('overlay-active');
+                        }
+                    };
 
-                // Re-show 'i' icon
-                infoIconImg.style.opacity = '1';
-                infoIconImg.style.visibility = 'visible';
-            }, 400); // Match animation duration
-        }
+                    if (isTouchDevice()) {
+                        infoIcon.addEventListener('click', (e) => {
+                            e.stopPropagation(); 
+                            toggleOverlayAndScale();
+                        });
 
-        // Attach click listener to the info icon shape
-        if (infoIconShape) {
-            infoIconShape.addEventListener('click', openAnimatedContactBox);
-        }
+                        if (muteButton) {
+                            muteButton.addEventListener('click', (e) => {
+                                e.stopPropagation(); 
+                            });
+                        }
 
-        // Attach click listener to the animated overlay shape itself (to close)
-        // This is still needed for clicking directly on the black box to close it
-        if (animatedOverlayShape) {
-            animatedOverlayShape.addEventListener('click', closeAnimatedContactBox);
-        }
+                        document.addEventListener('click', (e) => {
+                            if (!wrapper.contains(e.target) && wrapper.classList.contains('overlay-active')) {
+                                toggleOverlayAndScale(false); 
+                            }
+                        });
 
-        // New: Click outside functionality
-        document.addEventListener('click', function(event) {
-            // Check if the overlay is currently active/visible
-            if (animatedOverlayShape.classList.contains('active')) {
-                // Check if the click was outside the animated overlay and outside the info icon
-                if (!animatedOverlayShape.contains(event.target) && !infoIconShape.contains(event.target)) {
-                    closeAnimatedContactBox();
+                    } else {
+                        infoIcon.addEventListener('mouseenter', () => {
+                            toggleOverlayAndScale(true); 
+                        });
+                        infoIcon.addEventListener('mouseleave', () => {
+                            toggleOverlayAndScale(false); 
+                        });
+
+                        if (muteButton) {
+                            muteButton.addEventListener('mouseenter', () => {
+                                toggleOverlayAndScale(true);
+                            });
+                            muteButton.addEventListener('mouseleave', () => {
+                                toggleOverlayAndScale(false);
+                            });
+                        }
+                    }
                 }
-            }
+            });
+
+            // Re-integrate existing video autoplay logic (now handled by lazyLoadObserver for initial play)
+            // The mute/unmute functionality still needs its listeners
+            const setupMuteToggle = (videoId, muteButtonId, volumeOnId, volumeOffId) => {
+                const videoElement = document.getElementById(videoId);
+                const muteToggleButton = document.getElementById(muteButtonId);
+                const volumeOnIcon = document.getElementById(volumeOnId);
+                const volumeOffIcon = document.getElementById(volumeOffId);
+
+                if (muteToggleButton && videoElement) {
+                    muteToggleButton.addEventListener('click', () => {
+                        videoElement.muted = !videoElement.muted; 
+                        if (videoElement.muted) {
+                            if (volumeOnIcon) volumeOnIcon.classList.add('hidden');
+                            if (volumeOffIcon) volumeOffIcon.classList.remove('hidden');
+                        } else {
+                            if (volumeOnIcon) volumeOnIcon.classList.remove('hidden');
+                            if (volumeOffIcon) volumeOffIcon.classList.add('hidden');
+                        }
+                    });
+                }
+            };
+
+            // Setup for the Nike Training OS video mute control
+            setupMuteToggle('nikeTrainingVideo', 'muteToggleButtonNike', 'volumeOnIconNike', 'volumeOffIconNike');
+            
+            // Note: Autoplay for all videos is now handled by the lazyLoadObserver.
+            // We just need to ensure the correct element is passed to the observer for each video.
         });
     </script>
 </body>

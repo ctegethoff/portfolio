@@ -98,12 +98,24 @@
             justify-content: center;
             border: 1px solid #ccc; /* Ensure border is applied */
         }
+        .overlay-content h2 { /* Converted from [55px] */
+            font-size: 3.4375rem; /* 55px / 16 = 3.4375rem */
+            font-weight: 700; /* font-bold */
+            line-height: 1; /* leading-none */
+            margin-bottom: 1rem; /* mb-4 */
+        }
+        .overlay-content p { /* Converted from [22.5px] */
+            font-size: 1.40625rem; /* 22.5px / 16 = 1.40625rem */
+            line-height: 1.22; /* leading-tight */
+            margin-bottom: 2rem; /* mb-8 */
+        }
+
 
         /* Animation for scrolling panels */
         @keyframes fadeInAndMoveUp {
             0% {
                 opacity: 0;
-                transform: translateY(40px); /* Increased movement: Start 40px below final position */
+                transform: translateY(2.5rem); /* Converted from 40px */
             }
             100% {
                 opacity: 1;
@@ -114,7 +126,7 @@
         /* Initial state for panels to be animated */
         .panel-hidden {
             opacity: 0;
-            transform: translateY(40px); /* Consistent with keyframe start */
+            transform: translateY(2.5rem); /* Consistent with keyframe start */
             transition: opacity 0.45s ease-out, transform 0.45s ease-out; /* Smooth transition for non-animated state changes if any */
         }
 
@@ -160,8 +172,75 @@
 
         .play-button-overlay svg {
             color: white;
-            width: 80px;
-            height: 80px;
+            width: 5rem; /* Converted from 80px */
+            height: 5rem; /* Converted from 80px */
+        }
+        /* Custom paragraph styling for consistency */
+        /* Updated this to match other pages: text-xl/md:text-2xl & leading-relaxed */
+        .page-paragraph {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 300; /* For a thin look */
+            font-size: 1.25rem; /* Equivalent to Tailwind's text-xl */
+            line-height: 1.625; /* Equivalent to Tailwind's leading-relaxed */
+            text-align: center;
+            color: #4a4a4a; /* Or your preferred dark gray text color */
+            max-width: 56rem; /* Equivalent to Tailwind's max-w-3xl, adjust as needed */
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Header h2 styling */
+        .panel-header-text { /* New class for h2 in section headers */
+            font-size: 4.375rem; /* 70px / 16 = 4.375rem */
+            line-height: 1; /* leading-none */
+            font-weight: 300; /* font-light */
+        }
+
+        /* Text panel h3 styling */
+        .text-panel-h3 { /* New class for h3 in text panels */
+            font-size: 2.8125rem; /* 45px / 16 = 2.8125rem */
+            line-height: 1; /* leading-none */
+            font-weight: 300; /* font-light */
+        }
+
+        /* Text panel p styling - This is the primary target for change */
+        .text-panel-p { /* Matched to .page-paragraph style */
+            font-size: 1.25rem; /* Equivalent to text-xl */
+            line-height: 1.625; /* Equivalent to leading-relaxed */
+            margin-top: 1.125rem; /* 18px / 16 = 1.125rem */
+            color: #4a4a4a; /* Ensure consistent text color */
+        }
+        @media (min-width: 768px) { /* md: breakpoint for text-2xl */
+            .text-panel-p {
+                font-size: 1.5rem; /* Equivalent to text-2xl */
+            }
+        }
+
+
+        /* Text overlay p styling for panel 4 */
+        #panel-4-ux-customer-support-empathy-image p {
+            font-size: 2.8125rem; /* 45px / 16 = 2.8125rem */
+            line-height: 1.22; /* leading-tight */
+            font-weight: 900; /* font-black */
+            color: rgba(255, 255, 255, 0.7);
+            max-width: 56.25rem; /* 900px / 16 = 56.25rem */
+        }
+
+
+        /* Custom padding for text panels */
+        .text-panel-content-area { /* Applied to div inside text panels for inner spacing */
+            padding-top: 2rem; /* 32px / 16 = 2rem */
+            padding-bottom: 4.8125rem; /* 77px / 16 = 4.8125rem */
+            padding-left: 2rem; /* Matches p-8 (32px) for horizontal */
+            padding-right: 2rem; /* Matches p-8 (32px) for horizontal */
+        }
+
+        /* Adjust media queries for text panel content area on larger screens */
+        @media (min-width: 768px) { /* Corresponds to md: breakpoint */
+            .text-panel-content-area {
+                padding-left: 4rem; /* Matches md:px-16 (64px) for horizontal */
+                padding-right: 4rem; /* Matches md:px-16 (64px) for horizontal */
+            }
         }
     </style>
 </head>
@@ -188,7 +267,7 @@
         </div>
 
         <div id="panel-3-discovery-section-header" class="w-full bg-[#313135] h-[200px] flex items-center justify-center panel-hidden">
-            <h2 class="text-white text-center font-light text-[70px] leading-none">Discovery</h2>
+            <h2 class="text-white text-center font-light panel-header-text">Discovery</h2>
         </div>
 
         <div id="panel-4-ux-customer-support-empathy-image" class="w-full relative flex items-center justify-center panel-hidden">
@@ -196,16 +275,16 @@
                  alt="UX Customer Support Empathy"
                  class="w-full h-auto block object-cover">
             <div class="absolute inset-0 flex items-center justify-center p-4">
-                <p class="text-[45px] leading-tight font-black text-center max-w-[900px] mx-auto" style="color: rgba(255, 255, 255, 0.7);">
+                <p class="text-center">
                     We suspected there were usability issues with Settings Over Video, but struggled where to start
                 </p>
             </div>
         </div>
 
-        <div id="panel-5-empathy-text-panel" class="w-full bg-white px-8 pt-[32px] pb-[77px] panel-hidden">
-            <div class="max-w-[900px] mx-auto text-center">
-                <h3 class="text-black font-light text-[45px] leading-none">Empathy</h3>
-                <p class="mt-[18px] text-gray-800 text-[30px] leading-tight">
+        <div id="panel-5-empathy-text-panel" class="w-full bg-white panel-hidden">
+            <div class="max-w-[900px] mx-auto text-center text-panel-content-area">
+                <h3 class="text-black text-panel-h3">Empathy</h3>
+                <p class="text-gray-800 text-panel-p">
                     To understand if there was a problem, we started collecting data by listening in on a lot of customer support calls
                 </p>
             </div>
@@ -217,10 +296,10 @@
                  class="w-full h-auto block object-cover">
         </div>
 
-        <div id="panel-7-research-text-panel" class="w-full bg-white px-8 pt-[32px] pb-[77px] panel-hidden">
-            <div class="max-w-[900px] mx-auto text-center">
-                <h3 class="text-black font-light text-[45px] leading-none">Research</h3>
-                <p class="mt-[18px] text-gray-800 text-[30px] leading-tight">
+        <div id="panel-7-research-text-panel" class="w-full bg-white panel-hidden">
+            <div class="max-w-[900px] mx-auto text-center text-panel-content-area">
+                <h3 class="text-black text-panel-h3">Research</h3>
+                <p class="text-gray-800 text-panel-p">
                     We conducted a usability study to better understand the recurring pain points customers shared
                 </p>
             </div>
@@ -232,10 +311,10 @@
                  class="w-full h-auto block object-cover">
         </div>
 
-        <div id="panel-9-audits-text-panel" class="w-full bg-white px-8 pt-[32px] pb-[77px] panel-hidden">
-            <div class="max-w-[900px] mx-auto text-center">
-                <h3 class="text-black font-light text-[45px] leading-none">Audits</h3>
-                <p class="mt-[18px] text-gray-800 text-[30px] leading-tight">
+        <div id="panel-9-audits-text-panel" class="w-full bg-white panel-hidden">
+            <div class="max-w-[900px] mx-auto text-center text-panel-content-area">
+                <h3 class="text-black text-panel-h3">Audits</h3>
+                <p class="text-gray-800 text-panel-p">
                     In-depth internal and external audits provided lots of data and uncovered opportunities for improvement
                 </p>
             </div>
@@ -247,17 +326,17 @@
                  class="w-full h-auto block object-cover">
         </div>
 
-        <div id="panel-11-problem-text-panel" class="w-full bg-white px-8 pt-[32px] pb-[77px] panel-hidden">
-            <div class="max-w-[900px] mx-auto text-center">
-                <h3 class="text-black font-light text-[45px] leading-none">Problem</h3>
-                <p class="mt-[18px] text-gray-800 text-[30px] leading-tight">
+        <div id="panel-11-problem-text-panel" class="w-full bg-white panel-hidden">
+            <div class="max-w-[900px] mx-auto text-center text-panel-content-area">
+                <h3 class="text-black text-panel-h3">Problem</h3>
+                <p class="text-gray-800 text-panel-p">
                     Research highlighted Settings Over Video was a space where usability issues were firmly rooted in unclear hierarchy, ambiguous naming, and lack of user feedback
                 </p>
             </div>
         </div>
 
         <div id="panel-12-definition-section-header" class="w-full bg-[#313135] h-[200px] flex items-center justify-center panel-hidden">
-            <h2 class="text-white text-center font-light text-[70px] leading-none">Definition</h2>
+            <h2 class="text-white text-center font-light panel-header-text">Definition</h2>
         </div>
 
         <div id="panel-13-ux-user-journey-1-image" class="w-full panel-hidden">
@@ -266,10 +345,10 @@
                  class="w-full h-auto block object-cover">
         </div>
 
-        <div id="panel-14-empathy-maps-text-panel" class="w-full bg-white px-8 pt-[32px] pb-[77px] panel-hidden">
-            <div class="max-w-[900px] mx-auto text-center">
-                <h3 class="text-black font-light text-[45px] leading-none">Empathy Maps</h3>
-                <p class="mt-[18px] text-gray-800 text-[30px] leading-tight">
+        <div id="panel-14-empathy-maps-text-panel" class="w-full bg-white panel-hidden">
+            <div class="max-w-[900px] mx-auto text-center text-panel-content-area">
+                <h3 class="text-black text-panel-h3">Empathy Maps</h3>
+                <p class="text-gray-800 text-panel-p">
                     Empathy maps and CUJs grounded in real world user scenarios informed requirements
                 </p>
             </div>
@@ -281,10 +360,10 @@
                  class="w-full h-auto block object-cover">
         </div>
 
-        <div id="panel-16-goals-text-panel" class="w-full bg-white px-8 pt-[32px] pb-[77px] panel-hidden">
-            <div class="max-w-[900px] mx-auto text-center">
-                <h3 class="text-black font-light text-[45px] leading-none">Goals</h3>
-                <p class="mt-[18px] text-gray-800 text-[30px] leading-tight">
+        <div id="panel-16-goals-text-panel" class="w-full bg-white panel-hidden">
+            <div class="max-w-[900px] mx-auto text-center text-panel-content-area">
+                <h3 class="text-black text-panel-h3">Goals</h3>
+                <p class="text-gray-800 text-panel-p">
                     Collaborating with the CS support team was valuable in determining a primary business goal to reduce CS call volume which unblocked the project from moving forward
                 </p>
             </div>
@@ -296,9 +375,9 @@
                  class="w-full h-auto block object-cover">
         </div>
 
-        <div id="panel-18-kpis-text-panel" class="w-full bg-white px-8 pt-[32px] pb-[77px] panel-hidden">
-            <div class="max-w-[900px] mx-auto text-center">
-                <h3 class="text-black font-light text-[45px] leading-none">KPIs</h3>
+        <div id="panel-18-kpis-text-panel" class="w-full bg-white panel-hidden">
+            <div class="max-w-[900px] mx-auto text-center text-panel-content-area">
+                <h3 class="text-black text-panel-h3">KPIs</h3>
                 <p class="mt-[18px] text-gray-800 text-[30px] leading-tight">
                     Consumer and tech reviews were a core KPI, as they heavily influence TV purchase decisions
                 </p>
@@ -306,7 +385,7 @@
         </div>
 
         <div id="panel-19-design-section-header" class="w-full bg-[#313135] h-[200px] flex items-center justify-center panel-hidden">
-            <h2 class="text-white text-center font-light text-[70px] leading-none">Design</h2>
+            <h2 class="text-white text-center font-light panel-header-text">Design</h2>
         </div>
 
         <div id="panel-20-ux-process-sketch-image" class="w-full panel-hidden">
@@ -315,10 +394,10 @@
                  class="w-full h-auto block object-cover">
         </div>
 
-        <div id="panel-21-quick-ideation-text-panel" class="w-full bg-white px-8 pt-[32px] pb-[77px] panel-hidden">
-            <div class="max-w-[900px] mx-auto text-center">
-                <h3 class="text-black font-light text-[45px] leading-none">Quick Ideation</h3>
-                <p class="mt-[18px] text-gray-800 text-[30px] leading-tight">
+        <div id="panel-21-quick-ideation-text-panel" class="w-full bg-white panel-hidden">
+            <div class="max-w-[900px] mx-auto text-center text-panel-content-area">
+                <h3 class="text-black text-panel-h3">Quick Ideation</h3>
+                <p class="text-gray-800 text-panel-p">
                     Initial ideation started with sketches exploring related and non-related patterns and flows
                 </p>
             </div>
@@ -330,10 +409,10 @@
                  class="w-full h-auto block object-cover">
         </div>
 
-        <div id="panel-23-flows-text-panel" class="w-full bg-white px-8 pt-[32px] pb-[77px] panel-hidden">
-            <div class="max-w-[900px] mx-auto text-center">
-                <h3 class="text-black font-light text-[45px] leading-none">Flows</h3>
-                <p class="mt-[18px] text-gray-800 text-[30px] leading-tight">
+        <div id="panel-23-flows-text-panel" class="w-full bg-white panel-hidden">
+            <div class="max-w-[900px] mx-auto text-center text-panel-content-area">
+                <h3 class="text-black text-panel-h3">Flows</h3>
+                <p class="text-gray-800 text-panel-p">
                     Interaction flows helped engage engineering early in the design process to assess technical feasibility
                 </p>
             </div>
@@ -342,320 +421,4 @@
         <div id="panel-24-ordering-logic-image" class="w-full panel-hidden">
             <img src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1750372622/ordering_logic_yderam.webp"
                  alt="Ordering Logic"
-                 class="w-full h-auto block object-cover">
-        </div>
-
-        <div id="panel-25-ia-text-panel" class="w-full bg-white px-8 pt-[32px] pb-[77px] panel-hidden">
-            <div class="max-w-[900px] mx-auto text-center">
-                <h3 class="text-black font-light text-[45px] leading-none">IA</h3>
-                <p class="mt-[18px] text-gray-800 text-[30px] leading-tight">
-                    Research and data directly informed the information architecture and nomenclature used
-                </p>
-            </div>
-        </div>
-
-        <div id="panel-26-design-exploration-video" class="w-full panel-hidden">
-            <video id="designExplorationVideo" class="w-full h-auto block object-cover" autoplay loop muted playsinline>
-                <source src="https://res.cloudinary.com/dlbnlilfj/video/upload/v1750372629/design_exploration_ozmnhk.mp4" type="video/mp4">
-                Your browser does not support the video tag.
-            </video>
-        </div>
-
-        <div id="panel-27-design-iteration-text-panel" class="w-full bg-white px-8 pt-[32px] pb-[77px] panel-hidden">
-            <div class="max-w-[900px] mx-auto text-center">
-                <h3 class="text-black font-light text-[45px] leading-none">Design Iteration</h3>
-                <p class="mt-[18px] text-gray-800 text-[30px] leading-tight">
-                    Visual design started with layouts to communicate focus, minimize noise, and support both lean-in and lean-back use cases
-                </p>
-            </div>
-        </div>
-
-        <div id="panel-28-prototype-video" class="w-full panel-hidden">
-            <video id="prototypeVideo" class="w-full h-auto block object-cover" autoplay loop muted playsinline>
-                <source src="https://res.cloudinary.com/dlbnlilfj/video/upload/v1750372620/prototype_gm2cqm.mp4" type="video/mp4">
-                Your browser does not support the video tag.
-            </video>
-        </div>
-
-        <div id="panel-29-rapid-prototyping-text-panel" class="w-full bg-white px-8 pt-[32px] pb-[77px] panel-hidden">
-            <div class="max-w-[900px] mx-auto text-center">
-                <h3 class="text-black font-light text-[45px] leading-none">Rapid Prototyping</h3>
-                <p class="mt-[18px] text-gray-800 text-[30px] leading-tight">
-                    Rapid prototyping helped engineering more accurately scope the work, accelerated research, and aligned stakeholders
-                </p>
-            </div>
-        </div>
-
-        <div id="panel-30-selected-prototype-video" class="w-full relative panel-hidden">
-            <video id="selectedPrototypeVideo" class="w-full h-auto block object-cover" playsinline poster="https://res.cloudinary.com/dlbnlilfj/image/upload/v1750445093/still_of_prototype_nxfbtr.webp">
-                <source src="https://res.cloudinary.com/dlbnlilfj/video/upload/v1750372623/selected_prototype_yxcvq6.mp4" type="video/mp4">
-                Your browser does not support the video tag.
-            </video>
-            <div id="selectedPrototypePlayButton" class="play-button-overlay">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M8 5v14l11-7z"/>
-                </svg>
-            </div>
-        </div>
-
-        <div id="panel-31-alignment-text-panel" class="w-full bg-white px-8 pt-[32px] pb-[77px] panel-hidden">
-            <div class="max-w-[900px] mx-auto text-center">
-                <h3 class="text-black font-light text-[45px] leading-none">Alignment</h3>
-                <p class="mt-[18px] text-gray-800 text-[30px] leading-tight">
-                    After aligning the team through rapid prototypes, we pushed forward to test concepts directly with users
-                </p>
-            </div>
-        </div>
-
-        <div id="panel-32-ux-usability-testing-image" class="w-full panel-hidden">
-            <img src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1750372621/UX_usability_testing_wxifsw.webp"
-                 alt="UX Usability Testing"
-                 class="w-full h-auto block object-cover">
-        </div>
-
-        <div id="panel-33-usability-testing-text-panel" class="w-full bg-white px-8 pt-[32px] pb-[77px] panel-hidden">
-            <div class="max-w-[900px] mx-auto text-center">
-                <h3 class="text-black font-light text-[45px] leading-none">Usability Testing</h3>
-                <p class="mt-[18px] text-gray-800 text-[30px] leading-tight">
-                    Our second usability study mirrored our baseline approach, validated key improvements, and revealed new pain points
-                </p>
-            </div>
-        </div>
-
-        <div id="panel-34-ux-fine-tuning-video" class="w-full panel-hidden">
-            <video id="fineTuningVideo" class="w-full h-auto block object-cover" autoplay loop muted playsinline>
-                <source src="https://res.cloudinary.com/dlbnlilfj/video/upload/v1750372621/UX_fine_tuning_ickuid.mp4" type="video/mp4">
-                Your browser does not support the video tag.
-            </video>
-        </div>
-
-        <div id="panel-35-fine-tuning-text-panel" class="w-full bg-white px-8 pt-[32px] pb-[77px] panel-hidden">
-            <div class="max-w-[900px] mx-auto text-center">
-                <h3 class="text-black font-light text-[45px] leading-none">Fine Tuning</h3>
-                <p class="mt-[18px] text-gray-800 text-[30px] leading-tight">
-                    Research revealed that participants preferred the pop over with floating focus, allowing them to select a setting and return to the previous view for confirmation
-                </p>
-            </div>
-        </div>
-
-        <div id="panel-36-develop-section-header" class="w-full bg-[#313135] h-[200px] flex items-center justify-center panel-hidden">
-            <h2 class="text-white text-center font-light text-[70px] leading-none">Develop</h2>
-        </div>
-
-        <div id="panel-37-ux-process-deliver-video" class="w-full panel-hidden">
-            <video id="processDeliverVideo" class="w-full h-auto block object-cover" autoplay loop muted playsinline>
-                <source src="https://res.cloudinary.com/dlbnlilfj/video/upload/v1750372620/UX_process_deliver_krbek7.mp4" type="video/mp4">
-                Your browser does not support the video tag.
-            </video>
-        </div>
-
-        <div id="panel-38-develop-deliver-text-panel" class="w-full bg-white px-8 pt-[32px] pb-[77px] panel-hidden">
-            <div class="max-w-[900px] mx-auto text-center">
-                <h3 class="text-black font-light text-[45px] leading-none">Develop & Deliver</h3>
-                <p class="mt-[18px] text-gray-800 text-[30px] leading-tight">
-                    Established a single source of truth for the new pattern and collaborated with engineering across development and QA to bring it to life
-                </p>
-            </div>
-        </div>
-
-        <div id="panel-39-educate-video" class="w-full panel-hidden">
-            <video id="educateVideo" class="w-full h-auto block object-cover" autoplay playsinline>
-                <source src="https://res.cloudinary.com/dlbnlilfj/video/upload/v1750372626/Educate_vhcyjx.mp4" type="video/mp4">
-                Your browser does not support the video tag.
-            </video>
-        </div>
-
-        <div id="panel-40-beyond-specs-text-panel" class="w-full bg-white px-8 pt-[32px] pb-[77px] panel-hidden">
-            <div class="max-w-[900px] mx-auto text-center">
-                <h3 class="text-black font-light text-[45px] leading-none">Beyond Specs</h3>
-                <p class="mt-[18px] text-gray-800 text-[30px] leading-tight">
-                    Turned personal learnings into team growth opportunities during the design and development process
-                </p>
-            </div>
-        </div>
-
-        <div id="panel-41-customer-testimonial-image" class="w-full panel-hidden">
-            <img src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1750372622/customer_testamonial_mpnwbf.svg"
-                 alt="Customer Testimonial"
-                 class="w-full h-auto block object-cover">
-        </div>
-    </div>
-
-    <div id="overlay" class="overlay">
-        <div id="overlayContent" class="overlay-content max-w-[800px] mx-auto px-16 py-12 border border-gray-300">
-            <h2 class="text-black text-[55px] font-bold leading-none mb-4">About this case study</h2>
-            <p class="text-gray-800 text-[22.5px] leading-tight mb-8">
-                This is a 5-10 minute read covering one specific approach to a project. It's intentionally comprehensive. Most of the work shown is entirely my own, with some artifacts the result of close collaboration with cross-functional partners such as content writers, research, and PM.
-            </p>
-            <img src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1750433661/About_support_graphic_xwo00h.svg"
-                 alt="About Support Graphic"
-                 class="w-full h-auto">
-        </div>
-    </div>
-
-    <script>
-        // Get all video elements that need observation for autoplay/pause on scroll (except selectedPrototypeVideo)
-        const videoElements = [
-            document.getElementById('designExplorationVideo'),
-            document.getElementById('prototypeVideo'),
-            document.getElementById('fineTuningVideo'),
-            document.getElementById('processDeliverVideo')
-        ];
-
-        // The 'educateVideo' and 'selectedPrototypeVideo' have special behavior
-        const educateVideo = document.getElementById('educateVideo');
-        const selectedPrototypeVideo = document.getElementById('selectedPrototypeVideo');
-        const selectedPrototypePlayButton = document.getElementById('selectedPrototypePlayButton');
-
-        // Function to create Intersection Observer for looping/muted videos
-        const createLoopingVideoObserver = (videoElement) => {
-            return new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        videoElement.play().catch(error => {
-                            console.error('Video autoplay failed:', error);
-                        });
-                    } else {
-                        videoElement.pause();
-                    }
-                });
-            }, {
-                threshold: 0.5 // Trigger when 50% of the video is visible
-            });
-        };
-
-        // Start observing looping/muted video elements
-        videoElements.forEach(video => {
-            const observer = createLoopingVideoObserver(video);
-            observer.observe(video);
-        });
-
-        // Special handling for the 'educateVideo' (Panel 39)
-        if (educateVideo) {
-            const educateVideoObserver = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        educateVideo.play().catch(error => {
-                            console.error('Educate Video autoplay failed:', error);
-                        });
-                    } else {
-                        educateVideo.pause();
-                    }
-                });
-            }, {
-                threshold: 0.5
-            });
-            educateVideoObserver.observe(educateVideo);
-
-            educateVideo.addEventListener('click', () => {
-                if (educateVideo.paused) {
-                    educateVideo.play().catch(error => {
-                        console.error('Educate Video play failed on click:', error);
-                    });
-                } else {
-                    educateVideo.pause();
-                }
-            });
-        }
-
-        // Special handling for the 'selectedPrototypeVideo' (Panel 30)
-        if (selectedPrototypeVideo && selectedPrototypePlayButton) {
-            // IntersectionObserver for this video to manage play button visibility
-            const selectedPrototypeObserver = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        // If visible and paused, show the button
-                        if (selectedPrototypeVideo.paused) {
-                            selectedPrototypePlayButton.classList.remove('hidden');
-                        }
-                    } else {
-                        // If not visible, always hide button and pause video
-                        selectedPrototypePlayButton.classList.add('hidden');
-                        selectedPrototypeVideo.pause();
-                    }
-                });
-            }, {
-                threshold: 0.2
-            });
-            selectedPrototypeObserver.observe(selectedPrototypeVideo);
-
-            // Hide play button when video plays
-            selectedPrototypeVideo.addEventListener('play', () => {
-                selectedPrototypePlayButton.classList.add('hidden');
-            });
-
-            // Show play button when video pauses or ends
-            selectedPrototypeVideo.addEventListener('pause', () => {
-                selectedPrototypePlayButton.classList.remove('hidden');
-            });
-            selectedPrototypeVideo.addEventListener('ended', () => {
-                selectedPrototypePlayButton.classList.remove('hidden');
-                selectedPrototypeVideo.currentTime = 0; // Reset to start
-            });
-
-            // Handle click on the play button overlay
-            selectedPrototypePlayButton.addEventListener('click', () => {
-                if (selectedPrototypeVideo.paused) {
-                    selectedPrototypeVideo.play().catch(error => {
-                        console.error('Selected Prototype Video play failed on click:', error);
-                    });
-                } else {
-                    selectedPrototypeVideo.pause();
-                }
-            });
-
-            // Handle click on the video itself (to pause/play)
-            selectedPrototypeVideo.addEventListener('click', () => {
-                if (selectedPrototypeVideo.paused) {
-                    selectedPrototypeVideo.play().catch(error => {
-                        console.error('Selected Prototype Video play failed on click:', error);
-                    });
-                    } else {
-                    selectedPrototypeVideo.pause();
-                }
-            });
-        }
-
-
-        // Overlay functionality
-        const aboutCaseStudyText = document.getElementById('aboutCaseStudyText');
-        const overlay = document.getElementById('overlay');
-
-        // Function to toggle overlay visibility
-        function toggleOverlay() {
-            overlay.classList.toggle('active');
-        }
-
-        // Event listener to open overlay when text is clicked
-        if (aboutCaseStudyText) {
-            aboutCaseStudyText.addEventListener('click', toggleOverlay);
-        }
-
-        // Event listener to close overlay when the overlay itself is clicked (anywhere)
-        if (overlay) {
-            overlay.addEventListener('click', toggleOverlay);
-        }
-
-        // --- Panel Animation Logic ---
-        const panelsToAnimate = document.querySelectorAll('.panel-hidden'); // Select all panels with this class
-
-        const panelObserver = new IntersectionObserver((entries, observer) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    // Add the class to trigger animation
-                    entry.target.classList.add('panel-visible');
-                    // Stop observing once the animation is triggered
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, {
-            threshold: 0.2 // Trigger when 20% of the panel is visible
-        });
-
-        // Observe each panel
-        panelsToAnimate.forEach(panel => {
-            panelObserver.observe(panel);
-        });
-    </script>
-</body>
-</html>
+                 class="w-full h-auto block obj

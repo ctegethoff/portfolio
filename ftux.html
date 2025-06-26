@@ -79,12 +79,28 @@
             transform: translateY(0);
             transition-delay: 0.5s;
         }
+
+        /* Custom padding for text panels */
+        .text-panel-padding {
+            padding-top: 1rem; /* Half of original 2rem (p-8) */
+            padding-bottom: 2rem; /* Double the new top padding */
+            padding-left: 2rem; /* Keep original horizontal padding from p-8 */
+            padding-right: 2rem; /* Keep original horizontal padding from p-8 */
+        }
+
+        /* Adjust media queries for text panel padding on larger screens */
+        @media (min-width: 768px) { /* Corresponds to md: breakpoint */
+            .text-panel-padding {
+                padding-left: 4rem; /* Matches original md:px-16 */
+                padding-right: 4rem; /* Matches original md:px-16 */
+            }
+        }
     </style>
 </head>
 <body class="bg-white">
 
     <div class="w-full">
-        <!-- Black Header Bar -->
+        <!-- Black Header Bar (consistent with ad_platform.html) -->
         <header class="sticky top-0 h-20 w-full bg-black z-50">
             <div class="max-w-8xl mx-auto h-full flex items-center px-8 md:px-16">
                 <!-- Back Arrow -->
@@ -116,7 +132,7 @@
         <!-- Main Content Wrapper -->
         <div class="max-w-8xl mx-auto">
             <!-- Panel 3_intro_text -->
-            <section class="min-h-[260px] flex items-center justify-center p-8">
+            <section class="min-h-[260px] flex items-center justify-center text-panel-padding">
                 <p class="text-xl md:text-2xl font-light text-center max-w-3xl text-gray-800 leading-relaxed">
                     Are we losing opportunities to convert gamers into day-one players if we are failing to present a compelling narrative that Google Play Games for PC has something to offer them?
                 </p>
@@ -131,7 +147,7 @@
             </section>
             
             <!-- Panel 5_problem_text -->
-            <section class="min-h-[260px] flex items-center justify-center p-8">
+            <section class="min-h-[260px] flex items-center justify-center text-panel-padding">
                 <p class="text-xl md:text-2xl font-light text-center max-w-3xl text-gray-800 leading-relaxed">
                     The current first time user experience for Google Play Games has become dated, unresponsive, and lacks signs of life. The FTUX fails to communicate the platform’s unique value to new users.
                 </p>
@@ -182,7 +198,7 @@
             </section>
             
             <!-- Panel 9_engagement_solution_txt -->
-            <section class="min-h-[260px] flex items-center justify-center p-8">
+            <section class="min-h-[260px] flex items-center justify-center text-panel-padding">
                 <p class="text-xl md:text-2xl font-light text-center max-w-3xl text-gray-800 leading-relaxed">
                     As users progress down the page, we reduce barriers to gameplay, such as the need to install or purchase a game.
                 </p>
@@ -253,7 +269,7 @@
             </section>
             
              <!-- Panel 11_under_carousel_txt -->
-            <section class="min-h-[260px] flex items-center justify-center p-8">
+            <section class="min-h-[260px] flex items-center justify-center text-panel-padding">
                 <p class="text-xl md:text-2xl font-light text-center max-w-3xl text-gray-800 leading-relaxed">
                    Create a share-worthy FTUX for Google Play Games on PC that showcases the platform's unique value, boosts loyalty, highlights performance on larger screens, and makes it effortless to discover games to fall in love with.
                 </p>
@@ -272,7 +288,7 @@
             </section>
             
             <!-- Panel 13_under_prototype_txt -->
-            <section class="min-h-[260px] flex items-center justify-center p-8">
+            <section class="min-h-[260px] flex items-center justify-center text-panel-padding">
                 <p class="text-xl md:text-2xl font-light text-center max-w-3xl text-gray-800 leading-relaxed">
                    Projected 5% boost in monthly active users by immediately engaging gamers through a strategic mix of branding, education, personalization, frictionless play, and interactivity.
                 </p>
