@@ -2,14 +2,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Miscellaneous Projects - Chris Tegethoff</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
     <script>
-        // Custom configuration for Tailwind
+        // Custom configuration for Tailwind CSS
         tailwind.config = {
             theme: {
                 extend: {
@@ -19,7 +19,6 @@
                     maxWidth: {
                         '8xl': '1440px',
                     },
-                    // Ensure the height '90' is still available if used elsewhere
                     height: {
                         '90': '90px',
                         '120': '120px', 
@@ -38,6 +37,7 @@
         }
     </script>
     <style>
+        /* Basic body styling to remove margin, set font, and background */
         body {
             margin: 0;
             font-family: 'Montserrat', sans-serif;
@@ -46,180 +46,193 @@
             -moz-osx-font-smoothing: grayscale;
             background-color: #ffffff;
         }
+        /* Wrapper for each image/video project, handling responsiveness, fade-in, and hover effects */
         .misc-image-wrapper {
             position: relative;
             overflow: hidden;
-            display: block; 
-            text-decoration: none; 
-            color: inherit; 
-            background-color: #e0e0e0; 
-            opacity: 0; /* Initially invisible for fade-in */
-            transition: opacity 1s ease-in; /* Fade-in transition */
+            display: block; /* Ensures it acts as a block-level link */
+            text-decoration: none; /* Removes underline from links */
+            color: inherit; /* Inherits text color */
+            background-color: #e0e0e0; /* Placeholder background */
+            opacity: 0; /* Initially invisible for fade-in effect */
+            transition: opacity 1s ease-in; /* Smooth fade-in transition */
         }
-        /* When the panel has loaded and is in view, make it visible */
+        /* Class added when content is loaded and in view, making it visible */
         .misc-image-wrapper.is-loaded {
             opacity: 1;
         }
 
+        /* Smooth transform transition for image/video scaling on hover */
         .misc-image-wrapper img,
         .misc-image-wrapper video { 
             transition: transform 0.3s ease;
         }
 
-        /* Scale image/video only when .overlay-active class is present on the wrapper */
+        /* Scales the image/video when the 'overlay-active' class is present on the wrapper */
         .misc-image-wrapper.overlay-active img,
         .misc-image-wrapper.overlay-active video { 
             transform: scale(1.1);
         }
 
+        /* Styling for the overlay that appears on hover/tap */
         .hover-overlay {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.6);
-            color: white;
-            display: flex; 
-            flex-direction: column; 
-            justify-content: flex-end; 
-            align-items: flex-start; 
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            pointer-events: none; 
-            padding: 20px; 
-            box-sizing: border-box; 
+            background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent black background */
+            color: white; /* White text color */
+            display: flex; /* Flexbox for content positioning */
+            flex-direction: column; /* Stack content vertically */
+            justify-content: flex-end; /* Align content to the bottom */
+            align-items: flex-start; /* Align content to the left */
+            opacity: 0; /* Initially hidden */
+            transition: opacity 0.3s ease; /* Smooth fade-in/out for the overlay */
+            pointer-events: none; /* Allows clicks to pass through when hidden */
+            padding: 20px; /* Internal padding */
+            box-sizing: border-box; /* Includes padding in element's total width and height */
         }
 
+        /* Basic styling for the content within the overlay */
         .overlay-content {
-            margin: 0; 
-            text-align: left; 
-            font-weight: 300; 
-            font-size: 1.5rem; 
-            line-height: 1.4; 
+            margin: 0; /* Remove default margin */
+            text-align: left; /* Align text to the left */
+            font-weight: 300; /* Light font weight */
+            font-size: 1.5rem; /* Base font size */
+            line-height: 1.4; /* Line height for readability */
         }
 
+        /* Styling for the project title within the overlay */
         .overlay-content .project-title {
-            font-size: 2rem; 
-            font-weight: 400; 
-            display: block; 
-            margin-bottom: 0px; 
+            font-size: 2rem; /* Larger font size for the title */
+            font-weight: 400; /* Regular font weight for the title */
+            display: block; /* Ensures it takes up full width */
+            margin-bottom: 0px; /* No bottom margin */
         }
 
+        /* Styling for project roles text within the overlay */
         .overlay-content .project-roles {
-            font-size: 1.4rem; 
-            font-weight: 300; 
-            display: block; 
-            margin-top: -22.5px; 
+            font-size: 1.4rem; /* Slightly smaller font size for roles */
+            font-weight: 300; /* Light font weight for roles */
+            display: block; /* Ensures it takes up full width */
+            margin-top: -22.5px; /* Adjust top margin to bring it closer to the title */
         }
         
-        /* Specific styles for the Google Play Games Notifications overlay */
+        /* Specific styles for the Google Play Games Notifications overlay to align content right and top */
         .overlay-right-align-top { 
-            justify-content: flex-start; 
-            align-items: flex-end;   
+            justify-content: flex-start; /* Align content to the top */
+            align-items: flex-end;   /* Align content to the right */
         }
 
+        /* Text alignment for title and roles within the right-aligned overlay */
         .overlay-right-align-top .project-title,
         .overlay-right-align-top .project-roles {
-            text-align: right; 
+            text-align: right; /* Right align text */
         }
 
-        /* Styles for the information icon */
+        /* Styles for the information icon button */
         .info-icon {
             position: absolute;
-            bottom: 20px; 
-            right: 20px; 
-            width: 80px; 
-            height: 80px; 
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-radius: 50%; 
-            cursor: pointer;
-            z-index: 10; 
-            transition: background-color 0.3s ease;
+            bottom: 20px; /* Position from bottom */
+            right: 20px; /* Position from right */
+            width: 80px; /* Fixed width */
+            height: 80px; /* Fixed height (creates a circle with border-radius: 50%) */
+            display: flex; /* Flexbox for centering content */
+            justify-content: center; /* Center horizontally */
+            align-items: center; /* Center vertically */
+            border-radius: 50%; /* Makes it a circle */
+            cursor: pointer; /* Indicates it's clickable */
+            z-index: 10; /* Ensures it's above other elements */
+            transition: background-color 0.3s ease; /* Smooth transition for background color */
         }
 
+        /* Hover effect for the information icon */
         .info-icon:hover {
-            background-color: rgba(0, 0, 0, 0.7);
+            background-color: rgba(0, 0, 0, 0.7); /* Darker background on hover */
         }
 
+        /* Styling for the SVG icon within the info button */
         .info-icon svg {
-            width: 48px; 
-            height: 48px; 
-            color: #4a4a4a; 
-            transition: color 0.3s ease; 
+            width: 48px; /* Icon width */
+            height: 48px; /* Icon height */
+            color: #4a4a4a; /* Default icon color */
+            transition: color 0.3s ease; /* Smooth transition for icon color */
         }
 
+        /* Icon color change on hover */
         .info-icon:hover svg {
-            color: white; 
+            color: white; /* White icon on hover */
         }
 
-        /* Mute button styles */
+        /* Mute button styles, similar to info-icon but positioned differently */
         .mute-toggle-button {
             position: absolute;
-            bottom: 20px; 
-            right: 110px; 
-            color: white; 
-            z-index: 10; 
-            transition: background-color 0.3s ease;
-            border-radius: 50%; 
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 80px; 
-            height: 80px; 
+            bottom: 20px; /* Position from bottom */
+            right: 110px; /* Position from right (next to info icon) */
+            color: white; /* Text color */
+            z-index: 10; /* Ensures it's above other elements */
+            transition: background-color 0.3s ease; /* Smooth transition for background */
+            border-radius: 50%; /* Makes it a circle */
+            display: flex; /* Flexbox for centering */
+            justify-content: center; /* Center horizontally */
+            align-items: center; /* Center vertically */
+            width: 80px; /* Fixed width */
+            height: 80px; /* Fixed height */
         }
+        /* Hover effect for the mute button */
         .mute-toggle-button:hover {
-            background-color: rgba(0, 0, 0, 0.7);
+            background-color: rgba(0, 0, 0, 0.7); /* Darker background on hover */
         }
+        /* Styling for the SVG icon within the mute button */
         .mute-toggle-button svg {
-            width: 48px; 
-            height: 48px; 
-            color: #4a4a4a; 
-            transition: color 0.3s ease; 
+            width: 48px; /* Icon width */
+            height: 48px; /* Icon height */
+            color: #4a4a4a; /* Default icon color */
+            transition: color 0.3s ease; /* Smooth transition for icon color */
         }
+        /* Icon color change on hover */
         .mute-toggle-button:hover svg {
-            color: white; 
+            color: white; /* White icon on hover */
         }
 
         /* Styles for "Click for case study" text within the overlay */
         .case-study-text { 
             position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+            top: 50%; /* Center vertically */
+            left: 50%; /* Center horizontally */
+            transform: translate(-50%, -50%); /* Adjust for exact centering */
             font-family: 'Montserrat', sans-serif;
-            font-weight: 300; 
-            font-size: 2rem; 
-            color: white;
-            text-align: center;
-            text-decoration: none; 
-            opacity: 0;
-            pointer-events: none; 
-            transition: opacity 0.3s ease;
-            z-index: 9; 
-            white-space: nowrap; 
+            font-weight: 300; /* Light font weight */
+            font-size: 2rem; /* Large font size */
+            color: white; /* White text color */
+            text-align: center; /* Center text */
+            text-decoration: none; /* No underline */
+            opacity: 0; /* Initially hidden */
+            pointer-events: none; /* Allows clicks to pass through when hidden */
+            transition: opacity 0.3s ease; /* Smooth fade-in/out */
+            z-index: 9; /* Below info/mute icons */
+            white-space: nowrap; /* Prevents text from wrapping */
         }
 
         /* Show case study text when overlay is active */
         .misc-image-wrapper.overlay-active .case-study-text {
-            opacity: 1;
-            pointer-events: auto; 
+            opacity: 1; /* Make visible */
+            pointer-events: auto; /* Allow clicks */
         }
 
         /* Overlay visibility controlled by 'overlay-active' class on wrapper */
         .misc-image-wrapper.overlay-active .hover-overlay {
-            opacity: 1; /* Increased opacity for active hover overlay */
-            pointer-events: auto; 
+            opacity: 1; /* Make overlay visible */
+            pointer-events: auto; /* Allow clicks/interactions on overlay */
         }
 
-        /* Styling for the video element */
+        /* Styling for video elements within the wrapper */
         .misc-image-wrapper video {
-            display: block; 
-            width: 100%;
-            height: auto;
-            object-fit: cover; 
+            display: block; /* Block-level element */
+            width: 100%; /* Full width of parent */
+            height: auto; /* Maintain aspect ratio */
+            object-fit: cover; /* Cover the container, cropping if necessary */
         }
     </style>
 </head>
@@ -237,7 +250,7 @@
 
         <main>
             <div class="flex flex-col items-center">
-                <!-- IOT Mobile App -->
+                <!-- IOT Mobile App Project Section -->
                 <div class="misc-image-wrapper max-w-5xl w-full">
                   <img data-src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746736301/iot-smart-home-ux_pch1h9.webp" alt="IOT Mobile App" class="w-full h-auto"/>
                   <div class="hover-overlay">
@@ -247,12 +260,13 @@
                     </p>
                   </div>
                   <button class="info-icon" aria-label="More information about IOT Mobile App">
+                    <!-- Info icon SVG -->
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-info">
                         <circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>
                     </svg>
                   </button>
                 </div>
-                <!-- ROKU AD PLATFORM VIDEO PROJECT -->
+                <!-- ROKU AD PLATFORM VIDEO PROJECT Section -->
                 <a href="ad.html" class="misc-image-wrapper max-w-5xl w-full">
                   <video id="rokuAdPlatformVideo" data-src="https://res.cloudinary.com/dlbnlilfj/video/upload/v1750959843/ad_crawl_uvkeig.mp4" 
                          loop playsinline preload="auto" muted 
@@ -267,12 +281,13 @@
                   </div>
                   <span class="case-study-text">Click for case study</span>
                   <button class="info-icon" aria-label="More information about Roku Ad Platform">
+                    <!-- Info icon SVG -->
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-info">
                         <circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>
                     </svg>
                   </button>
                 </a>
-                <!-- MS Surface Music App -->
+                <!-- MS Surface Music App Project Section -->
                 <div class="misc-image-wrapper max-w-5xl w-full">
                   <img data-src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746215240/MS_Surface_Music_App_drtojj.webp" alt="MS Surface Music App" class="w-full h-auto"/>
                   <div class="hover-overlay">
@@ -282,12 +297,13 @@
                     </p>
                   </div>
                   <button class="info-icon" aria-label="More information about MS Surface Music App">
+                    <!-- Info icon SVG -->
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucude-info">
                         <circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>
                     </svg>
                   </button>
                 </div>
-                <!-- 360 Interactive Surface -->
+                <!-- 360 Interactive Surface Project Section -->
                 <div class="misc-image-wrapper max-w-5xl w-full">
                   <img data-src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746215238/MS_Surface_360_UX_aqsahi.webp" alt="360 Touch Surface" class="w-full h-auto"/>
                   <div class="hover-overlay">
@@ -297,12 +313,13 @@
                     </p>
                   </div>
                   <button class="info-icon" aria-label="More information about 360 Interactive Surface">
+                    <!-- Info icon SVG -->
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-info">
                         <circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>
                     </svg>
                   </button>
                 </div>
-                <!-- Roku Mobile Design -->
+                <!-- Roku Mobile Design Project Section -->
                 <div class="misc-image-wrapper max-w-5xl w-full">
                   <img data-src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746215248/Roku_Mobile_Design_tlqemb.webp" alt="Roku Mobile Design" class="w-full h-auto"/>
                   <div class="hover-overlay">
@@ -312,12 +329,13 @@
                     </p>
                   </div>
                   <button class="info-icon" aria-label="More information about Roku Mobile Design">
+                    <!-- Info icon SVG -->
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-info">
                         <circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>
                     </svg>
                   </button>
                 </div>
-                <!-- Roku OS VIDEO PROJECT -->
+                <!-- Roku OS VIDEO PROJECT Section -->
                 <div class="misc-image-wrapper max-w-5xl w-full">
                   <video id="rokuOsVideo" data-src="https://res.cloudinary.com/dlbnlilfj/video/upload/v1750800947/Slideshow_yrussz.mp4" 
                          loop playsinline preload="auto" muted 
@@ -331,12 +349,13 @@
                     </p>
                   </div>
                   <button class="info-icon" aria-label="More information about Roku OS">
+                    <!-- Info icon SVG -->
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-info">
                         <circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>
                     </svg>
                   </button>
                 </div>
-                <!-- GOOGLE PLAY GAMES NOTIFICATIONS VIDEO PROJECT -->
+                <!-- GOOGLE PLAY GAMES NOTIFICATIONS VIDEO PROJECT Section -->
                 <div class="misc-image-wrapper max-w-5xl w-full">
                   <video id="googlePlayNotificationsVideo" data-src="https://res.cloudinary.com/dlbnlilfj/video/upload/v1750912734/Notif_sequence_Main_3_qelvwb.mp4" 
                          loop playsinline preload="auto" muted 
@@ -350,12 +369,13 @@
                     </p>
                   </div>
                   <button class="info-icon" aria-label="More information about Google Play Games Notifications">
+                    <!-- Info icon SVG -->
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-info">
                         <circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>
                     </svg>
                   </button>
                 </div>
-                <!-- GOOGLE PLAY GAMES FTUX VIDEO PROJECT -->
+                <!-- GOOGLE PLAY GAMES FTUX VIDEO PROJECT Section -->
                 <a href="ftux.html" class="misc-image-wrapper max-w-5xl w-full">
                   <video id="googlePlayFTUXVideo" data-src="https://res.cloudinary.com/dlbnlilfj/video/upload/v1750962662/FTUX_xfdlqi.mp4" 
                          loop playsinline preload="auto" muted 
@@ -370,12 +390,13 @@
                   </div>
                   <span class="case-study-text">Click for case study</span>
                   <button class="info-icon" aria-label="More information about Google Play Games FTUX">
+                    <!-- Info icon SVG -->
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-info">
                         <circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>
                     </svg>
                   </button>
                 </a>
-                <!-- Nike Kids Storyboard -->
+                <!-- Nike Kids Storyboard Project Section -->
                 <div class="misc-image-wrapper max-w-5xl w-full">
                   <img data-src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746215242/Nike_Kids_Storyboard_ay53y9.webp" alt="Nike Kids Storyboard" class="w-full h-auto"/>
                   <div class="hover-overlay">
@@ -385,12 +406,13 @@
                     </p>
                   </div>
                   <button class="info-icon" aria-label="More information about Nike Kids Storyboard">
+                    <!-- Info icon SVG -->
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-info">
                         <circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>
                     </svg>
                   </button>
                 </div>
-                <!-- Nike Kids Concept -->
+                <!-- Nike Kids Concept Project Section -->
                 <div class="misc-image-wrapper max-w-5xl w-full">
                   <img data-src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746215244/Nike_Kids_Website_Concept_bgrali.webp" alt="Nike Kids Website Concept" class="w-full h-auto"/>
                   <div class="hover-overlay">
@@ -400,32 +422,13 @@
                     </p>
                   </div>
                   <button class="info-icon" aria-label="More information about Nike Kids Concept">
+                    <!-- Info icon SVG -->
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-info">
                         <circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>
                     </svg>
                   </button>
                 </div>
-                <!-- SETTINGS OVER VIDEO PROJECT -->
-                <a href="settings.html" class="misc-image-wrapper max-w-5xl w-full">
-                  <video id="settingsOverVideo" data-src="https://res.cloudinary.com/dlbnlilfj/video/upload/v1750964252/settings_dkyc1y.mp4" 
-                         loop playsinline preload="auto" muted 
-                         class="w-full h-auto object-cover">
-                    Your browser does not support the video tag.
-                  </video>
-                  <div class="hover-overlay">
-                    <p class="overlay-content">
-                      <span class="project-title">Settings Over Video</span><br>
-                      <span class="project-roles">Design, new pattern development, research, rapid prototyping</span>
-                    </p>
-                  </div>
-                  <span class="case-study-text">Click for case study</span>
-                  <button class="info-icon" aria-label="More information about Settings Over Video">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-info">
-                        <circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>
-                    </svg>
-                  </button>
-                </a>
-                <!-- EXISTING NIKE VIDEO PROJECT -->
+                <!-- EXISTING NIKE VIDEO PROJECT Section -->
                 <div class="misc-image-wrapper max-w-5xl w-full">
                   <video id="nikeTrainingVideo" data-src="https://res.cloudinary.com/dlbnlilfj/video/upload/v1750702214/nike_sst_a5kygz.mp4" 
                          loop playsinline preload="auto" muted 
@@ -441,17 +444,39 @@
                   <!-- Mute/Unmute button for video -->
                   <button id="muteToggleButtonNike" class="mute-toggle-button" aria-label="Toggle mute for Nike Training OS video">
                     <!-- Volume On Icon (initially visible) -->
-                    <svg id="volumeOnIconNike" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-volume-2 hidden"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M23.31 1.69a16 16 0 0 1 0 20.62"/></svg>
+                    <svg id="volumeOnIconNike" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 28 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-volume-2 hidden"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M23.31 1.69a16 16 0 0 1 0 20.62"/></svg>
                     <!-- Volume Off Icon (initially hidden) -->
                     <svg id="volumeOffIconNike" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-volume-x"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="22" x2="16" y1="9" y2="15"/><line x1="16" x2="22" y1="9" y2="15"/></svg>
                   </button>
                   <button class="info-icon" aria-label="More information about Nike Training OS">
+                    <!-- Info icon SVG -->
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-info">
                         <circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>
                     </svg>
                   </button>
                 </div>
-                <!-- Printer app -->
+                <!-- SETTINGS OVER VIDEO PROJECT Section -->
+                <a href="settings.html" class="misc-image-wrapper max-w-5xl w-full">
+                  <video id="settingsOverVideo" data-src="https://res.cloudinary.com/dlbnlilfj/video/upload/v1750964252/settings_dkyc1y.mp4" 
+                         loop playsinline preload="auto" muted 
+                         class="w-full h-auto object-cover">
+                    Your browser does not support the video tag.
+                  </video>
+                  <div class="hover-overlay">
+                    <p class="overlay-content">
+                      <span class="project-title">Settings Over Video</span><br>
+                      <span class="project-roles">Design, new pattern development, research, rapid prototyping</span>
+                    </p>
+                  </div>
+                  <span class="case-study-text">Click for case study</span>
+                  <button class="info-icon" aria-label="More information about Settings Over Video">
+                    <!-- Info icon SVG -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-info">
+                        <circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>
+                    </svg>
+                  </button>
+                </a>
+                <!-- Printer app Project Section -->
                 <div class="misc-image-wrapper max-w-5xl w-full">
                   <img data-src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746215246/Printer_UX_uph85f.webp" alt="Printer UX" class="w-full h-auto"/>
                   <div class="hover-overlay">
@@ -461,12 +486,13 @@
                     </p>
                   </div>
                   <button class="info-icon" aria-label="More information about Printer app">
+                    <!-- Info icon SVG -->
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-info">
                         <circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>
                     </svg>
                   </button>
                 </div>
-                <!-- Iconography -->
+                <!-- Iconography Project Section -->
                 <div class="misc-image-wrapper max-w-5xl w-full">
                   <img data-src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746215236/Iconography_j2j3m6.webp" alt="Iconography" class="w-full h-auto"/>
                   <div class="hover-overlay">
@@ -476,22 +502,24 @@
                     </p>
                   </div>
                   <button class="info-icon" aria-label="More information about Iconography">
+                    <!-- Info icon SVG -->
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-info">
                         <circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>
                     </svg>
                   </button>
                 </div>
-                <!-- Icon Sketches -->
+                <!-- Icon Sketches Project Section -->
                 <div class="misc-image-wrapper max-w-5xl w-full">
                   <img data-src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746215235/Icon_Sketches_t9zci1.webp" alt="Icon Sketches" class="w-full h-auto"/>
                   <div class="hover-overlay"><span>Icon Sketches</span></div>
                   <button class="info-icon" aria-label="More information about Icon Sketches">
+                    <!-- Info icon SVG -->
                     <svg xmlns="http://www.w3.org/2003/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-info">
                         <circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>
                     </svg>
                   </button>
                 </div>
-                <!-- Roku Design Systems -->
+                <!-- Roku Design Systems Project Section -->
                 <div class="misc-image-wrapper max-w-5xl w-full">
                   <img data-src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746215233/Design_Systems_m2mzen.webp" alt="Design System" class="w-full h-auto"/>
                   <div class="hover-overlay">
@@ -501,12 +529,14 @@
                     </p>
                   </div>
                   <button class="info-icon" aria-label="More information about Roku Design Systems">
+                    <!-- Info icon SVG -->
                     <svg xmlns="http://www.w3.org/2003/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-info">
                         <circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>
                     </svg>
                   </button>
                 </div>
                 
+                <!-- "The End" image section -->
                 <div class="max-w-5xl w-full my-16">
                     <img data-src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746215250/THE_END_dylo5r.svg" alt="The End" class="w-full h-auto">
                 </div>
@@ -516,96 +546,148 @@
     
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // Function to detect if the device is touch-enabled
             const isTouchDevice = () => {
                 return 'ontouchstart' in window || navigator.maxTouchPoints > 0;
             };
 
+            // Select all project wrappers
             const miscImageWrappers = document.querySelectorAll('.misc-image-wrapper');
 
+            // Set up Intersection Observer for lazy loading images and videos
             const lazyLoadObserver = new IntersectionObserver((entries, observer) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         const wrapper = entry.target;
                         const mediaElement = wrapper.querySelector('img, video');
                         if (mediaElement && mediaElement.dataset.src) {
+                            // Load media source from data-src
                             mediaElement.src = mediaElement.dataset.src;
-                            // For videos, also handle autoplay once loaded
+                            // For videos, attempt to play once loaded
                             if (mediaElement.tagName === 'VIDEO') {
                                 mediaElement.play().catch(error => console.warn(`Video autoplay prevented for ${mediaElement.id}:`, error));
                             }
                             mediaElement.removeAttribute('data-src'); // Remove data-src to prevent re-loading
                         }
-                        // Add class to trigger fade-in
+                        // Add 'is-loaded' class to trigger CSS fade-in
                         wrapper.classList.add('is-loaded');
                         observer.unobserve(wrapper); // Stop observing once loaded
                     }
                 });
             }, {
-                root: null, // Use the viewport as the root
+                root: null, // Use the viewport as the root for observation
                 rootMargin: '0px',
                 threshold: 0.1 // Trigger when 10% of the element is visible
             });
 
+            // Iterate over each project wrapper to attach event listeners and observer
             miscImageWrappers.forEach(wrapper => {
-                lazyLoadObserver.observe(wrapper);
+                lazyLoadObserver.observe(wrapper); // Start observing for lazy loading
 
                 const infoIcon = wrapper.querySelector('.info-icon');
                 const muteButton = wrapper.querySelector('.mute-toggle-button'); 
 
-                if (infoIcon) {
-                    const toggleOverlayAndScale = (force) => {
-                        miscImageWrappers.forEach(otherWrapper => {
-                            if (otherWrapper !== wrapper) {
-                                otherWrapper.classList.remove('overlay-active');
+                // Function to toggle the 'overlay-active' class on the wrapper
+                const toggleOverlayAndScale = (force) => {
+                    // Close any other active overlays before opening a new one
+                    miscImageWrappers.forEach(otherWrapper => {
+                        if (otherWrapper !== wrapper && otherWrapper.classList.contains('overlay-active')) {
+                            otherWrapper.classList.remove('overlay-active');
+                        }
+                    });
+                    // Toggle or force the 'overlay-active' class for the current wrapper
+                    if (typeof force === 'boolean') {
+                        wrapper.classList.toggle('overlay-active', force);
+                    } else {
+                        wrapper.classList.toggle('overlay-active');
+                    }
+                };
+
+
+                if (isTouchDevice()) {
+                    // Touch device specific logic
+                    if (wrapper.tagName === 'A') {
+                        // For case study links (<a> tags)
+                        wrapper.addEventListener('click', (e) => {
+                            const isOverlayActive = wrapper.classList.contains('overlay-active');
+                            const clickedOnInfoOrMute = (infoIcon && infoIcon.contains(e.target)) || (muteButton && muteButton.contains(e.target));
+
+                            if (isOverlayActive) {
+                                // If overlay is already active
+                                if (clickedOnInfoOrMute) {
+                                    // If info or mute button was clicked, just toggle overlay (or let specific handler take over)
+                                    // This prevents navigation if one of these specific buttons is tapped.
+                                    toggleOverlayAndScale(false); // Hide overlay
+                                    e.preventDefault(); // Prevent potential default link behavior from bubbling
+                                } else {
+                                    // Second tap on the main wrapper (not info/mute), allow navigation
+                                    // The default behavior of the <a> tag will now proceed.
+                                    // No need to preventDefault here.
+                                }
+                            } else {
+                                // If overlay is not active (first tap)
+                                e.preventDefault(); // Prevent immediate navigation
+                                toggleOverlayAndScale(true); // Show overlay
                             }
                         });
-                        if (typeof force === 'boolean') {
-                            wrapper.classList.toggle('overlay-active', force);
-                        } else {
-                            wrapper.classList.toggle('overlay-active');
-                        }
-                    };
+                    } else {
+                        // For non-case study divs
+                        // The infoIcon will handle toggling directly
+                    }
 
-                    if (isTouchDevice()) {
+                    // Always ensure infoIcon and muteButton stop propagation for touch devices
+                    if (infoIcon) {
                         infoIcon.addEventListener('click', (e) => {
-                            e.stopPropagation(); 
+                            e.stopPropagation(); // Prevent the wrapper's click listener from firing
+                            // For non-link wrappers, infoIcon directly toggles.
+                            // For link wrappers, infoIcon also toggles but doesn't trigger navigation.
                             toggleOverlayAndScale();
                         });
+                    }
+                    if (muteButton) {
+                        muteButton.addEventListener('click', (e) => {
+                            e.stopPropagation(); // Prevent the wrapper's click listener from firing
+                        });
+                    }
 
-                        if (muteButton) {
-                            muteButton.addEventListener('click', (e) => {
-                                e.stopPropagation(); 
-                            });
-                        }
-
-                        document.addEventListener('click', (e) => {
-                            if (!wrapper.contains(e.target) && wrapper.classList.contains('overlay-active')) {
-                                toggleOverlayAndScale(false); 
+                    // Global click listener to close any active overlay when tapping outside
+                    document.addEventListener('click', (e) => {
+                        let clickedInsideAnyActiveWrapper = false;
+                        miscImageWrappers.forEach(w => {
+                            if (w.classList.contains('overlay-active') && w.contains(e.target)) {
+                                clickedInsideAnyActiveWrapper = true;
                             }
                         });
 
-                    } else {
+                        // If the click was outside of any active wrapper, close all overlays
+                        if (!clickedInsideAnyActiveWrapper) {
+                             miscImageWrappers.forEach(w => w.classList.remove('overlay-active'));
+                        }
+                    });
+
+                } else {
+                    // Desktop (non-touch) device logic - original hover functionality
+                    if (infoIcon) {
                         infoIcon.addEventListener('mouseenter', () => {
                             toggleOverlayAndScale(true); 
                         });
                         infoIcon.addEventListener('mouseleave', () => {
                             toggleOverlayAndScale(false); 
                         });
+                    }
 
-                        if (muteButton) {
-                            muteButton.addEventListener('mouseenter', () => {
-                                toggleOverlayAndScale(true);
-                            });
-                            muteButton.addEventListener('mouseleave', () => {
-                                toggleOverlayAndScale(false);
-                            });
-                        }
+                    if (muteButton) {
+                        muteButton.addEventListener('mouseenter', () => {
+                            toggleOverlayAndScale(true);
+                        });
+                        muteButton.addEventListener('mouseleave', () => {
+                            toggleOverlayAndScale(false);
+                        });
                     }
                 }
             });
 
-            // Re-integrate existing video autoplay logic (now handled by lazyLoadObserver for initial play)
-            // The mute/unmute functionality still needs its listeners
+            // Function to set up mute/unmute toggle for videos
             const setupMuteToggle = (videoId, muteButtonId, volumeOnId, volumeOffId) => {
                 const videoElement = document.getElementById(videoId);
                 const muteToggleButton = document.getElementById(muteButtonId);
@@ -614,7 +696,8 @@
 
                 if (muteToggleButton && videoElement) {
                     muteToggleButton.addEventListener('click', () => {
-                        videoElement.muted = !videoElement.muted; 
+                        videoElement.muted = !videoElement.muted; // Toggle muted state
+                        // Toggle visibility of volume on/off icons based on muted state
                         if (videoElement.muted) {
                             if (volumeOnIcon) volumeOnIcon.classList.add('hidden');
                             if (volumeOffIcon) volumeOffIcon.classList.remove('hidden');
@@ -626,11 +709,8 @@
                 }
             };
 
-            // Setup for the Nike Training OS video mute control
+            // Setup mute toggle specifically for the Nike Training OS video
             setupMuteToggle('nikeTrainingVideo', 'muteToggleButtonNike', 'volumeOnIconNike', 'volumeOffIconNike');
-            
-            // Note: Autoplay for all videos is now handled by the lazyLoadObserver.
-            // We just need to ensure the correct element is passed to the observer for each video.
         });
     </script>
 </body>
