@@ -377,13 +377,6 @@
                       <span class="project-roles">Design, design systems, A11y, i18n</span>
                     </p>
                   </div>
-                  <!-- Play/Pause button for Roku OS video (mobile only) -->
-                  <button id="playPauseButtonRokuOs" class="video-play-pause-button" aria-label="Toggle play/pause for Roku OS video">
-                    <!-- Play icon (initially visible) -->
-                    <svg id="playIconRokuOs" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-play"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-                    <!-- Pause icon (initially hidden) -->
-                    <svg id="pauseIconRokuOs" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pause hidden"><rect width="4" height="16" x="6" y="4"/><rect width="4" height="16" x="14" y="4"/></svg>
-                  </button>
                   <button class="info-icon" aria-label="More information about Roku OS">
                     <!-- Info icon SVG -->
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-info">
@@ -704,18 +697,20 @@
                             mediaElement.src = mediaElement.dataset.src;
                             // For videos, attempt to play once loaded. Autoplay may still be blocked by browser policies.
                             if (mediaElement.tagName === 'VIDEO') {
+                                // For mobile, ensure all videos are muted and attempt to play
+                                if (isTouchDevice()) {
+                                    mediaElement.muted = true; // Ensure video is muted on mobile
+                                }
                                 mediaElement.play().catch(error => {
                                     console.warn(`Video autoplay prevented for ${mediaElement.id}:`, error);
-                                    // If autoplay is prevented, ensure play/pause button is visible
-                                    if (isTouchDevice()) {
-                                        const playPauseButton = wrapper.querySelector('.video-play-pause-button');
-                                        if (playPauseButton) {
-                                            playPauseButton.classList.remove('hidden-on-play');
-                                            const playIcon = playPauseButton.querySelector('.lucide-play');
-                                            const pauseIcon = playPauseButton.querySelector('.lucide-pause');
-                                            if (playIcon) playIcon.classList.remove('hidden');
-                                            if (pauseIcon) pauseIcon.classList.add('hidden');
-                                        }
+                                    // If autoplay is prevented, remove play/pause button if it exists and is for mobile only
+                                    const playPauseButton = wrapper.querySelector('.video-play-pause-button');
+                                    if (playPauseButton && isTouchDevice()) {
+                                        playPauseButton.classList.remove('hidden-on-play'); // Ensure it's visible if autoplay fails
+                                        const playIcon = playPauseButton.querySelector('.lucide-play');
+                                        const pauseIcon = playPauseButton.querySelector('.lucide-pause');
+                                        if (playIcon) playIcon.classList.remove('hidden');
+                                        if (pauseIcon) pauseIcon.classList.add('hidden');
                                     }
                                 });
                             }
@@ -784,11 +779,14 @@
 
                 if (isTouchDevice()) {
                     // Mobile specific click handling for all wrappers
+                    // This listener will handle both showing and dismissing overlays, and navigating for case studies.
                     wrapper.addEventListener('click', (e) => {
                         const clickedOnCaseStudyText = isCaseStudyLink && (e.target.classList.contains('case-study-text') || (e.target.closest && e.target.closest('.case-study-text')));
                         const isOverlayActive = wrapper.classList.contains('overlay-active');
+                        const clickedOnInfoIcon = infoIcon && infoIcon.contains(e.target);
+                        const clickedOnMuteButton = muteButton && muteButton.contains(e.target);
 
-                        // Always prevent default navigation for links on mobile, as we're handling clicks manually.
+                        // Prevent default navigation for links on mobile, as we're handling clicks manually.
                         if (wrapper.tagName === 'A') {
                             e.preventDefault(); 
                         }
@@ -799,60 +797,24 @@
                                 // If it's a case study and the specific 'Click for case study' text was tapped, navigate.
                                 saveStateBeforeUnload(wrapper.id);
                                 window.location.href = wrapper.getAttribute('data-original-href');
-                                wrapper.removeAttribute('data-tapped-for-overlay'); // Clear flag
                                 // No explicit toggleOverlayAndScale(false) here, as navigation will unload the page.
                             } else {
                                 // Clicked anywhere else on the panel when overlay is active (including info/mute icons)
+                                // This is the universal dismiss for active overlays on mobile.
                                 toggleOverlayAndScale(false); // Dismiss the overlay
-                                if (isCaseStudyLink) wrapper.removeAttribute('data-tapped-for-overlay'); // Reset case study flag
                             }
                         } else {
                             // If overlay is NOT active (this is the first tap on general area or any child element)
                             toggleOverlayAndScale(true); // Show overlay
-                            if (isCaseStudyLink) wrapper.setAttribute('data-tapped-for-overlay', 'true'); // For case studies, mark for second tap
+                            // No need for data-tapped-for-overlay flag with this simplified logic,
+                            // as a second tap just closes the overlay unless it's the case study text.
                         }
                     });
 
-                    // The infoIcon and muteButton themselves should not directly toggle the overlay as the wrapper handles it.
-                    // Their primary job is to stop propagation if they have specific functionality (mute/unmute, or if
-                    // we want to ensure their clicks only open and not close the overlay in the two-tap sequence)
-                    if (infoIcon) {
-                        infoIcon.addEventListener('click', (e) => {
-                            e.stopPropagation(); // Prevents click from bubbling up to wrapper listener
-                            // The wrapper's click listener now handles the overlay toggle for infoIcon clicks as well.
-                            // The hiding/showing of the icon itself is handled in toggleOverlayAndScale.
-                        });
-                    }
-                    if (muteButton) {
-                        muteButton.addEventListener('click', (e) => {
-                            e.stopPropagation(); // Prevents click from bubbling up to wrapper listener
-                            // Mute/unmute logic is handled directly by setupMuteToggle
-                        });
-                    }
-                    
-                    // Global click listener to close any active overlay when tapping outside
-                    document.addEventListener('click', (e) => {
-                        let clickedInsideAnyActiveWrapper = false;
-                        miscImageWrappers.forEach(w => {
-                            if (w.classList.contains('overlay-active') && w.contains(e.target)) {
-                                clickedInsideAnyActiveWrapper = true;
-                            }
-                        });
-
-                        if (!clickedInsideAnyActiveWrapper) {
-                             miscImageWrappers.forEach(w => {
-                                w.classList.remove('overlay-active');
-                                if (w.tagName === 'A' && w.hasAttribute('data-tapped-for-overlay')) {
-                                    w.removeAttribute('data-tapped-for-overlay');
-                                }
-                                // Ensure info icon is visible when overlay is closed by outside click
-                                if (isTouchDevice()) {
-                                    const currentInfoIcon = w.querySelector('.info-icon');
-                                    if (currentInfoIcon) currentInfoIcon.classList.remove('hidden');
-                                }
-                            });
-                        }
-                    });
+                    // On mobile, infoIcon and muteButton clicks are now handled by the wrapper's universal click listener.
+                    // The mute button's actual mute/unmute functionality is handled by `setupMuteToggle`.
+                    // We remove the specific click listeners for infoIcon and muteButton on mobile as they're now redundant
+                    // in terms of overlay control.
 
                 } else {
                     // Desktop (non-touch) device logic
@@ -909,17 +871,24 @@
                 const volumeOffIcon = document.getElementById(volumeOffId);
 
                 if (muteToggleButton && videoElement) {
-                    muteToggleButton.addEventListener('click', () => {
-                        videoElement.muted = !videoElement.muted; // Toggle muted state
-                        // Toggle visibility of volume on/off icons based on muted state
-                        if (videoElement.muted) {
-                            if (volumeOnIcon) volumeOnIcon.classList.add('hidden');
-                            if (volumeOffIcon) volumeOffIcon.classList.remove('hidden');
-                        } else {
-                            if (volumeOnIcon) volumeOnIcon.classList.remove('hidden');
-                            if (volumeOffIcon) volumeOffIcon.classList.add('hidden');
-                        }
-                    });
+                    // On mobile, always muted, no toggle
+                    if (isTouchDevice()) {
+                         videoElement.muted = true; // Ensure muted
+                         if (muteToggleButton) muteToggleButton.style.display = 'none'; // Hide mute button
+                    } else {
+                        // Desktop mute/unmute logic
+                        muteToggleButton.addEventListener('click', () => {
+                            videoElement.muted = !videoElement.muted; // Toggle muted state
+                            // Toggle visibility of volume on/off icons based on muted state
+                            if (videoElement.muted) {
+                                if (volumeOnIcon) volumeOnIcon.classList.add('hidden');
+                                if (volumeOffIcon) volumeOffIcon.classList.remove('hidden');
+                            } else {
+                                if (volumeOnIcon) volumeOnIcon.classList.remove('hidden');
+                                if (volumeOffIcon) volumeOffIcon.classList.add('hidden');
+                            }
+                        });
+                    }
                 }
             };
 
@@ -934,61 +903,67 @@
                 const playIcon = document.getElementById(playIconId);
                 const pauseIcon = document.getElementById(pauseIconId);
 
-                if (!videoElement || !playPauseButton || !isTouchDevice()) {
-                    return; // Only apply to touch devices and if elements exist
+                if (!videoElement || !playPauseButton) { // No need for isTouchDevice() check here, CSS handles visibility
+                    return; 
                 }
 
-                // Initial state: If video is paused or ended, show play icon
-                if (videoElement.paused || videoElement.ended) {
-                    playIcon.classList.remove('hidden');
-                    pauseIcon.classList.add('hidden');
-                    playPauseButton.classList.remove('hidden-on-play'); // Ensure button is visible
+                if (isTouchDevice()) {
+                     // For mobile, remove play/pause button as videos should autoplay muted
+                     playPauseButton.style.display = 'none';
                 } else {
-                    playIcon.classList.add('hidden');
-                    pauseIcon.classList.remove('hidden');
-                    playPauseButton.classList.add('hidden-on-play'); // Hide button if already playing (e.g. autoplay worked)
-                }
-                
-                // Add click listener to the play/pause button
-                playPauseButton.addEventListener('click', (e) => {
-                    e.stopPropagation(); // Prevent wrapper's click listener from interfering
-
+                    // Desktop play/pause button logic remains
+                    // Initial state for desktop: If video is paused or ended, show play icon
                     if (videoElement.paused || videoElement.ended) {
-                        videoElement.play().then(() => {
-                            playIcon.classList.add('hidden');
-                            pauseIcon.classList.remove('hidden');
-                            playPauseButton.classList.add('hidden-on-play'); // Hide button after successful play
-                        }).catch(error => {
-                            console.error('Error playing video:', error);
-                            // If play fails, keep button visible and in play state
-                            playIcon.classList.remove('hidden');
-                            pauseIcon.classList.add('hidden');
-                            playPauseButton.classList.remove('hidden-on-play');
-                        });
-                    } else {
-                        videoElement.pause();
                         playIcon.classList.remove('hidden');
                         pauseIcon.classList.add('hidden');
-                        playPauseButton.classList.remove('hidden-on-play'); // Show button when paused
+                        playPauseButton.classList.remove('hidden-on-play'); // Ensure button is visible
+                    } else {
+                        playIcon.classList.add('hidden');
+                        pauseIcon.classList.remove('hidden');
+                        playPauseButton.classList.add('hidden-on-play'); // Hide button if already playing (e.g. autoplay worked)
                     }
-                });
+                    
+                    // Add click listener to the play/pause button
+                    playPauseButton.addEventListener('click', (e) => {
+                        e.stopPropagation(); // Prevent wrapper's click listener from interfering
 
-                // Listen for video events to update button state
-                videoElement.addEventListener('play', () => {
-                    playIcon.classList.add('hidden');
-                    pauseIcon.classList.remove('hidden');
-                    playPauseButton.classList.add('hidden-on-play');
-                });
-                videoElement.addEventListener('pause', () => {
-                    playIcon.classList.remove('hidden');
-                    pauseIcon.classList.add('hidden');
-                    playPauseButton.classList.remove('hidden-on-play');
-                });
-                videoElement.addEventListener('ended', () => {
-                    playIcon.classList.remove('hidden');
-                    pauseIcon.classList.add('hidden');
-                    playPauseButton.classList.remove('hidden-on-play');
-                });
+                        if (videoElement.paused || videoElement.ended) {
+                            videoElement.play().then(() => {
+                                playIcon.classList.add('hidden');
+                                pauseIcon.classList.remove('hidden');
+                                playPauseButton.classList.add('hidden-on-play'); // Hide button after successful play
+                            }).catch(error => {
+                                console.error('Error playing video:', error);
+                                // If play fails, keep button visible and in play state
+                                playIcon.classList.remove('hidden');
+                                pauseIcon.classList.add('hidden');
+                                playPauseButton.classList.remove('hidden-on-play');
+                            });
+                        } else {
+                            videoElement.pause();
+                            playIcon.classList.remove('hidden');
+                            pauseIcon.classList.add('hidden');
+                            playPauseButton.classList.remove('hidden-on-play'); // Show button when paused
+                        }
+                    });
+
+                    // Listen for video events to update button state
+                    videoElement.addEventListener('play', () => {
+                        playIcon.classList.add('hidden');
+                        pauseIcon.classList.remove('hidden');
+                        playPauseButton.classList.add('hidden-on-play');
+                    });
+                    videoElement.addEventListener('pause', () => {
+                        playIcon.classList.remove('hidden');
+                        pauseIcon.classList.add('hidden');
+                        playPauseButton.classList.remove('hidden-on-play');
+                    });
+                    videoElement.addEventListener('ended', () => {
+                        playIcon.classList.remove('hidden');
+                        pauseIcon.classList.add('hidden');
+                        playPauseButton.classList.remove('hidden-on-play');
+                    });
+                }
             };
 
             // Setup play/pause for Roku OS video
