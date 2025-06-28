@@ -783,225 +783,30 @@
 
 
                 if (isTouchDevice()) {
-                    if (isCaseStudyLink) {
-                        // For case study links (<a> tags with data-original-href)
-                        wrapper.addEventListener('click', (e) => {
-                            const clickedOnInfoOrMute = (infoIcon && infoIcon.contains(e.target)) || (muteButton && muteButton.contains(e.target));
-                            
-                            // Always prevent default navigation on the <a> tag for mobile case study links
+                    // Mobile specific click handling for all wrappers
+                    wrapper.addEventListener('click', (e) => {
+                        const clickedOnInfoIcon = infoIcon && infoIcon.contains(e.target);
+                        const clickedOnMuteButton = muteButton && muteButton.contains(e.target);
+                        const clickedOnCaseStudyText = isCaseStudyLink && (e.target.classList.contains('case-study-text') || (e.target.closest && e.target.closest('.case-study-text')));
+
+                        // Always prevent default navigation for links on mobile, as we're handling clicks manually.
+                        if (wrapper.tagName === 'A') {
                             e.preventDefault(); 
+                        }
 
-                            if (clickedOnInfoOrMute) {
-                                // If info or mute button was clicked, force show overlay and mark for second tap
-                                toggleOverlayAndScale(true); 
-                                wrapper.setAttribute('data-tapped-for-overlay', 'true'); 
-                            } else if (wrapper.classList.contains('overlay-active') && wrapper.hasAttribute('data-tapped-for-overlay')) {
-                                // Second tap on the main wrapper (overlay active and previously tapped for overlay)
-                                // Save the ID of THIS panel before navigating
-                                saveStateBeforeUnload(wrapper.id); 
-                                window.location.href = wrapper.getAttribute('data-original-href'); // Navigate
-                                wrapper.removeAttribute('data-tapped-for-overlay'); // Reset flag
-                                toggleOverlayAndScale(false); // Hide overlay
+                        if (wrapper.classList.contains('overlay-active')) {
+                            // If overlay is active
+                            if (isCaseStudyLink && clickedOnCaseStudyText) {
+                                // If it's a case study and the specific 'Click for case study' text was tapped, navigate.
+                                saveStateBeforeUnload(wrapper.id);
+                                window.location.href = wrapper.getAttribute('data-original-href');
+                                wrapper.removeAttribute('data-tapped-for-overlay'); // Clear flag
+                                // No explicit toggleOverlayAndScale(false) here, as navigation will unload the page.
                             } else {
-                                // First tap on the main wrapper (overlay not active)
-                                toggleOverlayAndScale(true); // Show overlay
-                                wrapper.setAttribute('data-tapped-for-overlay', 'true'); // Mark for second tap
+                                // Clicked anywhere else on the panel when overlay is active (including info/mute icons)
+                                toggleOverlayAndScale(false); // Dismiss the overlay
+                                if (isCaseStudyLink) wrapper.removeAttribute('data-tapped-for-overlay'); // Reset case study flag
                             }
-                        });
-                    } else {
-                        // For non-case study divs
-                        // If the info icon is present on a non-link wrapper, its click should save panel ID
-                        if (infoIcon) {
-                            infoIcon.addEventListener('click', (e) => {
-                                e.stopPropagation(); // Prevent any parent click listeners
-                                toggleOverlayAndScale(); // Toggle overlay
-                                if (wrapper.id) { // Ensure the wrapper has an ID
-                                   saveStateBeforeUnload(wrapper.id);
-                                }
-                            });
-                        }
-                    }
-
-                    // Always ensure muteButton stops propagation for touch devices
-                    if (muteButton) {
-                        muteButton.addEventListener('click', (e) => {
-                            e.stopPropagation(); // Prevent parent click listeners
-                            if (wrapper.id) { // If the mute button's parent wrapper has an ID, save it
-                                saveStateBeforeUnload(wrapper.id);
-                            }
-                        });
-                    }
-                    
-                    // Global click listener to close any active overlay when tapping outside
-                    document.addEventListener('click', (e) => {
-                        let clickedInsideAnyActiveWrapper = false;
-                        miscImageWrappers.forEach(w => {
-                            if (w.classList.contains('overlay-active') && w.contains(e.target)) {
-                                clickedInsideAnyActiveWrapper = true;
-                            }
-                        });
-
-                        if (!clickedInsideAnyActiveWrapper) {
-                             miscImageWrappers.forEach(w => {
-                                w.classList.remove('overlay-active');
-                                if (w.tagName === 'A' && w.hasAttribute('data-tapped-for-overlay')) {
-                                    w.removeAttribute('data-tapped-for-overlay');
-                                }
-                                // Ensure info icon is visible when overlay is closed by outside click
-                                if (isTouchDevice()) {
-                                    const currentInfoIcon = w.querySelector('.info-icon');
-                                    if (currentInfoIcon) currentInfoIcon.classList.remove('hidden');
-                                }
-                            });
-                        }
-                    });
-
-                } else {
-                    // Desktop (non-touch) device logic
-                    if (isCaseStudyLink) {
-                        // On desktop, the entire case study panel is a direct link
-                        wrapper.href = wrapper.getAttribute('data-original-href');
-                        // No need for wrapper.addEventListener('click', saveScrollPosition) here, beforeunload handles it.
-
-                        // For case study links, infoIcon hover also toggles the overlay
-                        if (infoIcon) {
-                            infoIcon.addEventListener('mouseenter', () => {
-                                toggleOverlayAndScale(true);
-                            });
-                            infoIcon.addEventListener('mouseleave', () => {
-                                toggleOverlayAndScale(false);
-                            });
-                        }
-                    } else {
-                        // For non-case study div wrappers, only infoIcon hover toggles overlay
-                        if (infoIcon) {
-                            infoIcon.addEventListener('mouseenter', () => {
-                                toggleOverlayAndScale(true);
-                            });
-                            infoIcon.addEventListener('mouseleave', () => {
-                                toggleOverlayAndScale(false);
-                            });
-                        }
-                    }
-                    // For ANY clickable element (<a> tag or button) on desktop, save the panel ID
-                    // This covers resume link, info buttons, and mute buttons.
-                    if (infoIcon) { // Check infoIcon specifically as a common interactive element
-                        infoIcon.addEventListener('click', () => {
-                            if (wrapper.id) {
-                                saveStateBeforeUnload(wrapper.id);
-                            }
-                        });
-                    }
-                    if (muteButton) { // Check muteButton specifically
-                        muteButton.addEventListener('click', () => {
-                            if (wrapper.id) {
-                                saveStateBeforeUnload(wrapper.id);
-                            }
-                        });
-                    }
-                    // For direct <a> links that are NOT case study panels (like the resume link),
-                    // the beforeunload listener handles saving the scroll position.
-                    // If these links also need to mark a *specific panel* as the "last clicked",
-                    // add a click listener to them to call `saveStateBeforeUnload(panelId)`.
-                }
-            });
-
-            // Function to set up mute/unmute toggle for videos
-            const setupMuteToggle = (videoId, muteButtonId, volumeOnId, volumeOffId) => {
-                const videoElement = document.getElementById(videoId);
-                const muteToggleButton = document.getElementById(muteButtonId);
-                const volumeOnIcon = document.getElementById(volumeOnId);
-                const volumeOffIcon = document.getElementById(volumeOffId);
-
-                if (muteToggleButton && videoElement) {
-                    muteToggleButton.addEventListener('click', () => {
-                        videoElement.muted = !videoElement.muted; // Toggle muted state
-                        // Toggle visibility of volume on/off icons based on muted state
-                        if (videoElement.muted) {
-                            if (volumeOnIcon) volumeOnIcon.classList.add('hidden');
-                            if (volumeOffIcon) volumeOffIcon.classList.remove('hidden');
                         } else {
-                            if (volumeOnIcon) volumeOnIcon.classList.remove('hidden');
-                            if (volumeOffIcon) volumeOffIcon.classList.add('hidden');
-                        }
-                    });
-                }
-            };
-
-            // Setup mute toggle specifically for the Nike Training OS video
-            setupMuteToggle('nikeTrainingVideo', 'muteToggleButtonNike', 'volumeOnIconNike', 'volumeOffIconNike');
-
-
-            // New: Play/Pause control for Roku OS video on mobile
-            const setupRokuOsPlayPause = (videoId, playPauseButtonId, playIconId, pauseIconId) => {
-                const videoElement = document.getElementById(videoId);
-                const playPauseButton = document.getElementById(playPauseButtonId);
-                const playIcon = document.getElementById(playIconId);
-                const pauseIcon = document.getElementById(pauseIconId);
-
-                if (!videoElement || !playPauseButton || !isTouchDevice()) {
-                    return; // Only apply to touch devices and if elements exist
-                }
-
-                // Initial state: If video is paused or ended, show play icon
-                if (videoElement.paused || videoElement.ended) {
-                    playIcon.classList.remove('hidden');
-                    pauseIcon.classList.add('hidden');
-                    playPauseButton.classList.remove('hidden-on-play'); // Ensure button is visible
-                } else {
-                    playIcon.classList.add('hidden');
-                    pauseIcon.classList.remove('hidden');
-                    playPauseButton.classList.add('hidden-on-play'); // Hide button if already playing (e.g. autoplay worked)
-                }
-                
-                // Add click listener to the play/pause button
-                playPauseButton.addEventListener('click', (e) => {
-                    e.stopPropagation(); // Prevent wrapper's click listener from interfering
-
-                    if (videoElement.paused || videoElement.ended) {
-                        videoElement.play().then(() => {
-                            playIcon.classList.add('hidden');
-                            pauseIcon.classList.remove('hidden');
-                            playPauseButton.classList.add('hidden-on-play'); // Hide button after successful play
-                        }).catch(error => {
-                            console.error('Error playing video:', error);
-                            // If play fails, keep button visible and in play state
-                            playIcon.classList.remove('hidden');
-                            pauseIcon.classList.add('hidden');
-                            playPauseButton.classList.remove('hidden-on-play');
-                        });
-                    } else {
-                        videoElement.pause();
-                        playIcon.classList.remove('hidden');
-                        pauseIcon.classList.add('hidden');
-                        playPauseButton.classList.remove('hidden-on-play'); // Show button when paused
-                    }
-                });
-
-                // Listen for video events to update button state
-                videoElement.addEventListener('play', () => {
-                    playIcon.classList.add('hidden');
-                    pauseIcon.classList.remove('hidden');
-                    playPauseButton.classList.add('hidden-on-play');
-                });
-                videoElement.addEventListener('pause', () => {
-                    playIcon.classList.remove('hidden');
-                    pauseIcon.classList.add('hidden');
-                    playPauseButton.classList.remove('hidden-on-play');
-                });
-                videoElement.addEventListener('ended', () => {
-                    playIcon.classList.remove('hidden');
-                    pauseIcon.classList.add('hidden');
-                    playPauseButton.classList.remove('hidden-on-play');
-                });
-            };
-
-            // Setup play/pause for Roku OS video
-            setupRokuOsPlayPause('rokuOsVideo', 'playPauseButtonRokuOs', 'playIconRokuOs', 'pauseIconRokuOs');
-
-            // Restore scroll position on initial page load
-            restoreAndCenterPanel();
-        });
-    </script>
-</body>
-</html>
+                            // If overlay is NOT active (this is the first tap on the panel)
+                            toggleOver
