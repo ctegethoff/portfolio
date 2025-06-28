@@ -813,7 +813,9 @@
                         }
                     });
 
-                    // Explicit handlers for info and mute buttons (primarily for their visual state and stopPropagation)
+                    // The infoIcon and muteButton themselves should not directly toggle the overlay as the wrapper handles it.
+                    // Their primary job is to stop propagation if they have specific functionality (mute/unmute, or if
+                    // we want to ensure their clicks only open and not close the overlay in the two-tap sequence)
                     if (infoIcon) {
                         infoIcon.addEventListener('click', (e) => {
                             e.stopPropagation(); // Prevents click from bubbling up to wrapper listener
