@@ -786,13 +786,14 @@
                     // Mobile specific click handling for all wrappers
                     wrapper.addEventListener('click', (e) => {
                         const clickedOnCaseStudyText = isCaseStudyLink && (e.target.classList.contains('case-study-text') || (e.target.closest && e.target.closest('.case-study-text')));
+                        const isOverlayActive = wrapper.classList.contains('overlay-active');
 
                         // Always prevent default navigation for links on mobile, as we're handling clicks manually.
                         if (wrapper.tagName === 'A') {
                             e.preventDefault(); 
                         }
 
-                        if (wrapper.classList.contains('overlay-active')) {
+                        if (isOverlayActive) {
                             // If overlay is active
                             if (isCaseStudyLink && clickedOnCaseStudyText) {
                                 // If it's a case study and the specific 'Click for case study' text was tapped, navigate.
@@ -806,19 +807,18 @@
                                 if (isCaseStudyLink) wrapper.removeAttribute('data-tapped-for-overlay'); // Reset case study flag
                             }
                         } else {
-                            // If overlay is NOT active (this is the first tap on general area)
+                            // If overlay is NOT active (this is the first tap on general area or any child element)
                             toggleOverlayAndScale(true); // Show overlay
                             if (isCaseStudyLink) wrapper.setAttribute('data-tapped-for-overlay', 'true'); // For case studies, mark for second tap
                         }
                     });
 
                     // Explicit handlers for info and mute buttons (primarily for their visual state and stopPropagation)
-                    // These are simplified now that the main wrapper click handles dismissal universally
                     if (infoIcon) {
                         infoIcon.addEventListener('click', (e) => {
                             e.stopPropagation(); // Prevents click from bubbling up to wrapper listener
-                            // The `toggleOverlayAndScale` is now handled by the main wrapper's click.
-                            // This ensures the icon hides when overlay appears, and overlay dismisses when icon is clicked again.
+                            // The wrapper's click listener now handles the overlay toggle for infoIcon clicks as well.
+                            // The hiding/showing of the icon itself is handled in toggleOverlayAndScale.
                         });
                     }
                     if (muteButton) {
