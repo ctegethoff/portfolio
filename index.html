@@ -208,7 +208,7 @@
             position: absolute;
             top: 50%; /* Center vertically */
             left: 50%; /* Center horizontally */
-            transform: translate(-50%, -50%); /* Adjust for exact centering */
+            transform: translate(-50%, -50%) scale(1); /* Initial scale 1 */
             font-family: 'Montserrat', sans-serif;
             font-weight: 300; /* Light font weight */
             font-size: 2rem; /* Large font size */
@@ -217,7 +217,8 @@
             text-decoration: none; /* No underline */
             opacity: 0; /* Initially hidden */
             pointer-events: none; /* Allows clicks to pass through when hidden */
-            transition: opacity 0.3s ease; /* Smooth fade-in/out */
+            /* Combined transitions for opacity and transform for smooth effect */
+            transition: opacity 0.3s ease, transform 0.95s cubic-bezier(0.85, 0, 0.15, 1);
             z-index: 9; /* Below info/mute icons */
             white-space: nowrap; /* Prevents text from wrapping */
         }
@@ -226,6 +227,7 @@
         .misc-image-wrapper.overlay-active .case-study-text {
             opacity: 1; /* Make visible */
             pointer-events: auto; /* Allow clicks */
+            transform: translate(-50%, -50%) scale(1.1); /* Scale up when active */
         }
 
         /* Overlay visibility controlled by 'overlay-active' class on wrapper */
@@ -294,7 +296,8 @@
             <!-- Added px-4 for padding on smaller screens -->
             <div class="max-w-5xl mx-auto h-full flex items-center justify-between px-4">
                 <!-- Name and Title on the left -->
-                <span class="text-white text-2xl font-montserrat font-normal">Chris Tegethoff &bull; Designer</span>
+                <!-- The "• Designer" part is now hidden on small screens -->
+                <span class="text-white text-2xl font-montserrat font-normal">Chris Tegethoff <span class="hidden md:inline">&bull; Designer</span></span>
                 <!-- Resume link on the right -->
                 <a href="https://drive.google.com/file/d/1bOVBcVUzmDVa5FMh-eLXwv2CFx6ZV5Tc/view?usp=sharing" target="_blank" class="text-white text-2xl font-montserrat font-normal hover:opacity-75 transition-opacity">Resume</a>
             </div>
@@ -754,6 +757,11 @@
                             if (otherWrapper.tagName === 'A' && otherWrapper.hasAttribute('data-tapped-for-overlay')) {
                                 otherWrapper.removeAttribute('data-tapped-for-overlay');
                             }
+                            // Re-show info icon if its overlay is being closed and it's a touch device
+                            if (isTouchDevice()) {
+                                const otherInfoIcon = otherWrapper.querySelector('.info-icon');
+                                if (otherInfoIcon) otherInfoIcon.classList.remove('hidden');
+                            }
                         }
                     });
                     // Toggle or force the 'overlay-active' class for the current wrapper
@@ -761,6 +769,15 @@
                         wrapper.classList.toggle('overlay-active', force);
                     } else {
                         wrapper.classList.toggle('overlay-active');
+                    }
+
+                    // Hide/Show infoIcon based on overlay state on touch devices
+                    if (isTouchDevice() && infoIcon) {
+                        if (wrapper.classList.contains('overlay-active')) {
+                            infoIcon.classList.add('hidden'); // Hide info icon when overlay is active
+                        } else {
+                            infoIcon.classList.remove('hidden'); // Show info icon when overlay is not active
+                        }
                     }
                 };
 
@@ -829,6 +846,11 @@
                                 w.classList.remove('overlay-active');
                                 if (w.tagName === 'A' && w.hasAttribute('data-tapped-for-overlay')) {
                                     w.removeAttribute('data-tapped-for-overlay');
+                                }
+                                // Ensure info icon is visible when overlay is closed by outside click
+                                if (isTouchDevice()) {
+                                    const currentInfoIcon = w.querySelector('.info-icon');
+                                    if (currentInfoIcon) currentInfoIcon.classList.remove('hidden');
                                 }
                             });
                         }
