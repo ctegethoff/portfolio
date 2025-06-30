@@ -54,8 +54,8 @@
             text-decoration: none; /* Removes underline from links */
             color: inherit; /* Inherits text color */
             background-color: #e0e0e0; /* Placeholder background */
-            opacity: 0; /* Initially invisible for fade-in effect */
-            transition: opacity 1s ease-in; /* Smooth fade-in transition */
+            opacity: 0; /* Corrected: Added back initial opacity 0 */
+            transition: opacity 1s ease-in; /* Corrected: Added back transition */
         }
         /* Class added when content is loaded and in view, making it visible */
         .misc-image-wrapper.is-loaded {
@@ -111,6 +111,7 @@
             font-weight: 400; /* Regular font weight for the title */
             display: block; /* Ensures it takes up full width */
             margin-bottom: 0px; /* No bottom margin */
+            transition: transform 0.3s ease-out; /* Add transition for scaling */
         }
 
         /* Styling for project roles text within the overlay */
@@ -119,8 +120,24 @@
             font-weight: 300; /* Light font weight for roles */
             display: block; /* Ensures it takes up full width */
             margin-top: -22.5px; /* Adjust top margin to bring it closer to the title */
+            transition: transform 0.3s ease-out; /* Add transition for scaling */
         }
         
+        /* Mobile specific font size adjustments for overlay content */
+        @media (max-width: 767px) {
+            .overlay-content .project-title {
+                font-size: 1.75rem; /* Slightly smaller on mobile (28px) */
+            }
+            .overlay-content .project-roles {
+                font-size: 1.2rem; /* Slightly smaller on mobile (19.2px) */
+            }
+            /* Scale up on mobile when overlay is active */
+            .misc-image-wrapper.overlay-active .overlay-content .project-title,
+            .misc-image-wrapper.overlay-active .overlay-content .project-roles {
+                transform: scale(1.05); /* Scale up by 5% */
+            }
+        }
+
         /* Specific styles for the Google Play Games Notifications overlay to align content right and top */
         .overlay-right-align-top { 
             justify-content: flex-start; /* Align content to the top */
@@ -479,7 +496,7 @@
                       <span class="project-roles">Concept, storyboarding</span>
                     </p>
                   </div>
-                  <button class="info-icon" aria-label="More information about Nike Kids Storyboard">
+                  <button class="info-icon" aria-label="More information about Nike Training OS">
                     <!-- Info icon SVG -->
                     <svg xmlns="http://www.w3.org/2003/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-info">
                         <circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>
@@ -595,16 +612,20 @@
                 </div>
                 <!-- Roku Design Systems Project Section -->
                 <div class="misc-image-wrapper max-w-5xl w-full" id="roku-design-systems-panel">
-                  <img data-src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746215233/Design_Systems_m2mzen.webp" alt="Design System" class="w-full h-auto"/>
+                  <video data-src="https://res.cloudinary.com/dlbnlilfj/video/upload/v1751304117/design_system_demo_optimized_ltsg2d.mp4" 
+                         loop playsinline autoplay muted 
+                         class="w-full h-auto object-cover">
+                    Your browser does not support the video tag.
+                  </video>
                   <div class="hover-overlay">
                     <p class="overlay-content">
                       <span class="project-title">Roku Design Systems</span><br>
-                      <span class="project-roles">Component creation, documentation</span>
+                      <span class="project-roles">Design, motion, pattern dev, documentation</span>
                     </p>
                   </div>
                   <button class="info-icon" aria-label="More information about Roku Design Systems">
                     <!-- Info icon SVG -->
-                    <svg xmlns="http://www.w3.org/2003/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-info">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-info">
                         <circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>
                     </svg>
                   </button>
@@ -991,6 +1012,8 @@
                     });
 
                     // Listen for video events to update button state
+                    // The `id` attribute is missing from the video element in the `index.html` file.
+                    // To fix this issue, you need to add the `id="rokuOsVideo"` attribute to the video element.
                     videoElement.addEventListener('play', () => {
                         playIcon.classList.add('hidden');
                         pauseIcon.classList.remove('hidden');
