@@ -725,8 +725,6 @@
                 saveStateBeforeUnload(); 
             });
 
-            // Flag to track if initial scroll has happened
-            let initialScrollDetected = false;
 
             // Set up Intersection Observer for lazy loading images and videos
             const lazyLoadObserver = new IntersectionObserver((entries, observer) => {
@@ -760,10 +758,8 @@
                         }
                         // Add 'is-loaded' class to trigger CSS fade-in
                         wrapper.classList.add('is-loaded');
-                        // Only unobserve if initial scroll has NOT been detected, otherwise keep observing for all elements.
-                        if (!initialScrollDetected) {
-                            observer.unobserve(wrapper); 
-                        }
+                        // Always unobserve after loading, as we want individual lazy loading for each element.
+                        observer.unobserve(wrapper); 
                     }
                 });
             }, {
@@ -771,31 +767,6 @@
                 rootMargin: '0px',
                 threshold: 0.1 // Trigger when 10% of the element is visible
             });
-
-            // Universal loading logic after first scroll
-            window.addEventListener('scroll', () => {
-                if (!initialScrollDetected && window.scrollY > 0) {
-                    initialScrollDetected = true;
-                    // Disconnect the observer from all elements it's currently observing
-                    miscImageWrappers.forEach(wrapper => {
-                        lazyLoadObserver.unobserve(wrapper);
-                    });
-                    // Force load all remaining images and videos immediately
-                    document.querySelectorAll('.misc-image-wrapper').forEach(wrapper => {
-                        const mediaElement = wrapper.querySelector('img[data-src], video');
-                        if (mediaElement && mediaElement.dataset.src) {
-                            mediaElement.src = mediaElement.dataset.src;
-                            if (mediaElement.tagName === 'VIDEO') {
-                                mediaElement.load();
-                                mediaElement.play().catch(e => console.warn(`Forced autoplay prevented for ${mediaElement.id || 'unnamed video'}:`, e));
-                            }
-                            mediaElement.removeAttribute('data-src');
-                        }
-                        wrapper.classList.add('is-loaded');
-                    });
-                }
-            }, { once: true }); // Use { once: true } to ensure this listener runs only once
-
 
             // Assign IDs to all misc-image-wrapper elements that don't already have one, for consistent targeting
             document.querySelectorAll('.misc-image-wrapper:not([id])').forEach((el, index) => {
