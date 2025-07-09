@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Case Study: Komodo Touch Screen</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Montserrat (now including thin 100 weight) -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* Custom styles for the Montserrat font */
+        body {
+            font-family: 'Montserrat', sans-serif;
+        }
+        /* Basic styling for the container to mimic the image layout */
+        .container-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr; /* Three columns for the top section */
+            gap: 0; /* Remove gap as borders will create separation */
+            max-width: 1200px; /* Changed max-width to 1200px */
+            margin: 0 auto; /* Center the container */
+            padding-top: 1rem; /* Reduced top padding */
+            padding-bottom: 1rem; /* Reduced bottom padding */
+            padding-left: 2rem; /* Keep horizontal padding */
+            padding-right: 2rem; /* Keep horizontal padding */
+        }
+
+        /* Adjustments for smaller screens */
+        @media (max-width: 768px) {
+            .container-layout {
+                grid-template-columns: 1fr; /* Single column on small screens */
+            }
+            .container-layout > div {
+                border-left: none !important; /* Remove vertical borders on small screens */
+                padding-left: 0 !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-white min-h-screen text-gray-800">
+
+    <!-- START: Applied Top Cap Header -->
+    <header class="sticky top-0 h-20 w-full bg-black z-50">
+        <div class="max-w-[1200px] mx-auto h-full flex items-center px-8 md:px-16">
+            <!-- Back Arrow -->
+            <a href="index.html" class="text-white hover:opacity-75 transition-opacity" aria-label="Back to Home">
+                <svg width="26" height="52" viewBox="0 0 26 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M25 51L1 26L25 1" stroke="currentColor" stroke-width="2"/>
+                </svg>
+            </a>
+        </div>
+    </header>
+    <!-- END: Applied Top Cap Header -->
+
+    <div class="container-layout">
+        <!-- Top Left Section: Komodo Touch Screen -->
+        <div class="col-span-1 pr-8 py-2"> <!-- Added right padding for spacing and vertical padding -->
+            <h1 class="text-6xl font-thin leading-tight mb-8">
+                Komodo <br> Touch <br> Screen
+            </h1>
+        </div>
+
+        <!-- Top Middle Section: My Role(s) -->
+        <div class="col-span-1 py-2 border-l border-gray-200 pl-8 pr-8"> <!-- Added left border and padding -->
+            <h2 class="text-xl font-medium mb-2">My Role(s)</h2>
+            <ul class="list-disc list-inside text-gray-700">
+                <li>Journey maps</li>
+                <li>Design</li>
+                <li>Interaction design</li>
+                <li>New pattern development</li>
+            </ul>
+        </div>
+
+        <!-- Top Right Section: Learning -->
+        <div class="col-span-1 py-2 border-l border-gray-200 pl-8"> <!-- Added left border and padding -->
+            <h2 class="text-xl font-medium mb-2">Learning</h2>
+            <p class="text-gray-700">
+                Designing for smartphone-sized screens at a fixed floor height required constant focus on simplicity, ensuring key actions remained clear, accessible, and touch-friendly from a standing distance.
+            </p>
+        </div>
+    </div>
+
+    <!-- Main Content Section with Image and Text Blocks -->
+    <div class="max-w-[1200px] mx-auto px-4 py-8 grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+        <!-- Main Image -->
+        <div class="md:col-span-1 flex justify-center items-center">
+            <img src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1751920479/printer_main_image_gckt4h.webp"
+                 alt="Komodo Touch Screen Main Image"
+                 class="max-w-full h-auto"
+                 onerror="this.onerror=null;this.src='https://placehold.co/600x400/cccccc/333333?text=Image+Not+Found'">
+        </div>
+
+        <!-- Right Side Text Blocks -->
+        <div class="md:col-span-1 space-y-8">
+            <div>
+                <h2 class="text-2xl font-light mb-2">Context</h2>
+                <p class="text-gray-700">
+                    Designed a 4.3" multi-touch UI for Komodo, enabling users to interact directly with a smart printer for viewing, editing, and sharing content.
+                </p>
+            </div>
+            <div>
+                <h2 class="text-2xl font-light mb-2">Problem / Opportunity</h2>
+                <p class="text-gray-700">
+                    Printers lacked intuitive, on-device interaction. Komodo required new UI patterns to support direct touch tasks on a compact screen with limited physical controls.
+                </p>
+            </div>
+            <div>
+                <h2 class="text-2xl font-light mb-2">Contribution</h2>
+                <p class="text-gray-700">
+                    Led design of new touch interaction patterns, optimizing for screen size, gestures, and capacative buttons in collaboration with hardware and product teams.
+                </p>
+            </div>
+            <div>
+                <h2 class="text-2xl font-light mb-2">Impact</h2>
+                <p class="text-gray-700">
+                    Established clear, reusable UI patterns for small touch displays, supporting future smart devices with consistent, scalable user experiences.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Applied UX Laws Section -->
+    <div class="max-w-[1200px] mx-auto px-4 py-8 mt-12">
+        <h2 class="text-6xl font-thin mb-8">Applied UX Laws*</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+            <!-- UX Law 1: Hick's Law -->
+            <div class="flex items-start space-x-4">
+                <img src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1751833206/sst_UXL_5_gstkl1.webp"
+                     alt="Hick's Law Icon"
+                     class="w-20 h-20 flex-shrink-0"
+                     onerror="this.onerror=null;this.src='https://placehold.co/80x80/cccccc/333333?text=Icon'">
+                <div>
+                    <h3 class="text-xl font-medium mb-1">Hick's Law</h3>
+                    <p class="text-gray-700">
+                        The time it takes to make a decision increases with the number and complexity of choices.
+                    </p>
+                </div>
+            </div>
+
+            <!-- UX Law 2: Fitts's Law -->
+            <div class="flex items-start space-x-4">
+                <img src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1751833207/sst_UXL_6_mzo6sj.webp"
+                     alt="Fitts's Law Icon"
+                     class="w-20 h-20 flex-shrink-0"
+                     onerror="this.onerror=null;this.src='https://placehold.co/80x80/cccccc/333333?text=Icon'">
+                <div>
+                    <h3 class="text-xl font-medium mb-1">Fitts's Law</h3>
+                    <p class="text-gray-700">
+                        The time to acquire a target is a function of the distance to and size of the target.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Credits Section -->
+    <div class="max-w-[1200px] mx-auto px-4 py-8 text-sm text-gray-600 mt-12">
+        <p class="mb-2">* Credits</p>
+        <ul class="list-disc list-inside">
+            <li>Website - Yablonski, Jon. "Laws of UX." Laws of UX. Jon Yablonski, 2025. <a href="https://lawsofux.com/" class="text-blue-600 hover:underline" target="_blank">lawsofux.com/</a></li>
+            <li>Website - Yablonski, Jon. "Laws of UX." Laws of UX. Jon Yablonski, lawsofux.com/ Accessed 5 July 2025.</li>
+        </ul>
+    </div>
+
+</body>
+</html>

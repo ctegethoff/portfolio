@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ad Platform Case Study</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
+    <script>
+        // Custom configuration for Tailwind
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'montserrat': ['Montserrat', 'sans-serif'],
+                    },
+                    maxWidth: {
+                        '8xl': '1440px',
+                    },
+                    // Ensure the height '90' is still available if used elsewhere
+                    height: {
+                        '90': '90px',
+                    },
+                    keyframes: { /* Merged from FTUX top cap */
+                        scrollLeft: {
+                            '0%': { transform: 'translateX(100vw)' },
+                            '100%': { transform: 'translateX(-100%)' },
+                        }
+                    },
+                    animation: { /* Merged from FTUX top cap */
+                        'scroll-left': 'scrollLeft linear infinite',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 300;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            background-color: #ffffff;
+        }
+        /* Style for lazy loaded sections */
+        .lazy-load-section {
+            opacity: 0;
+            transition: opacity 1s ease-in;
+        }
+        .lazy-load-section.is-loaded {
+            opacity: 1;
+        }
+
+        #problem-statement-graphic {
+            transition: transform 400ms cubic-bezier(0.68, -0.55, 0.27, 1.55);
+        }
+        @media (hover: hover) {
+            #problem-statement-graphic:hover {
+                transform: scale(1.25);
+            }
+        }
+        .carousel-slide {
+            transition: opacity 1s ease-in-out;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Mobile specific line height for paragraph text */
+        @media (max-width: 767px) {
+            p.leading-relaxed { /* Target paragraphs that explicitly use leading-relaxed */
+                line-height: 1.4; /* Set leading to 1.4 for mobile */
+            }
+        }
+
+        /* Styles for video play button overlay */
+        .play-button-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.4); /* Semi-transparent background for the button */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 1; /* Initially visible */
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .play-button-overlay.hidden {
+            opacity: 0;
+            pointer-events: none; /* Make it unclickable when hidden */
+        }
+
+        .play-button-overlay svg {
+            color: white;
+            width: 5rem; /* Converted from 80px */
+            height: 5rem; /* Converted from 80px */
+        }
+
+        /* Styles for mute toggle button */
+        .mute-toggle-button {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            width: 80px;
+            height: 80px;
+            background-color: rgba(0, 0, 0, 0.4);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+            opacity: 1;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .mute-toggle-button.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .mute-toggle-button svg {
+            color: white;
+            width: 48px;
+            height: 48px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="w-full">
+        <!-- START: Applied Top Cap Header -->
+        <header class="sticky top-0 h-20 w-full bg-black z-50">
+            <div class="max-w-8xl mx-auto h-full flex items-center px-8 md:px-16">
+                <!-- Back Arrow -->
+                <a href="index.html" class="text-white hover:opacity-75 transition-opacity" aria-label="Back to Home">
+                    <svg width="26" height="52" viewBox="0 0 26 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M25 51L1 26L25 1" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                </a>
+            </div>
+        </header>
+        <!-- END: Applied Top Cap Header -->
+
+        <main>
+            <section class="max-w-8xl mx-auto lazy-load-section">
+                <img data-src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1749923417/UX_design_monetization_ads_header_lgfemf.webp" alt="Roku Ad Platform Header" class="w-full h-auto">
+            </section>
+
+            <section class="relative max-w-8xl mx-auto lazy-load-section">
+                <!-- Added 'autoplay' attribute here -->
+                <video loop muted playsinline autoplay class="w-full h-auto">
+                    <source data-src="https://res.cloudinary.com/dlbnlilfj/video/upload/v1749923421/existing_roku_screensaver_gm4rao.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                <div class="absolute inset-0 bg-black/50 flex justify-center items-start pt-14 p-8">
+                    <img id="problem-statement-graphic" data-src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1749923418/problem_statement_sijhx3.svg" alt="Problem Statement" class="w-full max-w-4xl h-auto">
+                </div>
+            </section>
+        
+            <!-- Modified Section for Brainstorming Graphic - Black area now limited to 1440px -->
+            <section class="max-w-8xl mx-auto lazy-load-section">
+                <div class="w-full bg-black flex flex-col items-center justify-start gap-12 p-8 md:px-16 md:pt-12 md:pb-48">
+                    <div class="w-full flex justify-center">
+                         <img data-src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1749925681/roku_ad_platform_brainstorming_e8qtqh.svg" alt="Brainstorming Graphic" class="w-full max-w-6xl h-auto">
+                    </div>
+                    <div class="w-full flex justify-center pt-8">
+                        <p class="text-xl md:text-2xl font-light text-white max-w-3xl leading-relaxed text-center">
+                            As a self-initiated project, I reimagined the screensaver as an interactive cityscape that blends entertainment seamlessly with ads. The design transformed a passive experience into a powerful ad platform.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <div class="max-w-8xl mx-auto">
+                <section class="py-12 px-8 lazy-load-section">
+                    <img data-src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1749936713/imagine_text_vbyv1z.webp" alt="Imagine text" class="w-full max-w-5xl h-auto mx-auto">
+                </section>
+
+                <section class="py-12 px-8 lazy-load-section">
+                     <p class="text-xl md:text-2xl font-light text-center max-w-3xl text-gray-800 leading-relaxed mx-auto">
+                        Imagine a city where movies come to life in a vibrant world bursting with playful nods to entertainment.
+                    </p>
+                </section>
+            </div>
+        
+            <section id="inspiration-section" class="relative w-full lazy-load-section">
+                 <div id="inspiration-carousel" class="relative max-w-8xl mx-auto" style="aspect-ratio: 1440 / 925">
+                    <img data-src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1749948532/screensaver_ux_process_01_ocnhma.webp" alt="Inspiration Image 1" class="carousel-slide absolute top-0 left-0 w-full h-full object-cover">
+                    <img data-src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1749955723/screensaver_ux_process_02_o5n6wo.webp" alt="Inspiration Image 2" class="carousel-slide absolute top-0 left-0 w-full h-full object-cover opacity-0">
+                    <img data-src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1749955738/screensaver_ux_process_03_qlrwmc.webp" alt="Inspiration Image 3" class="carousel-slide absolute top-0 left-0 w-full h-full object-cover opacity-0">
+                    <img data-src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1749955750/screensaver_ux_process_04_tmnxnq.webp" alt="Inspiration Image 4" class="carousel-slide absolute top-0 left=0 w-full h-full object-cover opacity-0">
+                    <img data-src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1749955763/screensaver_ux_process_05_wjixo0.webp" alt="Inspiration Image 5" class="carousel-slide absolute top-0 left-0 w-full h-full object-cover opacity-0">
+                </div>
+            </section>
+            
+            <div class="max-w-8xl mx-auto">
+                <section class="py-12 px-8 lazy-load-section">
+                    <p class="text-xl md:text-2xl font-light text-center max-w-3xl text-gray-800 leading-relaxed mx-auto">
+                        I had a lot of fun drawing inspiration from my deep love for entertainment to conceptualize a universe of movie-themed references and easter eggs designed to grab viewers’ attention. Along the way, I solved some tough engineering challenges, learned a lot, and created value for Roku and its customers.
+                    </p>
+                </section>
+
+                <section class="lazy-load-section">
+                    <img data-src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1750016047/diagrams_e1s4jh.svg" alt="Diagrams" class="w-full h-auto">
+                </section>
+                
+                <section id="initial-illustrations-section" class="relative w-full lazy-load-section">
+                     <div id="initial-illustrations-carousel" class="relative" style="aspect-ratio: 1440/810">
+                        <img data-src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1750020992/initial_explorations_rna0ra.webp" alt="Initial Explorations" class="carousel-slide absolute top-0 left-0 w-full h-full object-contain">
+                        <img data-src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1750021044/round_2_bdhzew.webp" alt="Round 2" class="carousel-slide absolute top-0 left-0 w-full h-full object-contain opacity-0">
+                        <img data-src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1750021058/color_studies_arekle.webp" alt="Color Studies" class="carousel-slide absolute top-0 left-0 w-full h-full object-contain opacity-0">
+                    </div>
+                </section>
+
+                <section class="py-12 px-8 lazy-load-section">
+                     <p class="text-xl md:text-2xl font-light text-center max-w-3xl text-gray-800 leading-relaxed mx-auto">
+                       Through design sprints, close collaboration with the illustrator, and rapid prototyping, I helped bring the screensaver story to life and align leadership around the vision.
+                    </p>
+                </section>
+                
+                <section id="prototype-video-section" class="lazy-load-section">
+                     <video id="prototype-video" muted playsinline autoplay class="w-full h-auto">
+                        <source data-src="https://res.cloudinary.com/dlbnlilfj/video/upload/v1750034207/prototype_hrel1s.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </section>
+                
+                <section class="py-12 px-8 lazy-load-section">
+                     <p class="text-xl md:text-2xl font-light text-center max-w-3xl text-gray-800 leading-relaxed mx-auto">
+                       The result is part feature and part content that transformed a passive experience into an interactive iconic ad platform that has generated over 100M dollars in new ad revenue.
+                    </p>
+                </section>
+                
+                <section id="final-video-section" class="relative lazy-load-section">
+                    <!-- New video for final-video-section -->
+                    <video id="final-video" playsinline poster="https://res.cloudinary.com/dlbnlilfj/image/upload/v1751645681/Roku_city_still_hdet2r.webp" class="w-full h-auto">
+                        <source src="https://res.cloudinary.com/dlbnlilfj/video/upload/v1751657026/screensaver_becomes_brand_xsjmgv.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <!-- Play button overlay -->
+                    <div id="finalVideoPlayButton" class="play-button-overlay">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M8 5v14l11-7z"/>
+                        </svg>
+                    </div>
+                    <!-- Mute/Unmute button for final video -->
+                    <button id="finalVideoMuteButton" class="mute-toggle-button" aria-label="Toggle mute for final video">
+                        <!-- Volume On Icon (initially visible) -->
+                        <svg id="finalVideoVolumeOnIcon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 28 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-volume-2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M23.31 1.69a16 16 0 0 1 0 20.62"/></svg>
+                        <!-- Volume Off Icon (initially hidden) -->
+                        <svg id="finalVideoVolumeOffIcon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-volume-x hidden"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="22" x2="16" y1="9" y2="15"/><line x1="16" x2="22" y1="9" y2="15"/></svg>
+                    </button>
+                </section>
+
+                 <section class="py-12 px-8 lazy-load-section">
+                     <p class="text-xl md:text-2xl font-light text-center max-w-3xl text-gray-800 leading-relaxed mx-auto">
+                       The Roku screensaver became a defining part of the Roku brand, prominently featured across the Roku campus, industry events, and TV shows. Building on its success, an entire ad platform was developed, integrating content and full thematic takeovers with ads, further driving revenue growth.
+                    </p>
+                </section>
+            </div>
+        </main>
+        
+        <footer class="relative h-20 w-full bg-black"></footer>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Function to set up play/pause and mute/unmute for a video
+        const setupVideoControls = (videoElement, playButtonElement, muteButtonElement, volumeOnIconElement, volumeOffIconElement) => {
+            if (!videoElement || !playButtonElement) {
+                return;
+            }
+
+            // Initial state: If video is paused or ended, show play button
+            const updatePlayButtonVisibility = () => {
+                if (videoElement.paused || videoElement.ended) {
+                    playButtonElement.classList.remove('hidden');
+                } else {
+                    playButtonElement.classList.add('hidden');
+                }
+            };
+
+            // Initial state: Set mute icon based on video's muted state
+            const updateMuteButtonVisibility = () => {
+                if (muteButtonElement && volumeOnIconElement && volumeOffIconElement) {
+                    if (videoElement.muted) {
+                        volumeOnIconElement.classList.add('hidden');
+                        volumeOffIconElement.classList.remove('hidden');
+                    } else {
+                        volumeOnIconElement.classList.remove('hidden');
+                        volumeOffIconElement.classList.add('hidden');
+                    }
+                }
+            };
+
+            // Set initial state
+            updatePlayButtonVisibility();
+            updateMuteButtonVisibility();
+
+            // Play button click handler
+            playButtonElement.addEventListener('click', (e) => {
+                e.stopPropagation(); // Prevent clicks from bubbling up
+                if (videoElement.paused || videoElement.ended) {
+                    videoElement.play().catch(error => console.error('Play failed:', error));
+                } else {
+                    videoElement.pause();
+                }
+            });
+
+            // Mute button click handler
+            if (muteButtonElement) {
+                muteButtonElement.addEventListener('click', (e) => {
+                    e.stopPropagation(); // Prevent clicks from bubbling up
+                    videoElement.muted = !videoElement.muted;
+                    updateMuteButtonVisibility();
+                });
+            }
+
+            // Update button visibility on video events
+            videoElement.addEventListener('play', updatePlayButtonVisibility);
+            videoElement.addEventListener('pause', updatePlayButtonVisibility);
+            videoElement.addEventListener('ended', () => {
+                videoElement.currentTime = 0; // Reset video to start
+                updatePlayButtonVisibility();
+            });
+        };
+
+        // Setup controls for the final video (Panel 30)
+        setupVideoControls(
+            document.getElementById('final-video'),
+            document.getElementById('finalVideoPlayButton'),
+            document.getElementById('finalVideoMuteButton'),
+            document.getElementById('finalVideoVolumeOnIcon'),
+            document.getElementById('finalVideoVolumeOffIcon')
+        );
+
+        // Intersection Observer for lazy loading and fade-in effect
+        const lazyLoadObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const section = entry.target;
+                    const images = section.querySelectorAll('img[data-src]');
+                    const videos = section.querySelectorAll('video');
+
+                    // Load images
+                    images.forEach(img => {
+                        img.src = img.dataset.src;
+                        img.removeAttribute('data-src');
+                    });
+
+                    // Load videos and manage autoplay
+                    videos.forEach(video => {
+                        const source = video.querySelector('source[data-src]');
+                        if (source && source.dataset.src) {
+                            video.src = source.dataset.src;
+                            video.load(); // Load the video
+                            // Only play if it was already meant to autoplay and is in view
+                            if (video.hasAttribute('autoplay')) {
+                                video.play().catch(e => console.warn(`Video autoplay prevented for ${video.id || 'unnamed video'}:`, e));
+                            }
+                            source.removeAttribute('data-src'); // Remove data-src after loading
+                        }
+                    });
+                    
+                    // Add class to trigger fade-in
+                    section.classList.add('is-loaded');
+                    observer.unobserve(section); // Stop observing once loaded
+                }
+            });
+        }, { threshold: 0.1 }); // Trigger when 10% of the element is visible
+
+        // Observe all sections for lazy loading
+        document.querySelectorAll('section').forEach(section => {
+            lazyLoadObserver.observe(section);
+        });
+
+        // Carousel functionality
+        function createCarousel(containerId) {
+            const section = document.getElementById(containerId);
+            if (!section) return;
+            
+            const carousel = section.querySelector('.carousel-slide') ? section.querySelector('div') : section;
+            
+            if (carousel) {
+                const slides = carousel.querySelectorAll('.carousel-slide');
+                if (slides.length === 0) return;
+                let currentSlide = 0;
+                let intervalId = null;
+
+                const showSlide = (index) => {
+                    slides.forEach((slide, i) => {
+                        slide.style.opacity = i === index ? '1' : '0';
+                    });
+                };
+
+                const startCarousel = () => {
+                    if (intervalId) return;
+                    showSlide(currentSlide);
+                    intervalId = setInterval(() => {
+                        currentSlide = (currentSlide + 1) % slides.length;
+                        showSlide(currentSlide);
+                    }, 4000); 
+                };
+
+                const stopCarousel = () => {
+                    clearInterval(intervalId);
+                    intervalId = null;
+                };
+
+                // Use a separate observer for carousel playback (if it's not handled by main lazyLoadObserver)
+                // This ensures carousel stops when out of view, and starts when in view.
+                const carouselObserver = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            startCarousel();
+                        } else {
+                            stopCarousel();
+                        }
+                    });
+                }, { threshold: 0.1 }); // Use a lower threshold for carousels to start sooner
+
+                carouselObserver.observe(section);
+            }
+        }
+
+        createCarousel('inspiration-section');
+        createCarousel('initial-illustrations-section');
+
+        // Note: Individual video autoplay is now handled by the main lazyLoadObserver based on the 'autoplay' attribute.
+        // We no longer need separate createVideoObserver functions.
+    });
+    </script>
+</body>
+</html>

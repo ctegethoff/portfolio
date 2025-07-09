@@ -37,6 +37,11 @@
         }
     </script>
     <style>
+        /* Define CSS variable for header height */
+        :root {
+            --header-height: 80px; /* Corresponds to h-20 in Tailwind (80px) */
+        }
+
         /* Basic body styling to remove margin, set font, and background */
         body {
             margin: 0;
@@ -54,23 +59,24 @@
             text-decoration: none; /* Removes underline from links */
             color: inherit; /* Inherits text color */
             background-color: #d0d0d0; /* Changed to a more noticeable placeholder background */
-            opacity: 0; 
-            transition: opacity 1s ease-in; 
-        }
-        /* Class added when content is loaded and in view, making it visible */
-        .misc-image-wrapper.is-loaded {
-            opacity: 1;
+            
+            /* Apply scroll-margin-top to account for sticky header when scrolling to this element */
+            scroll-margin-top: var(--header-height);
         }
 
         /* Smooth transform transition for image/video scaling on hover */
         .misc-image-wrapper img,
         .misc-image-wrapper video { 
-            /* Increased transition duration for a smoother effect */
-            transition: transform 0.95s cubic-bezier(0.85, 0, 0.15, 1); /* Extended duration by 150ms */
+            /* Increased transition duration for a smoother effect (0.95s * 0.70 = 0.665s) */
+            /* Updated to be 30% faster: 0.665 * 0.70 = 0.4655s */
+            transition: transform 0.466s cubic-bezier(0.85, 0, 0.15, 1); 
         }
 
-        /* Scales the image/video when the 'overlay-active' class is present on the wrapper */
-        .misc-image-wrapper.overlay-active img,
+        /* Scales the image/video when the 'hover-active' class is present on the wrapper (desktop) */
+        /* Or when 'overlay-active' is present (touch - though touch now directly navigates, this might be redundant) */
+        .misc-image-wrapper.hover-active img,
+        .misc-image-wrapper.hover-active video,
+        .misc-image-wrapper.overlay-active img, /* Kept for touch overlay activation */
         .misc-image-wrapper.overlay-active video { 
             /* Changed scale value to 1.1 for a larger zoom */
             transform: scale(1.1);
@@ -94,6 +100,7 @@
             pointer-events: none; /* Allows clicks to pass through when hidden */
             padding: 20px; /* Internal padding */
             box-sizing: border-box; /* Includes padding in element's total width and height */
+            z-index: 1; /* Ensure overlay is above image/video */
         }
 
         /* Basic styling for the content within the overlay */
@@ -162,7 +169,7 @@
             align-items: center; /* Center vertically */
             border-radius: 50%; /* Makes it a circle */
             cursor: pointer; /* Indicates it's clickable */
-            z-index: 10; /* Ensures it's above other elements */
+            z-index: 3; /* Ensure it's above overlay and text */
             transition: background-color 0.3s ease; /* Smooth transition for background color */
         }
 
@@ -195,7 +202,7 @@
             bottom: 20px; /* Position from bottom */
             right: 110px; /* Position from right (next to info icon) */
             color: white; /* Text color */
-            z-index: 10; /* Ensures it's above other elements */
+            z-index: 3; /* Ensure it's above overlay and text */
             transition: background-color 0.3s ease; /* Smooth transition for background */
             border-radius: 50%; /* Makes it a circle */
             display: flex; /* Flexbox for centering */
@@ -234,24 +241,57 @@
             text-decoration: none; /* No underline */
             opacity: 0; /* Initially hidden */
             pointer-events: none; /* Allows clicks to pass through when hidden */
-            /* Combined transitions for opacity and transform for smooth effect */
-            transition: opacity 0.3s ease, transform 0.95s cubic-bezier(0.85, 0, 0.15, 1);
-            z-index: 9; /* Below info/mute icons */
+            /* Combined transitions for opacity and transform for smooth effect (0.95s * 0.70 = 0.665s for transform) */
+            /* Updated to be 30% faster: 0.665 * 0.70 = 0.4655s */
+            transition: opacity 0.3s ease, transform 0.466s cubic-bezier(0.85, 0, 0.15, 1);
+            z-index: 2; /* Above overlay, below buttons */
             white-space: nowrap; /* Prevents text from wrapping */
         }
 
-        /* Show case study text when overlay is active */
-        .misc-image-wrapper.overlay-active .case-study-text {
-            opacity: 1; /* Make visible */
-            pointer-events: auto; /* Allow clicks */
-            transform: translate(-50%, -50%) scale(1.1); /* Scale up when active */
+        /* Desktop Hover Effects (controlled by JS adding 'hover-active' class to parent) */
+        @media (hover: hover) and (pointer: fine) {
+            .misc-image-wrapper.hover-active .hover-overlay {
+                opacity: 1;
+                pointer-events: auto;
+            }
+            .misc-image-wrapper.hover-active img,
+            .misc-image-wrapper.hover-active video { 
+                transform: scale(1.1);
+            }
+            .misc-image-wrapper.hover-active .case-study-text {
+                opacity: 1;
+                pointer-events: auto;
+                transform: translate(-50%, -50%) scale(1.1);
+            }
+            .misc-image-wrapper.hover-active .info-icon svg {
+                color: white;
+            }
+            /* Mute button color change when info icon is hovered (if it's in the same wrapper) */
+            .misc-image-wrapper.hover-active .mute-toggle-button svg {
+                color: white;
+            }
         }
 
-        /* Overlay visibility controlled by 'overlay-active' class on wrapper */
+        /* Touch Device Active State (managed by JS for info icon click) */
         .misc-image-wrapper.overlay-active .hover-overlay {
-            opacity: 1; /* Make overlay visible */
-            pointer-events: auto; /* Allow clicks/interactions on overlay */
+            opacity: 1;
+            pointer-events: auto;
         }
+        .misc-image-wrapper.overlay-active img,
+        .misc-image-wrapper.overlay-active video { 
+            transform: scale(1.1);
+        }
+        .misc-image-wrapper.overlay-active .case-study-text {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translate(-50%, -50%) scale(1.1);
+        }
+        /* Hide info icon on touch when overlay is active */
+        /* Removed: .misc-image-wrapper.overlay-active .info-icon {
+            opacity: 0;
+            pointer-events: none;
+        } */
+
 
         /* Styling for video elements within the wrapper */
         .misc-image-wrapper video {
@@ -275,12 +315,12 @@
             justify-content: center;
             align-items: center;
             cursor: pointer;
-            z-index: 10;
+            z-index: 3; /* Ensure it's above overlay and text */
             opacity: 1; /* Initially visible for interaction */
             transition: opacity 0.3s ease;
         }
 
-        /* Hide play/pause button when video is playing on touch devices */
+        /* Hide play/pause button when video is playing on desktop */
         @media (hover: hover) and (pointer: fine) {
             .video-play-pause-button.hidden-on-play {
                 opacity: 0;
@@ -334,9 +374,9 @@
 
         <main>
             <div class="flex flex-col items-center">
-                <!-- Roku Design Systems Project Section (Moved to first) -->
-                <div class="misc-image-wrapper max-w-5xl w-full" id="roku-design-systems-panel">
-                  <video data-src="https://res.cloudinary.com/dlbnlilfj/video/upload/v1751304117/design_system_demo_optimized_ltsg2d.mp4" 
+                <!-- Roku Design Systems Project Section -->
+                <a href="ds.html" data-original-href="ds.html" class="misc-image-wrapper max-w-5xl w-full" id="roku-ds-panel">
+                  <video src="https://res.cloudinary.com/dlbnlilfj/video/upload/v1751304117/design_system_demo_optimized_ltsg2d.mp4" 
                          loop playsinline autoplay muted 
                          class="w-full h-auto object-cover">
                     Your browser does not support the video tag.
@@ -347,40 +387,35 @@
                       <span class="project-roles">Design, motion, pattern dev, documentation</span>
                     </p>
                   </div>
+                  <span class="case-study-text">Click for case study</span>
                   <button class="info-icon" aria-label="More information about Roku Design Systems">
                     <!-- Info icon SVG -->
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-info">
                         <circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>
                     </svg>
                   </button>
-                </div>
-
-                <!-- SETTINGS OVER VIDEO PROJECT Section (Moved here) -->
-                <a data-original-href="settings.html" class="misc-image-wrapper max-w-5xl w-full" id="settings-over-video-panel">
-                  <video id="settingsOverVideo" data-src="https://res.cloudinary.com/dlbnlilfj/video/upload/v1750964252/settings_dkyc1y.mp4" 
-                         loop playsinline preload="auto" muted 
-                         class="w-full h-auto object-cover">
-                    Your browser does not support the video tag.
-                  </video>
+                </a>
+                <!-- IOT Mobile App Project Section -->
+                <a href="iot.html" data-original-href="iot.html" class="misc-image-wrapper max-w-5xl w-full" id="iot-mobile-panel">
+                  <img src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746736301/iot-smart-home-ux_pch1h9.webp" alt="IOT Mobile App" class="w-full h-auto"/>
                   <div class="hover-overlay">
                     <p class="overlay-content">
-                      <span class="project-title">Settings Over Video</span><br>
-                      <span class="project-roles">Design, new pattern development, research, rapid prototyping</span>
+                      <span class="project-title">IOT Mobile App</span><br>
+                      <span class="project-roles">Interaction design, rapid prototypes, research</span>
                     </p>
                   </div>
                   <span class="case-study-text">Click for case study</span>
-                  <button class="info-icon" aria-label="More information about Settings Over Video">
+                  <button class="info-icon" aria-label="More information about IOT Mobile App">
                     <!-- Info icon SVG -->
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-info">
                         <circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>
                     </svg>
                   </button>
                 </a>
-
                 <!-- ROKU AD PLATFORM VIDEO PROJECT Section -->
-                <a data-original-href="ad.html" class="misc-image-wrapper max-w-5xl w-full" id="roku-ad-platform-panel">
-                  <video id="rokuAdPlatformVideo" data-src="https://res.cloudinary.com/dlbnlilfj/video/upload/v1750959843/ad_crawl_uvkeig.mp4" 
-                         loop playsinline preload="auto" muted 
+                <a href="ad_cs.html" data-original-href="ad_cs.html" class="misc-image-wrapper max-w-5xl w-full" id="roku-ad-platform-panel">
+                  <video id="rokuAdPlatformVideo" src="https://res.cloudinary.com/dlbnlilfj/video/upload/v1750959843/ad_crawl_uvkeig.mp4" 
+                         loop playsinline autoplay muted 
                          class="w-full h-auto object-cover">
                     Your browser does not support the video tag.
                   </video>
@@ -398,26 +433,10 @@
                     </svg>
                   </button>
                 </a>
-                <!-- IOT Mobile App Project Section -->
-                <div class="misc-image-wrapper max-w-5xl w-full" id="iot-mobile-app-panel">
-                  <img data-src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746736301/iot-smart-home-ux_pch1h9.webp" alt="IOT Mobile App" class="w-full h-auto"/>
-                  <div class="hover-overlay">
-                    <p class="overlay-content">
-                      <span class="project-title">IOT Mobile App</span><br>
-                      <span class="project-roles">Interaction design, rapid prototypes, research</span>
-                    </p>
-                  </div>
-                  <button class="info-icon" aria-label="More information about IOT Mobile App">
-                    <!-- Info icon SVG -->
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-info">
-                        <circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>
-                    </svg>
-                  </button>
-                </div>
                 <!-- Roku OS VIDEO PROJECT Section -->
-                <div class="misc-image-wrapper max-w-5xl w-full" id="roku-os-panel">
-                  <video id="rokuOsVideo" data-src="https://res.cloudinary.com/dlbnlilfj/video/upload/v1750800947/Slideshow_yrussz.mp4" 
-                         loop playsinline preload="auto" muted 
+                <a href="roku_os_cs.html" data-original-href="roku_os_cs.html" class="misc-image-wrapper max-w-5xl w-full" id="roku-os-panel">
+                  <video id="rokuOsVideo" src="https://res.cloudinary.com/dlbnlilfj/video/upload/v1750800947/Slideshow_yrussz.mp4" 
+                         loop playsinline autoplay muted 
                          class="w-full h-auto object-cover">
                     Your browser does not support the video tag.
                   </video>
@@ -427,33 +446,64 @@
                       <span class="project-roles">Design, design systems, A11y, i18n</span>
                     </p>
                   </div>
+                  <span class="case-study-text">Click for case study</span>
+                  <button id="playPauseButtonRokuOs" class="video-play-pause-button" aria-label="Play/Pause video">
+                      <svg id="playIconRokuOs" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-play"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                      <svg id="pauseIconRokuOs" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pause hidden"><rect width="4" height="16" x="6" y="4"/><rect width="4" height="16" x="14" y="4"/></svg>
+                  </button>
                   <button class="info-icon" aria-label="More information about Roku OS">
                     <!-- Info icon SVG -->
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-info">
                         <circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>
                     </svg>
                   </button>
-                </div>
+                </a>
                 <!-- Roku Mobile Design Project Section -->
-                <div class="misc-image-wrapper max-w-5xl w-full" id="roku-mobile-design-panel">
-                  <img data-src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746215248/Roku_Mobile_Design_tlqemb.webp" alt="Roku Mobile Design" class="w-full h-auto"/>
+                <a href="roku_mobile_cs.html" data-original-href="roku_mobile_cs.html" class="misc-image-wrapper max-w-5xl w-full" id="roku-mobile-panel">
+                  <img src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746215248/Roku_Mobile_Design_tlqemb.webp" alt="Roku Mobile Design" class="w-full h-auto"/>
                   <div class="hover-overlay">
                     <p class="overlay-content">
                       <span class="project-title">Roku Mobile Design</span><br>
                       <span class="project-roles">Visual & interaction design, prototypes</span>
                     </p>
                   </div>
+                  <span class="case-study-text">Click for case study</span>
                   <button class="info-icon" aria-label="More information about Roku Mobile Design">
                     <!-- Info icon SVG -->
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-info">
                         <circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>
                     </svg>
                   </button>
-                </div>
+                </a>
+                <!-- SETTINGS OVER VIDEO PROJECT Section -->
+                <a href="settings_cs.html" data-original-href="settings_cs.html" class="misc-image-wrapper max-w-5xl w-full" id="settings-video-panel">
+                  <video id="settingsOverVideo" src="https://res.cloudinary.com/dlbnlilfj/video/upload/v1750964252/settings_dkyc1y.mp4" 
+                         loop playsinline autoplay muted 
+                         class="w-full h-auto object-cover">
+                    Your browser does not support the video tag.
+                  </video>
+                  <div class="hover-overlay">
+                    <p class="overlay-content">
+                      <span class="project-title">Settings Over Video</span><br>
+                      <span class="project-roles">Design, new pattern development, research, rapid prototyping</span>
+                    </p>
+                  </div>
+                  <span class="case-study-text">Click for case study</span>
+                  <button id="playPauseButtonSettings" class="video-play-pause-button" aria-label="Play/Pause video">
+                      <svg id="playIconSettings" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-play"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                      <svg id="pauseIconSettings" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pause hidden"><rect width="4" height="16" x="6" y="4"/><rect width="4" height="16" x="14" y="4"/></svg>
+                  </button>
+                  <button class="info-icon" aria-label="More information about Settings Over Video">
+                    <!-- Info icon SVG -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-info">
+                        <circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>
+                    </svg>
+                  </button>
+                </a>
                 <!-- GOOGLE PLAY GAMES NOTIFICATIONS VIDEO PROJECT Section -->
-                <div class="misc-image-wrapper max-w-5xl w-full" id="google-play-notifications-panel">
-                  <video id="googlePlayNotificationsVideo" data-src="https://res.cloudinary.com/dlbnlilfj/video/upload/v1751328519/Notif_sequence_Main_3_qelvwb.mp4" 
-                         loop playsinline preload="auto" muted 
+                <a href="notif_cs.html" data-original-href="notif_cs.html" class="misc-image-wrapper max-w-5xl w-full" id="google-play-notifications-panel">
+                  <video id="googlePlayNotificationsVideo" src="https://res.cloudinary.com/dlbnlilfj/video/upload/v1751328519/Notif_sequence_Main_3_qelvwb.mp4" 
+                         loop playsinline autoplay muted 
                          class="w-full h-auto object-cover">
                     Your browser does not support the video tag.
                   </video>
@@ -463,6 +513,7 @@
                       <span class="project-roles">Strategy, design, motion</span>
                     </p>
                   </div>
+                  <span class="case-study-text">Click for case study</span>
                   <!-- NEW Mute/Unmute button for Google Play Notifications video -->
                   <button id="muteToggleButtonGooglePlay" class="mute-toggle-button" aria-label="Toggle mute for Desktop Notifications video">
                       <!-- Volume On Icon (initially hidden because video is muted by default) -->
@@ -476,75 +527,28 @@
                         <circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>
                     </svg>
                   </button>
-                </div>
+                </a>
                 <!-- MS Surface Music App Project Section -->
-                <div class="misc-image-wrapper max-w-5xl w-full" id="ms-surface-music-panel">
-                  <img data-src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746215240/MS_Surface_Music_App_drtojj.webp" alt="MS Surface Music App" class="w-full h-auto"/>
+                <a href="surface_cs.html" data-original-href="surface_cs.html" class="misc-image-wrapper max-w-5xl w-full" id="ms-surface-music-panel">
+                  <img src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746215240/MS_Surface_Music_App_drtojj.webp" alt="MS Surface Music App" class="w-full h-auto"/>
                   <div class="hover-overlay">
                     <p class="overlay-content">
                       <span class="project-title">MS Surface Music App</span><br>
                       <span class="project-roles">Visual design</span>
                     </p>
                   </div>
+                  <span class="case-study-text">Click for case study</span>
                   <button class="info-icon" aria-label="More information about MS Surface Music App">
                     <!-- Info icon SVG -->
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucude-info">
                         <circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>
                     </svg>
                   </button>
-                </div>
-                <!-- 360 Interactive Surface Project Section -->
-                <div class="misc-image-wrapper max-w-5xl w-full" id="interactive-surface-panel">
-                  <img data-src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746215238/MS_Surface_360_UX_aqsahi.webp" alt="360 Touch Surface" class="w-full h-auto"/>
-                  <div class="hover-overlay">
-                    <p class="overlay-content">
-                      <span class="project-title">360 Interactive Surface</span><br>
-                      <span class="project-roles">Interaction design, motion</span>
-                    </p>
-                  </div>
-                  <button class="info-icon" aria-label="More information about 360 Interactive Surface">
-                    <!-- Info icon SVG -->
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-info">
-                        <circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>
-                    </svg>
-                  </button>
-                </div>
-                <!-- Nike Kids Storyboard Project Section -->
-                <div class="misc-image-wrapper max-w-5xl w-full" id="nike-kids-storyboard-panel">
-                  <img data-src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746215242/Nike_Kids_Storyboard_ay53y9.webp" alt="Nike Kids Storyboard" class="w-full h-auto"/>
-                  <div class="hover-overlay">
-                    <p class="overlay-content">
-                      <span class="project-title">Nike Kids Storyboard</span><br>
-                      <span class="project-roles">Concept, storyboarding</span>
-                    </p>
-                  </div>
-                  <button class="info-icon" aria-label="More information about Nike Training OS">
-                    <!-- Info icon SVG -->
-                    <svg xmlns="http://www.w3.org/2003/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-info">
-                        <circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>
-                    </svg>
-                  </button>
-                </div>
-                <!-- Nike Kids Concept Project Section -->
-                <div class="misc-image-wrapper max-w-5xl w-full" id="nike-kids-concept-panel">
-                  <img data-src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746215244/Nike_Kids_Website_Concept_bgrali.webp" alt="Nike Kids Website Concept" class="w-full h-auto"/>
-                  <div class="hover-overlay">
-                    <p class="overlay-content">
-                      <span class="project-title">Nike Kids Concept</span><br>
-                      <span class="project-roles">Visual & interaction design, prototypes</span>
-                    </p>
-                  </div>
-                  <button class="info-icon" aria-label="More information about Nike Kids Concept">
-                    <!-- Info icon SVG -->
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-info">
-                        <circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>
-                    </svg>
-                  </button>
-                </div>
-                <!-- EXISTING NIKE VIDEO PROJECT Section -->
-                <div class="misc-image-wrapper max-w-5xl w-full" id="nike-training-video-panel">
-                  <video id="nikeTrainingVideo" data-src="https://res.cloudinary.com/dlbnlilfj/video/upload/v1750702214/nike_sst_a5kygz.mp4" 
-                         loop playsinline preload="auto" muted 
+                </a>
+                <!-- Nike Training OS Project Section -->
+                <a href="nike_cs.html" data-original-href="nike_cs.html" class="misc-image-wrapper max-w-5xl w-full" id="nike-training-os-panel">
+                  <video id="nikeTrainingVideo" src="https://res.cloudinary.com/dlbnlilfj/video/upload/v1750702214/nike_sst_a5kygz.mp4" 
+                         loop playsinline autoplay muted 
                          class="w-full h-auto object-cover">
                     Your browser does not support the video tag.
                   </video>
@@ -554,6 +558,7 @@
                       <span class="project-roles">Interaction design, motion, development</span>
                     </p>
                   </div>
+                  <span class="case-study-text">Click for case study</span>
                   <!-- Mute/Unmute button for video -->
                   <button id="muteToggleButtonNike" class="mute-toggle-button" aria-label="Toggle mute for Nike Training OS video">
                     <!-- Volume On Icon (initially visible) -->
@@ -563,30 +568,48 @@
                   </button>
                   <button class="info-icon" aria-label="More information about Nike Training OS">
                     <!-- Info icon SVG -->
+                    <svg xmlns="http://www.w3.org/2003/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-info">
+                        <circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>
+                    </svg>
+                  </button>
+                </a>
+                <!-- Nike Kids Concept Project Section -->
+                <a href="nike_kids_cs.html" data-original-href="nike_kids_cs.html" class="misc-image-wrapper max-w-5xl w-full" id="nike-kids-concept-panel">
+                  <img src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746215244/Nike_Kids_Website_Concept_bgrali.webp" alt="Nike Kids Website Concept" class="w-full h-auto"/>
+                  <div class="hover-overlay">
+                    <p class="overlay-content">
+                      <span class="project-title">Nike Kids Concept</span><br>
+                      <span class="project-roles">Visual & interaction design, prototypes</span>
+                    </p>
+                  </div>
+                  <span class="case-study-text">Click for case study</span>
+                  <button class="info-icon" aria-label="More information about Nike Kids Concept">
+                    <!-- Info icon SVG -->
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-info">
                         <circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>
                     </svg>
                   </button>
-                </div>
-                <!-- Printer app Project Section -->
-                <div class="misc-image-wrapper max-w-5xl w-full" id="printer-app-panel">
-                  <img data-src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746215246/Printer_UX_uph85f.webp" alt="Printer UX" class="w-full h-auto"/>
+                </a>
+                 <!-- Printer app Project Section -->
+                <a href="printer_cs.html" data-original-href="printer_cs.html" class="misc-image-wrapper max-w-5xl w-full" id="printer-app-panel">
+                  <img src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746215246/Printer_UX_uph85f.webp" alt="Printer UX" class="w-full h-auto"/>
                   <div class="hover-overlay">
                     <p class="overlay-content">
                       <span class="project-title">Printer app</span><br>
                       <span class="project-roles">Creative direction, icon design</span>
                     </p>
                   </div>
+                  <span class="case-study-text">Click for case study</span>
                   <button class="info-icon" aria-label="More information about Printer app">
                     <!-- Info icon SVG -->
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-info">
                         <circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>
                     </svg>
                   </button>
-                </div>
+                </a>
                 <!-- Iconography Project Section -->
                 <div class="misc-image-wrapper max-w-5xl w-full" id="iconography-panel">
-                  <img data-src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746215236/Iconography_j2j3m6.webp" alt="Iconography" class="w-full h-auto"/>
+                  <img src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746215236/Iconography_j2j3m6.webp" alt="Iconography" class="w-full h-auto"/>
                   <div class="hover-overlay">
                     <p class="overlay-content">
                       <span class="project-title">Iconography</span><br>
@@ -602,7 +625,7 @@
                 </div>
                 <!-- Icon Sketches Project Section -->
                 <div class="misc-image-wrapper max-w-5xl w-full" id="icon-sketches-panel">
-                  <img data-src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746215235/Icon_Sketches_t9zci1.webp" alt="Icon Sketches" class="w-full h-auto"/>
+                  <img src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746215235/Icon_Sketches_t9zci1.webp" alt="Icon Sketches" class="w-full h-auto"/>
                   <div class="hover-overlay"><span>Icon Sketches</span></div>
                   <button class="info-icon" aria-label="More information about Icon Sketches">
                     <!-- Info icon SVG -->
@@ -614,7 +637,7 @@
                 
                 <!-- "The End" image section -->
                 <div class="misc-image-wrapper the-end-graphic max-w-5xl w-full my-16" id="the-end-panel">
-                    <img data-src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746215250/THE_END_dylo5r.svg" alt="The End" class="w-full h-auto">
+                    <img src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1746215250/THE_END_dylo5r.svg" alt="The End" class="w-full h-auto">
                 </div>
             </div>
         </main>
@@ -631,279 +654,131 @@
             // Select all project wrappers
             const miscImageWrappers = document.querySelectorAll('.misc-image-wrapper');
 
-            // Store scroll position and last clicked panel ID before navigating away
-            const saveStateBeforeUnload = (panelId = null) => {
-                sessionStorage.setItem('scrollPosition', window.scrollY);
-                if (panelId) {
-                    sessionStorage.setItem('lastClickedPanelId', panelId);
-                } else {
-                    sessionStorage.removeItem('lastClickedPanelId'); // Clear if no specific panel was explicitly clicked
-                }
-            };
+            // Define an array of panel IDs that should always scroll to their top when returning
+            // All case study panels are now included in this list.
+            const panelsToAlwaysScrollToTop = [
+                'roku-ds-panel',
+                'iot-mobile-panel',
+                'roku-ad-platform-panel',
+                'roku-os-panel',
+                'roku-mobile-panel',
+                'settings-video-panel',
+                'google-play-notifications-panel',
+                'ms-surface-music-panel',
+                'nike-training-os-panel',
+                'nike-kids-concept-panel',
+                'printer-app-panel'
+            ];
 
-            // Restore scroll position and center panel if applicable
-            const restoreAndCenterPanel = () => {
-                const storedScrollY = sessionStorage.getItem('scrollPosition');
-                const lastClickedPanelId = sessionStorage.getItem('lastClickedPanelId');
-                const referrer = document.referrer;
-                const caseStudyPagesToTop = ['ad.html', 'ftux.html']; // Case study pages that should reset scroll to top
+            // Restore scroll position based on sessionStorage
+            const restoreScrollPosition = () => {
+                const storedPanelId = sessionStorage.getItem('lastVisitedPanelId');
+                const storedScrollY = sessionStorage.getItem('lastScrollY');
+                const headerHeight = document.querySelector('header').offsetHeight;
+                // Adjust this value as needed to fine-tune the scroll position.
+                // A positive value will scroll the page up more (making the target element appear higher).
+                const scrollOffsetBuffer = 10; 
 
-                let shouldScrollToTop = false;
-                if (referrer) {
-                    const referrerFileName = referrer.substring(referrer.lastIndexOf('/') + 1);
-                    if (caseStudyPagesToTop.includes(referrerFileName)) {
-                        shouldScrollToTop = true;
-                    }
-                }
-
-                if (shouldScrollToTop) {
-                    window.scrollTo(0, 0); // Always scroll to top for specified case studies
-                } else if (lastClickedPanelId) {
-                    const targetElement = document.getElementById(lastClickedPanelId);
+                if (storedPanelId) {
+                    const targetElement = document.getElementById(storedPanelId);
                     if (targetElement) {
-                        const mediaElement = targetElement.querySelector('img, video');
-                        let mediaPromise;
-
-                        if (mediaElement) {
-                            if (mediaElement.tagName === 'IMG') {
-                                mediaPromise = new Promise(resolve => {
-                                    if (mediaElement.complete) {
-                                        resolve();
-                                    } else {
-                                        mediaElement.addEventListener('load', resolve);
-                                    }
-                                });
-                            } else if (mediaElement.tagName === 'VIDEO') {
-                                mediaPromise = new Promise(resolve => {
-                                    if (mediaElement.readyState >= 2) { // HAVE_CURRENT_DATA or more
-                                        resolve();
-                                    } else {
-                                        mediaElement.addEventListener('loadedmetadata', resolve);
-                                    }
-                                });
-                            }
+                        let scrollTargetY;
+                        // Check if the stored panel ID is in the list of panels that should always scroll to their top
+                        if (panelsToAlwaysScrollToTop.includes(storedPanelId)) {
+                            // Subtract an additional buffer to ensure the panel is fully visible at the top
+                            scrollTargetY = targetElement.offsetTop - headerHeight - scrollOffsetBuffer;
+                            // Ensure scrollTargetY doesn't go below 0
+                            scrollTargetY = Math.max(0, scrollTargetY);
                         } else {
-                            // No media element, resolve immediately
-                            mediaPromise = Promise.resolve();
+                            // For other panels, use the exact stored scroll Y if available, otherwise fallback to panel top
+                            scrollTargetY = storedScrollY ? parseInt(storedScrollY, 10) : targetElement.offsetTop - headerHeight;
+                            // Ensure scrollTargetY doesn't go below 0
+                            scrollTargetY = Math.max(0, scrollTargetY);
                         }
 
-                        mediaPromise.then(() => {
-                            // Allow a very small delay for repaint after layout calculation
-                            requestAnimationFrame(() => {
-                                const rect = targetElement.getBoundingClientRect();
-                                const offset = rect.top + window.scrollY; // Absolute top position of the element
-                                const viewportCenter = window.innerHeight / 2;
-                                const elementCenter = rect.height / 2;
-
-                                const scrollToY = offset - viewportCenter + elementCenter;
-
-                                window.scrollTo({
-                                    top: scrollToY,
-                                    behavior: 'smooth'
-                                });
-                            });
-                        }).catch(error => {
-                            console.error('Error waiting for media to load:', error);
-                            // Fallback to general scroll restoration if media loading fails
-                            if (storedScrollY) {
-                                window.scrollTo(0, parseInt(storedScrollY, 10));
-                            }
+                        window.scrollTo({
+                            top: scrollTargetY,
+                            behavior: 'instant' // Instant jump to the position
                         });
-                    } else if (storedScrollY) {
-                        // Fallback to general scroll restoration if panel not found
-                        window.scrollTo(0, parseInt(storedScrollY, 10));
+
+                        // Clear sessionStorage after restoring to prevent unexpected scrolls on subsequent visits
+                        sessionStorage.removeItem('lastVisitedPanelId');
+                        sessionStorage.removeItem('lastScrollY');
                     }
-                } else if (storedScrollY) {
-                    // General scroll restoration if no specific panel was clicked
-                    window.scrollTo(0, parseInt(storedScrollY, 10));
+                } else if (window.location.hash) {
+                    // Fallback for direct links with hash (e.g., if user manually types index.html#panel-id)
+                    const panelIdFromHash = window.location.hash.substring(1);
+                    const targetElement = document.getElementById(panelIdFromHash);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({
+                            block: 'start',
+                            behavior: 'smooth' // Smooth scroll for direct hash links
+                        });
+                    }
                 }
-                sessionStorage.removeItem('scrollPosition'); // Always clear after attempting to restore
-                sessionStorage.removeItem('lastClickedPanelId'); // Always clear after attempting to restore
             };
 
-            // Add a global beforeunload listener to save scroll position
-            window.addEventListener('beforeunload', () => {
-                // By default, save the scroll position without a specific panel ID unless overridden by a click listener
-                saveStateBeforeUnload(); 
-            });
-
-
-            // Set up Intersection Observer for lazy loading images and videos
-            const lazyLoadObserver = new IntersectionObserver((entries, observer) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        const wrapper = entry.target;
-                        const mediaElement = wrapper.querySelector('img, video');
-                        if (mediaElement && mediaElement.dataset.src) {
-                            // Load media source from data-src
-                            mediaElement.src = mediaElement.dataset.src;
-                            // For videos, attempt to play once loaded. Autoplay may still be blocked by browser policies.
-                            if (mediaElement.tagName === 'VIDEO') {
-                                // For mobile, ensure all videos are muted and attempt to play
-                                if (isTouchDevice()) {
-                                    mediaElement.muted = true; // Ensure video is muted on mobile
-                                }
-                                mediaElement.play().catch(error => {
-                                    console.warn(`Video autoplay prevented for ${mediaElement.id}:`, error);
-                                    // If autoplay is prevented, remove play/pause button if it exists and is for mobile only
-                                    const playPauseButton = wrapper.querySelector('.video-play-pause-button');
-                                    if (playPauseButton && isTouchDevice()) {
-                                        playPauseButton.classList.remove('hidden-on-play'); // Ensure it's visible if autoplay fails
-                                        const playIcon = playPauseButton.querySelector('.lucide-play');
-                                        const pauseIcon = playPauseButton.querySelector('.lucide-pause');
-                                        if (playIcon) playIcon.classList.remove('hidden');
-                                        if (pauseIcon) pauseIcon.classList.add('hidden');
-                                    }
-                                });
-                            }
-                            mediaElement.removeAttribute('data-src'); // Remove data-src to prevent re-loading
-                        }
-                        // Add 'is-loaded' class to trigger CSS fade-in
-                        wrapper.classList.add('is-loaded');
-                        // Always unobserve after loading, as we want individual lazy loading for each element.
-                        observer.unobserve(wrapper); 
-                    }
-                });
-            }, {
-                root: null, // Use the viewport as the root for observation
-                rootMargin: '0px',
-                threshold: 0.1 // Trigger when 10% of the element is visible
-            });
-
-            // Assign IDs to all misc-image-wrapper elements that don't already have one, for consistent targeting
-            document.querySelectorAll('.misc-image-wrapper:not([id])').forEach((el, index) => {
-                el.id = `misc-panel-${Date.now()}-${index}`; // Assign a unique ID using timestamp and index
-            });
-
-
-            // Iterate over each project wrapper to attach event listeners and observer
+            // Iterate over each project wrapper to attach event listeners
             miscImageWrappers.forEach(wrapper => {
-                // Initial observation for lazy loading
-                lazyLoadObserver.observe(wrapper); 
-
                 const infoIcon = wrapper.querySelector('.info-icon');
                 const muteButton = wrapper.querySelector('.mute-toggle-button'); 
                 // Check if it's a case study link by looking for the data-original-href attribute
                 const isCaseStudyLink = wrapper.tagName === 'A' && wrapper.hasAttribute('data-original-href');
 
-                // Function to toggle the 'overlay-active' class on the wrapper
-                const toggleOverlayAndScale = (force) => {
-                    // Close any other active overlays before opening a new one
-                    miscImageWrappers.forEach(otherWrapper => {
-                        if (otherWrapper !== wrapper && otherWrapper.classList.contains('overlay-active')) {
-                            otherWrapper.classList.remove('overlay-active');
-                            // Reset any tapped-for-overlay flags on other links when closing their overlays
-                            if (otherWrapper.tagName === 'A' && otherWrapper.hasAttribute('data-tapped-for-overlay')) {
-                                otherWrapper.removeAttribute('data-tapped-for-overlay');
-                            }
-                            // Re-show info icon if its overlay is being closed and it's a touch device
-                            if (isTouchDevice()) {
-                                const otherInfoIcon = otherWrapper.querySelector('.info-icon');
-                                if (otherInfoIcon) otherInfoIcon.classList.remove('hidden');
-                            }
-                        }
-                    });
-                    // Toggle or force the 'overlay-active' class for the current wrapper
-                    if (typeof force === 'boolean') {
-                        wrapper.classList.toggle('overlay-active', force);
-                    } else {
-                        wrapper.classList.toggle('overlay-active');
-                    }
+                // Info icon and mute button clicks should stop propagation to prevent interference with parent elements.
+                if (infoIcon) {
+                    infoIcon.addEventListener('click', (e) => {
+                        e.stopPropagation(); // Prevent the click from bubbling up to the wrapper's <a> tag
 
-                    // Hide/Show infoIcon based on overlay state on touch devices
-                    if (isTouchDevice() && infoIcon) {
-                        if (wrapper.classList.contains('overlay-active')) {
-                            infoIcon.classList.add('hidden'); // Hide info icon when overlay is active
-                        } else {
-                            infoIcon.classList.remove('hidden'); // Show info icon when overlay is not active
-                        }
-                    }
-                };
+                        if (isTouchDevice()) {
+                            // Toggle the overlay-active class on the parent wrapper
+                            const currentlyActive = wrapper.classList.contains('overlay-active');
 
+                            // Close all other active overlays first
+                            miscImageWrappers.forEach(otherWrapper => {
+                                if (otherWrapper.classList.contains('overlay-active')) {
+                                    otherWrapper.classList.remove('overlay-active');
+                                    const otherInfoIcon = otherWrapper.querySelector('.info-icon');
+                                    // Ensure info icon is visible when another overlay is closed
+                                    if (otherInfoIcon) otherInfoIcon.classList.remove('hidden'); 
+                                }
+                            });
 
-                if (isTouchDevice()) {
-                    // Mobile specific click handling for all wrappers
-                    // This listener will handle both showing and dismissing overlays, and navigating for case studies.
-                    wrapper.addEventListener('click', (e) => {
-                        const clickedOnCaseStudyText = isCaseStudyLink && (e.target.classList.contains('case-study-text') || (e.target.closest && e.target.closest('.case-study-text')));
-                        const isOverlayActive = wrapper.classList.contains('overlay-active');
-                        // const clickedOnInfoIcon = infoIcon && infoIcon.contains(e.target); // No longer needed directly here
-                        // const clickedOnMuteButton = muteButton && muteButton.contains(e.target); // No longer needed directly here
-
-                        // Prevent default navigation for links on mobile, as we're handling clicks manually.
-                        if (wrapper.tagName === 'A') {
-                            e.preventDefault(); 
-                        }
-
-                        if (isOverlayActive) {
-                            // If overlay is active
-                            if (isCaseStudyLink && clickedOnCaseStudyText) {
-                                // If it's a case study and the specific 'Click for case study' text was tapped, navigate.
-                                saveStateBeforeUnload(wrapper.id);
-                                window.location.href = wrapper.getAttribute('data-original-href');
-                                // No explicit toggleOverlayAndScale(false) here, as navigation will unload the page.
+                            // If this wrapper was not active, activate it
+                            if (!currentlyActive) {
+                                wrapper.classList.add('overlay-active');
+                                // The info icon is no longer hidden on mobile when overlay is active
                             } else {
-                                // Clicked anywhere else on the panel when overlay is active (including info/mute icons)
-                                // This is the universal dismiss for active overlays on mobile.
-                                toggleOverlayAndScale(false); // Dismiss the overlay
+                                // If it was active, it's already closed by the loop above, just ensure icon is visible
+                                infoIcon.classList.remove('hidden');
                             }
-                        } else {
-                            // If overlay is NOT active (this is the first tap on general area or any child element)
-                            toggleOverlayAndScale(true); // Show overlay
-                            // No need for data-tapped-for-overlay flag with this simplified logic,
-                            // as a second tap just closes the overlay unless it's the case study text.
                         }
                     });
 
-                    // On mobile, infoIcon and muteButton clicks are now handled by the wrapper's universal click listener.
-                    // The mute button's actual mute/unmute functionality is handled by `setupMuteToggle`.
-                    // We remove the specific click listeners for infoIcon and muteButton on mobile as they're now redundant
-                    // in terms of overlay control.
-
-                } else {
-                    // Desktop (non-touch) device logic
-                    if (isCaseStudyLink) {
-                        // On desktop, the entire case study panel is a direct link
-                        wrapper.href = wrapper.getAttribute('data-original-href'); // Ensure href is set for direct navigation
-                        // No need for wrapper.addEventListener('click', saveScrollPosition) here, beforeunload handles it.
-
-                        // For case study links, infoIcon hover also toggles the overlay
-                        if (infoIcon) {
-                            infoIcon.addEventListener('mouseenter', () => {
-                                toggleOverlayAndScale(true);
-                            });
-                            infoIcon.addEventListener('mouseleave', () => {
-                                toggleOverlayAndScale(false);
-                            });
-                        }
-                    } else {
-                        // For non-case study div wrappers, only infoIcon hover toggles overlay
-                        if (infoIcon) {
-                            infoIcon.addEventListener('mouseenter', () => {
-                                toggleOverlayAndScale(true);
-                            });
-                            infoIcon.addEventListener('mouseleave', () => {
-                                toggleOverlayAndScale(false);
-                            });
-                        }
-                    }
-                    // For ANY clickable element (<a> tag or button) on desktop, save the panel ID
-                    // This covers resume link, info buttons, and mute buttons.
-                    // Clicks on general <a> tags (like the resume link in header) are implicitly handled by browser for navigation.
-                    if (infoIcon) { 
-                        infoIcon.addEventListener('click', () => {
-                            if (wrapper.id) {
-                                saveStateBeforeUnload(wrapper.id);
-                            }
+                    // Add desktop hover listeners ONLY if not a touch device
+                    if (!isTouchDevice()) {
+                        infoIcon.addEventListener('mouseenter', () => {
+                            wrapper.classList.add('hover-active');
+                        });
+                        infoIcon.addEventListener('mouseleave', () => {
+                            wrapper.classList.remove('hover-active');
                         });
                     }
-                    if (muteButton) { 
-                        muteButton.addEventListener('click', () => {
-                            if (wrapper.id) {
-                                saveStateBeforeUnload(wrapper.id);
-                            }
-                        });
-                    }
+                }
+                if (muteButton) { 
+                    muteButton.addEventListener('click', (e) => {
+                        e.stopPropagation(); 
+                    });
+                }
+
+                // Store the ID of the current panel and scroll position in sessionStorage before navigation
+                if (isCaseStudyLink) {
+                    wrapper.addEventListener('mousedown', () => { // Use mousedown to capture scroll before navigation
+                        sessionStorage.setItem('lastVisitedPanelId', wrapper.id);
+                        sessionStorage.setItem('lastScrollY', window.scrollY); // Store current scroll position
+                    });
+                    // No need to preventDefault or manually set window.location.href here.
+                    // Let the browser handle the native <a> tag navigation.
                 }
             });
 
@@ -943,14 +818,14 @@
             setupMuteToggle('googlePlayNotificationsVideo', 'muteToggleButtonGooglePlay', 'volumeOnIconGooglePlay', 'volumeOffIconGooglePlay');
 
 
-            // New: Play/Pause control for Roku OS video on mobile
-            const setupRokuOsPlayPause = (videoId, playPauseButtonId, playIconId, pauseIconId) => {
+            // New: Play/Pause control for Roku OS and Settings Over Video
+            const setupVideoPlayPause = (videoId, playPauseButtonId, playIconId, pauseIconId) => {
                 const videoElement = document.getElementById(videoId);
                 const playPauseButton = document.getElementById(playPauseButtonId);
                 const playIcon = document.getElementById(playIconId);
                 const pauseIcon = document.getElementById(pauseIconId);
 
-                if (!videoElement || !playPauseButton) { // No need for isTouchDevice() check here, CSS handles visibility
+                if (!videoElement || !playPauseButton) {
                     return; 
                 }
 
@@ -995,8 +870,6 @@
                     });
 
                     // Listen for video events to update button state
-                    // The `id` attribute is missing from the video element in the `index.html` file.
-                    // To fix this issue, you need to add the `id="rokuOsVideo"` attribute to the video element.
                     videoElement.addEventListener('play', () => {
                         playIcon.classList.add('hidden');
                         pauseIcon.classList.remove('hidden');
@@ -1016,10 +889,13 @@
             };
 
             // Setup play/pause for Roku OS video
-            setupRokuOsPlayPause('rokuOsVideo', 'playPauseButtonRokuOs', 'playIconRokuOs', 'pauseIconRokuOs');
+            setupVideoPlayPause('rokuOsVideo', 'playPauseButtonRokuOs', 'playIconRokuOs', 'pauseIconRokuOs');
+            // Setup play/pause for Settings Over Video
+            setupVideoPlayPause('settingsOverVideo', 'playPauseButtonSettings', 'playIconSettings', 'pauseIconSettings');
+
 
             // Restore scroll position on initial page load
-            restoreAndCenterPanel();
+            restoreScrollPosition();
         });
     </script>
 </body>

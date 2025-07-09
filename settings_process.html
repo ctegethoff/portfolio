@@ -1,0 +1,801 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page with Black Top Cap and Image</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <script>
+        // Custom configuration for Tailwind
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'montserrat': ['Montserrat', 'sans-serif'],
+                    },
+                    maxWidth: {
+                        '8xl': '1440px',
+                    },
+                    keyframes: { /* Merged from FTUX top cap */
+                        scrollLeft: {
+                            '0%': { transform: 'translateX(100vw)' },
+                            '100%': { transform: 'translateX(-100%)' },
+                        }
+                    },
+                    animation: { /* Merged from FTUX top cap */
+                        'scroll-left': 'scrollLeft linear infinite',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Apply Montserrat font to the entire page, with Inter as fallback */
+        body {
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh; /* Ensure body takes full viewport height */
+            background-color: #f3f4f6; /* Light gray background */
+            /* Font smoothing properties */
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale; /* For Firefox on macOS */
+        }
+
+        /* Overlay styles */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7); /* Dark semi-transparent */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000; /* Ensure it's on top */
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+        }
+
+        .overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Keyframe animation for overlay content */
+        @keyframes scaleInBounce {
+            0% {
+                transform: scale(0.9); /* Start slightly larger */
+                opacity: 0;
+            }
+            70% {
+                transform: scale(1.01); /* Reduced overshoot for less bounce */
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .overlay.active .overlay-content {
+            animation: scaleInBounce 0.38s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; /* Over 350ms duration with subtle bounce easing */
+        }
+
+        .overlay-content {
+            background-color: white;
+            padding: 2rem;
+            max-width: 800px; /* Keeping it responsive for smaller screens */
+            max-height: 90%;
+            overflow-y: auto;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #ccc; /* Ensure border is applied */
+        }
+        .overlay-content h2 { /* Converted from [55px] */
+            font-size: 3.4375rem; /* 55px / 16 = 3.4375rem */
+            font-weight: 700; /* font-bold */
+            line-height: 1; /* leading-none */
+            margin-bottom: 1rem; /* mb-4 */
+        }
+        .overlay-content p { /* Converted from [22.5px] */
+            font-size: 1.40625rem; /* 22.5px / 16 = 1.40625rem */
+            line-height: 1.22; /* leading-tight */
+            margin-bottom: 2rem; /* mb-8 */
+        }
+
+
+        /* Animation for scrolling panels */
+        @keyframes fadeInAndMoveUp {
+            0% {
+                opacity: 0;
+                transform: translateY(2.5rem); /* Converted from 40px */
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0); /* End at original position */
+            }
+        }
+
+        /* Initial state for panels to be animated */
+        .panel-hidden {
+            opacity: 0;
+            transform: translateY(2.5rem); /* Consistent with keyframe start */
+            transition: opacity 0.45s ease-out, transform 0.45s ease-out; /* Smooth transition for non-animated state changes if any */
+        }
+
+        /* State for visible and animated panels */
+        .panel-visible {
+            animation: fadeInAndMoveUp 0.45s ease-out forwards; /* Changed duration to 450ms */
+        }
+
+        /* Video container specific styles for play button overlay */
+        .video-container {
+            position: relative;
+            width: 100%;
+            height: auto;
+            display: block; /* Ensures it behaves like a block for full width */
+            overflow: hidden; /* Ensures poster image respects container bounds */
+        }
+
+        .video-container video {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .play-button-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.4); /* Semi-transparent background for the button */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 1; /* Initially visible */
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .play-button-overlay.hidden {
+            opacity: 0;
+            pointer-events: none; /* Make it unclickable when hidden */
+        }
+
+        .play-button-overlay svg {
+            color: white;
+            width: 5rem; /* Converted from 80px */
+            height: 5rem; /* Converted from 80px */
+        }
+        /* Styles for mute toggle button (universal styling, but not used by educate video now) */
+        .mute-toggle-button {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            width: 80px;
+            height: 80px;
+            background-color: rgba(0, 0, 0, 0.4);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+            opacity: 1;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .mute-toggle-button.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .mute-toggle-button svg {
+            color: white;
+            width: 48px;
+            height: 48px;
+        }
+
+        /* Custom paragraph styling for consistency */
+        /* Updated this to match other pages: text-xl/md:text-2xl & leading-relaxed */
+        .page-paragraph {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 300; /* For a thin look */
+            font-size: 1.25rem; /* Equivalent to Tailwind's text-xl */
+            line-height: 1.4; /* Changed from 1.625 */
+            text-align: center;
+            color: #4a4a4a; /* Or your preferred dark gray text color */
+            max-width: 56rem; /* Equivalent to Tailwind's max-w-3xl, adjust as needed */
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Header h2 styling */
+        .panel-header-text { /* New class for h2 in section headers */
+            font-size: 4.375rem; /* 70px / 16 = 4.375rem */
+            line-height: 1; /* leading-none */
+            font-weight: 300; /* font-light */
+        }
+
+        /* Text panel h3 styling - Adjusted font sizes for mobile and larger screens */
+        .text-panel-h3 { /* New class for h3 in text panels */
+            font-size: 1.875rem; /* Default for mobile (30px) */
+            line-height: 1; /* leading-none */
+            font-weight: 300; /* font-light */
+        }
+        @media (min-width: 768px) { /* md: breakpoint */
+            .text-panel-h3 {
+                font-size: 2.25rem; /* 36px for larger screens */
+            }
+        }
+
+        /* Text panel p styling - This is the primary target for change */
+        .text-panel-p { /* Matched to .page-paragraph style */
+            font-size: 1.25rem; /* Equivalent to text-xl */
+            line-height: 1.4; /* Changed from 1.625 */
+            margin-top: 1.125rem; /* 18px / 16 = 1.125rem */
+            color: #4a4a4a; /* Ensure consistent text color */
+        }
+        @media (min-width: 768px) { /* md: breakpoint for text-2xl */
+            .text-panel-p {
+                font-size: 1.5rem; /* Equivalent to text-2xl */
+            }
+        }
+
+
+        /* Text overlay p styling for panel 4 */
+        #panel-4-ux-customer-support-empathy-image p {
+            font-size: 2.8125rem; /* 45px / 16 = 2.8125rem */
+            line-height: 1.22; /* leading-tight */
+            font-weight: 900; /* font-black */
+            color: rgba(255, 255, 255, 0.7);
+            max-width: 56.25rem; /* 900px / 16 = 56.25rem */
+            transition: transform 0.3s ease-in-out; /* Add transition for scale */
+            transform: scale(1); /* Default scale for mobile and no-hover desktop */
+        }
+        /* Mobile specific adjustments for panel-4 text to make it smaller and fit better */
+        @media (max-width: 767px) { /* Adjust for screens smaller than md breakpoint */
+            #panel-4-ux-customer-support-empathy-image p {
+                font-size: 1.5rem; /* Smaller font size for mobile */
+                line-height: 1.4; /* Slightly looser line height */
+                padding: 0 1rem; /* Add some horizontal padding */
+                box-sizing: border-box; /* Include padding in width */
+                white-space: normal; /* Allow text to wrap */
+                word-break: break-word; /* Break long words if necessary */
+            }
+        }
+        /* Hover scale for #panel-4 text on larger screens only */
+        @media (min-width: 768px) {
+            #panel-4-ux-customer-support-empathy-image p:hover {
+                transform: scale(1.1); /* Scale up 10% on hover */
+            }
+        }
+
+
+        /* Custom padding for text panels */
+        .text-panel-content-area { /* Applied to div inside text panels for inner spacing */
+            padding-top: 2rem; /* 32px / 16 = 2rem */
+            padding-bottom: 4.8125rem; /* 77px / 16 = 4.8125rem */
+            padding-left: 2rem; /* Matches p-8 (32px) for horizontal */
+            padding-right: 2rem; /* Matches p-8 (32px) for horizontal */
+        }
+
+        /* Adjust media queries for text panel content area on larger screens */
+        @media (min-width: 768px) { /* Corresponds to md: breakpoint */
+            .text-panel-content-area {
+                padding-left: 4rem; /* Matches md:px-16 (64px) for horizontal */
+                padding-right: 4rem; /* Matches md:px-16 (64px) for horizontal */
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- START: Applied Top Cap Header with About this Case Study - Now Full Width -->
+    <header class="sticky top-0 h-16 md:h-18 w-full bg-black z-50">
+        <div class="max-w-8xl mx-auto h-full flex items-center justify-between px-8 md:px-16">
+            <!-- Back Arrow -->
+            <a href="index.html" class="text-white hover:opacity-75 transition-opacity" aria-label="Back to Home">
+                <svg width="26" height="52" viewBox="0 0 26 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M25 51L1 26L25 1" stroke="currentColor" stroke-width="2"/>
+                </svg>
+            </a>
+            <!-- "About this case study" text - Hidden on mobile, visible on medium and up -->
+            <span id="aboutCaseStudyText" class="text-white text-2xl font-light cursor-pointer hidden md:inline">About this case study</span>
+        </div>
+    </header>
+    <!-- END: Applied Top Cap Header -->
+
+    <div class="max-w-[1440px] mx-auto bg-white shadow-lg min-h-screen">
+        <div id="panel-2-ux-design-systems-header-image" class="w-full panel-hidden">
+            <img src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1750372622/UX_design_systems_header_ukjuw1.webp"
+                 alt="UX Design Systems Header"
+                 class="w-full h-auto block object-cover">
+        </div>
+
+        <div id="panel-3-discovery-section-header" class="w-full bg-[#32343A] h-[200px] flex items-center justify-center panel-hidden">
+            <h2 class="text-white text-center font-light panel-header-text">Discovery</h2>
+        </div>
+
+        <div id="panel-4-ux-customer-support-empathy-image" class="w-full relative flex items-center justify-center panel-hidden">
+            <img src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1750372621/UX_customer_support_empathy_ifefvy.webp"
+                 alt="UX Customer Support Empathy"
+                 class="w-full h-auto block object-cover">
+            <div class="absolute inset-0 flex items-center justify-center p-4">
+                <p class="text-center">
+                    We suspected there were usability issues with Settings Over Video, but struggled where to start
+                </p>
+            </div>
+        </div>
+
+        <div id="panel-5-empathy-text-panel" class="w-full bg-white panel-hidden">
+            <div class="max-w-[900px] mx-auto text-center text-panel-content-area">
+                <h3 class="text-black text-panel-h3">Empathy</h3>
+                <p class="text-gray-800 text-panel-p">
+                    To understand if there was a problem, we started collecting data by listening in on a lot of customer support calls
+                </p>
+            </div>
+        </div>
+
+        <div id="panel-6-ux-usability-research-empathy-image" class="w-full panel-hidden">
+            <img src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1750372621/UX_usability_research_empathy_pgrgi5.webp"
+                 alt="UX Usability Research Empathy"
+                 class="w-full h-auto block object-cover">
+        </div>
+
+        <div id="panel-7-research-text-panel" class="w-full bg-white panel-hidden">
+            <div class="max-w-[900px] mx-auto text-center text-panel-content-area">
+                <h3 class="text-black text-panel-h3">Research</h3>
+                <p class="text-gray-800 text-panel-p">
+                    We conducted a usability study to better understand the recurring pain points customers shared
+                </p>
+            </div>
+        </div>
+
+        <div id="panel-8-ux-design-process-audits-image" class="w-full panel-hidden">
+            <img src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1750372621/UX_design_process_audits_q2bg5d.webp"
+                 alt="UX Design Process Audits"
+                 class="w-full h-auto block object-cover">
+        </div>
+
+        <div id="panel-9-audits-text-panel" class="w-full bg-white panel-hidden">
+            <div class="max-w-[900px] mx-auto text-center text-panel-content-area">
+                <h3 class="text-black text-panel-h3">Audits</h3>
+                <p class="text-gray-800 text-panel-p">
+                    In-depth internal and external audits provided lots of data and uncovered opportunities for improvement
+                </p>
+            </div>
+        </div>
+
+        <div id="panel-10-ux-research-pain-points-image" class="w-full panel-hidden">
+            <img src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1750372621/UX_research_pain_points_omfwln.webp"
+                 alt="UX Research Pain Points"
+                 class="w-full h-auto block object-cover">
+        </div>
+
+        <div id="panel-11-problem-text-panel" class="w-full bg-white panel-hidden">
+            <div class="max-w-[900px] mx-auto text-center text-panel-content-area">
+                <h3 class="text-black text-panel-h3">Problem</h3>
+                <p class="text-gray-800 text-panel-p">
+                    Research highlighted Settings Over Video was a space where usability issues were firmly rooted in unclear hierarchy, ambiguous naming, and lack of user feedback
+                </p>
+            </div>
+        </div>
+
+        <div id="panel-12-definition-section-header" class="w-full bg-[#32343A] h-[200px] flex items-center justify-center panel-hidden">
+            <h2 class="text-white text-center font-light panel-header-text">Definition</h2>
+        </div>
+
+        <div id="panel-13-ux-user-journey-1-image" class="w-full panel-hidden">
+            <img src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1750372622/UX_user_journey_1_tfdiqw.webp"
+                 alt="UX User Journey 1"
+                 class="w-full h-auto block object-cover">
+        </div>
+
+        <div id="panel-14-empathy-maps-text-panel" class="w-full bg-white panel-hidden">
+            <div class="max-w-[900px] mx-auto text-center text-panel-content-area">
+                <h3 class="text-black text-panel-h3">Empathy Maps</h3>
+                <p class="text-gray-800 text-panel-p">
+                    Empathy maps and CUJs grounded in real world user scenarios informed requirements
+                </p>
+            </div>
+        </div>
+
+        <div id="panel-15-user-business-goals-image" class="w-full panel-hidden">
+            <img src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1750372622/user_and_business_goals_mktdg6.webp"
+                 alt="User and Business Goals"
+                 class="w-full h-auto block object-cover">
+        </div>
+
+        <div id="panel-16-goals-text-panel" class="w-full bg-white panel-hidden">
+            <div class="max-w-[900px] mx-auto text-center text-panel-content-area">
+                <h3 class="text-black text-panel-h3">Goals</h3>
+                <p class="text-gray-800 text-panel-p">
+                    Collaborating with the CS support team was valuable in determining a primary business goal to reduce CS call volume which unblocked the project from moving forward
+                </p>
+            </div>
+        </div>
+
+        <div id="panel-17-ux-kpis-image" class="w-full panel-hidden">
+            <img src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1750372622/UX_KPIs_soequn.webp"
+                 alt="UX KPIs"
+                 class="w-full h-auto block object-cover">
+        </div>
+
+        <div id="panel-18-kpis-text-panel" class="w-full bg-white panel-hidden">
+            <div class="max-w-[900px] mx-auto text-center text-panel-content-area">
+                <h3 class="text-black text-panel-h3">KPIs</h3>
+                <!-- Adjusted text size and responsive classes for mobile -->
+                <p class="text-gray-800 text-panel-p text-sm sm:text-base md:text-xl leading-tight">
+                    Consumer and tech reviews were a core KPI, as they heavily influence TV purchase decisions
+                </p>
+            </div>
+        </div>
+
+        <div id="panel-19-design-section-header" class="w-full bg-[#32343A] h-[200px] flex items-center justify-center panel-hidden">
+            <h2 class="text-white text-center font-light panel-header-text">Design</h2>
+        </div>
+
+        <div id="panel-20-ux-process-sketch-image" class="w-full panel-hidden">
+            <img src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1750372621/UX_process_sketch_vp5gol.webp"
+                 alt="UX Process Sketch"
+                 class="w-full h-auto block object-cover">
+        </div>
+
+        <div id="panel-21-quick-ideation-text-panel" class="w-full bg-white panel-hidden">
+            <div class="max-w-[900px] mx-auto text-center text-panel-content-area">
+                <h3 class="text-black text-panel-h3">Quick Ideation</h3>
+                <p class="text-gray-800 text-panel-p">
+                    Initial ideation started with sketches exploring related and non-related patterns and flows
+                </p>
+            </div>
+        </div>
+
+        <div id="panel-22-ux-wires-image" class="w-full panel-hidden">
+            <img src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1750372623/UX_wires_lbfjgn.webp"
+                 alt="UX Wires"
+                 class="w-full h-auto block object-cover">
+        </div>
+
+        <div id="panel-23-flows-text-panel" class="w-full bg-white panel-hidden">
+            <div class="max-w-[900px] mx-auto text-center text-panel-content-area">
+                <h3 class="text-black text-panel-h3">Flows</h3>
+                <p class="text-gray-800 text-panel-p">
+                    Interaction flows helped engage engineering early in the design process to assess technical feasibility
+                </p>
+            </div>
+        </div>
+
+        <div id="panel-24-ordering-logic-image" class="w-full panel-hidden">
+            <img src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1750372622/ordering_logic_yderam.webp"
+                 alt="Ordering Logic"
+                 class="w-full h-auto block object-cover">
+        </div>
+
+        <div id="panel-25-ia-text-panel" class="w-full bg-white panel-hidden">
+            <div class="max-w-[900px] mx-auto text-center text-panel-content-area">
+                <h3 class="text-black text-panel-h3">IA</h3>
+                <p class="text-gray-800 text-panel-p">
+                    Research and data directly informed the information architecture and nomenclature used
+                </p>
+            </div>
+        </div>
+
+        <div id="panel-26-design-exploration-video" class="w-full panel-hidden">
+            <video id="designExplorationVideo" class="w-full h-auto block object-cover" autoplay loop muted playsinline>
+                <source src="https://res.cloudinary.com/dlbnlilfj/video/upload/v1750372629/design_exploration_ozmnhk.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+
+        <div id="panel-27-design-iteration-text-panel" class="w-full bg-white panel-hidden">
+            <div class="max-w-[900px] mx-auto text-center text-panel-content-area">
+                <h3 class="text-black text-panel-h3">Design Iteration</h3>
+                <p class="text-gray-800 text-panel-p">
+                    Visual design started with layouts to communicate focus, minimize noise, and support both lean-in and lean-back use cases
+                </p>
+            </div>
+        </div>
+
+        <div id="panel-28-prototype-video" class="w-full panel-hidden">
+            <video id="prototypeVideo" class="w-full h-auto block object-cover" autoplay loop muted playsinline>
+                <source src="https://res.cloudinary.com/dlbnlilfj/video/upload/v1750372620/prototype_gm2cqm.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+
+        <div id="panel-29-rapid-prototyping-text-panel" class="w-full bg-white panel-hidden">
+            <div class="max-w-[900px] mx-auto text-center text-panel-content-area">
+                <h3 class="text-black text-panel-h3">Rapid Prototyping</h3>
+                <p class="text-gray-800 text-panel-p">
+                    Rapid prototyping helped engineering more accurately scope the work, accelerated research, and aligned stakeholders
+                </p>
+            </div>
+        </div>
+
+        <div id="panel-30-selected-prototype-video" class="w-full relative panel-hidden">
+            <video id="selectedPrototypeVideo" class="w-full h-auto block object-cover" playsinline poster="https://res.cloudinary.com/dlbnlilfj/image/upload/v1750445093/still_of_prototype_nxfbtr.webp">
+                <source src="https://res.cloudinary.com/dlbnlilfj/video/upload/v1750372623/selected_prototype_yxcvq6.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <div id="selectedPrototypePlayButton" class="play-button-overlay">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M8 5v14l11-7z"/>
+                </svg>
+            </div>
+        </div>
+
+        <div id="panel-31-alignment-text-panel" class="w-full bg-white panel-hidden">
+            <div class="max-w-[900px] mx-auto text-center text-panel-content-area">
+                <h3 class="text-black text-panel-h3">Alignment</h3>
+                <p class="text-gray-800 text-panel-p">
+                    After aligning the team through rapid prototypes, we pushed forward to test concepts directly with users
+                </p>
+            </div>
+        </div>
+
+        <div id="panel-32-ux-usability-testing-image" class="w-full panel-hidden">
+            <img src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1750372621/UX_usability_testing_wxifsw.webp"
+                 alt="UX Usability Testing"
+                 class="w-full h-auto block object-cover">
+        </div>
+
+        <div id="panel-33-usability-testing-text-panel" class="w-full bg-white panel-hidden">
+            <div class="max-w-[900px] mx-auto text-center text-panel-content-area">
+                <h3 class="text-black text-panel-h3">Usability Testing</h3>
+                <p class="text-gray-800 text-panel-p">
+                    Our second usability study mirrored our baseline approach, validated key improvements, and revealed new pain points
+                </p>
+            </div>
+        </div>
+
+        <div id="panel-34-ux-fine-tuning-video" class="w-full panel-hidden">
+            <video id="fineTuningVideo" class="w-full h-auto block object-cover" autoplay loop muted playsinline>
+                <source src="https://res.cloudinary.com/dlbnlilfj/video/upload/v1750372621/UX_fine_tuning_ickuid.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+
+        <div id="panel-35-fine-tuning-text-panel" class="w-full bg-white panel-hidden">
+            <div class="max-w-[900px] mx-auto text-center text-panel-content-area">
+                <h3 class="text-black text-panel-h3">Fine Tuning</h3>
+                <p class="text-gray-800 text-panel-p">
+                    Research revealed that participants preferred the pop over with floating focus, allowing them to select a setting and return to the previous view for confirmation
+                </p>
+            </div>
+        </div>
+
+        <div id="panel-36-develop-section-header" class="w-full bg-[#32343A] h-[200px] flex items-center justify-center panel-hidden">
+            <h2 class="text-white text-center font-light panel-header-text">Develop</h2>
+        </div>
+
+        <div id="panel-37-ux-process-deliver-video" class="w-full panel-hidden">
+            <video id="processDeliverVideo" class="w-full h-auto block object-cover" autoplay loop muted playsinline>
+                <source src="https://res.cloudinary.com/dlbnlilfj/video/upload/v1750372620/UX_process_deliver_krbek7.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+
+        <div id="panel-38-develop-deliver-text-panel" class="w-full bg-white panel-hidden">
+            <div class="max-w-[900px] mx-auto text-center text-panel-content-area">
+                <h3 class="text-black text-panel-h3">Develop & Deliver</h3>
+                <p class="text-gray-800 text-panel-p">
+                    Established a single source of truth for the new pattern and collaborated with engineering across development and QA to bring it to life
+                </p>
+            </div>
+        </div>
+
+        <div id="panel-39-educate-video" class="w-full relative panel-hidden">
+            <video id="educateVideo" class="w-full h-auto block object-cover" playsinline>
+                <source src="https://res.cloudinary.com/dlbnlilfj/video/upload/v1750372626/Educate_vhcyjx.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <!-- Play button overlay for Educate Video -->
+            <div id="educateVideoPlayButton" class="play-button-overlay">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M8 5v14l11-7z"/>
+                </svg>
+            </div>
+        </div>
+
+        <div id="panel-40-beyond-specs-text-panel" class="w-full bg-white panel-hidden">
+            <div class="max-w-[900px] mx-auto text-center text-panel-content-area">
+                <h3 class="text-black text-panel-h3">Beyond Specs</h3>
+                <p class="text-gray-800 text-panel-p">
+                    Turned personal learnings into team growth opportunities during the design and development process
+                </p>
+            </div>
+        </div>
+
+        <div id="panel-41-customer-testimonial-image" class="w-full panel-hidden">
+            <img src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1750372622/customer_testamonial_mpnwbf.svg"
+                 alt="Customer Testimonial"
+                 class="w-full h-auto block object-cover">
+        </div>
+    </div>
+
+    <div id="overlay" class="overlay">
+        <div id="overlayContent" class="overlay-content">
+            <h2 class="text-black font-bold leading-none mb-4">About this case study</h2>
+            <p class="text-gray-800 leading-tight mb-8">
+                This is a 5-10 minute read covering one specific approach to a project. It's intentionally comprehensive. Most of the work shown is entirely my own, with some artifacts the result of close collaboration with cross-functional partners such as content writers, research, and PM.
+            </p>
+            <img src="https://res.cloudinary.com/dlbnlilfj/image/upload/v1750433661/About_support_graphic_xwo00h.svg"
+                 alt="About Support Graphic"
+                 class="w-full h-auto">
+        </div>
+    </div>
+
+    <script>
+        // Get all video elements that need observation for autoplay/pause on scroll
+        const loopingVideos = [
+            document.getElementById('designExplorationVideo'),
+            document.getElementById('prototypeVideo'),
+            document.getElementById('fineTuningVideo'),
+            document.getElementById('processDeliverVideo')
+        ];
+
+        // Function to create Intersection Observer for looping/muted videos
+        const createLoopingVideoObserver = (videoElement) => {
+            return new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        videoElement.play().catch(error => {
+                            console.error('Video autoplay failed:', error);
+                        });
+                    } else {
+                        videoElement.pause();
+                    }
+                });
+            }, {
+                threshold: 0.5 // Trigger when 50% of the video is visible
+            });
+        };
+
+        // Start observing looping/muted video elements
+        loopingVideos.forEach(video => {
+            const observer = createLoopingVideoObserver(video);
+            observer.observe(video);
+        });
+
+        // Function to set up play/pause and optionally mute/unmute for a video
+        const setupVideoPlayerControls = (videoElement, playButtonElement, muteButtonElement = null, volumeOnIconElement = null, volumeOffIconElement = null) => {
+            if (!videoElement || !playButtonElement) {
+                return;
+            }
+
+            // Handle initial state of play button
+            const updatePlayButtonVisibility = () => {
+                if (videoElement.paused || videoElement.ended) {
+                    playButtonElement.classList.remove('hidden');
+                } else {
+                    playButtonElement.classList.add('hidden');
+                }
+            };
+
+            // Handle initial state of mute button (only if it exists)
+            const updateMuteButtonVisibility = () => {
+                if (muteButtonElement && volumeOnIconElement && volumeOffIconElement) {
+                    if (videoElement.muted) {
+                        volumeOnIconElement.classList.add('hidden');
+                        volumeOffIconElement.classList.remove('hidden');
+                    } else {
+                        volumeOnIconElement.classList.remove('hidden');
+                        volumeOffIconElement.classList.add('hidden');
+                    }
+                }
+            };
+            
+            // Initial setup
+            updatePlayButtonVisibility();
+            updateMuteButtonVisibility(); // Call for initial state if mute button exists
+
+            // Click listener for the play button
+            playButtonElement.addEventListener('click', (e) => {
+                e.stopPropagation(); // Prevent clicks from bubbling up to parents
+
+                if (videoElement.paused || videoElement.ended) {
+                    videoElement.play().then(() => {
+                        updatePlayButtonVisibility(); // Hide button on play
+                    }).catch(error => {
+                        console.error('Video play failed on click:', error);
+                        updatePlayButtonVisibility(); // Show button if play fails
+                    });
+                } else {
+                    videoElement.pause();
+                    updatePlayButtonVisibility(); // Show button on pause
+                }
+            });
+
+            // Click listener for the video itself (to toggle play/pause)
+            // This is separate from the button click, allowing click anywhere on video to toggle
+            videoElement.addEventListener('click', () => {
+                if (videoElement.paused) {
+                    videoElement.play().catch(error => {
+                        console.error('Video play failed on video click:', error);
+                    });
+                } else {
+                    videoElement.pause();
+                }
+            });
+
+            // Click listener for the mute button (only if it exists)
+            if (muteButtonElement) {
+                muteButtonElement.addEventListener('click', (e) => {
+                    e.stopPropagation(); // Prevent clicks from bubbling up
+                    videoElement.muted = !videoElement.muted; // Toggle muted state
+                    updateMuteButtonVisibility(); // Update icons
+                });
+            }
+
+            // Listen for video events to update button states
+            videoElement.addEventListener('play', updatePlayButtonVisibility);
+            videoElement.addEventListener('pause', updatePlayButtonVisibility);
+            videoElement.addEventListener('ended', updatePlayButtonVisibility);
+        };
+
+        // Setup controls for Selected Prototype Video (Panel 30)
+        setupVideoPlayerControls(
+            document.getElementById('selectedPrototypeVideo'),
+            document.getElementById('selectedPrototypePlayButton')
+        );
+
+        // Setup controls for Educate Video (Panel 39)
+        setupVideoPlayerControls(
+            document.getElementById('educateVideo'),
+            document.getElementById('educateVideoPlayButton'),
+            // Passed null for mute-related elements as per request
+            null, null, null
+        );
+
+
+        // Overlay functionality (About this case study)
+        const aboutCaseStudyText = document.getElementById('aboutCaseStudyText');
+        const overlay = document.getElementById('overlay');
+
+        // Function to toggle overlay visibility
+        function toggleOverlay() {
+            overlay.classList.toggle('active');
+        }
+
+        // Event listener to open overlay when text is clicked
+        if (aboutCaseStudyText) {
+            aboutCaseStudyText.addEventListener('click', toggleOverlay);
+        }
+
+        // Event listener to close overlay when the overlay itself is clicked (anywhere)
+        if (overlay) {
+            overlay.addEventListener('click', toggleOverlay);
+        }
+
+        // --- Panel Animation Logic ---
+        const panelsToAnimate = document.querySelectorAll('.panel-hidden'); // Select all panels with this class
+
+        const panelObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // Add the class to trigger animation
+                    entry.target.classList.add('panel-visible');
+                    // Stop observing once the animation is triggered
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.2 // Trigger when 20% of the panel is visible
+        });
+
+        // Observe each panel
+        panelsToAnimate.forEach(panel => {
+            panelObserver.observe(panel);
+        });
+    </script>
+</body>
+</html>
