@@ -725,38 +725,42 @@
                 // Check if it's a case study link by looking for the data-original-href attribute
                 const isCaseStudyLink = wrapper.tagName === 'A' && wrapper.hasAttribute('data-original-href');
 
-                // Info icon and mute button clicks should stop propagation to prevent interference with parent elements.
-                if (infoIcon) {
-                    infoIcon.addEventListener('click', (e) => {
-                        e.stopPropagation(); // Prevent the click from bubbling up to the wrapper's <a> tag
+                // Add a general click listener to the wrapper to handle navigation and button clicks
+                if (isCaseStudyLink) {
+                    wrapper.addEventListener('click', (e) => {
+                        // If the click target is the info icon or the mute button, prevent default navigation
+                        // This applies only on non-touch devices where these buttons are interactive.
+                        if (!isTouchDevice() && ((infoIcon && infoIcon.contains(e.target)) || (muteButton && muteButton.contains(e.target)))) {
+                            e.preventDefault(); // Prevent the <a> tag from navigating
+                            e.stopPropagation(); // Stop the event from bubbling further
+                        } else if (isTouchDevice() && infoIcon && infoIcon.contains(e.target)) {
+                            // On touch, if info icon is clicked, prevent navigation and handle overlay toggle
+                            e.preventDefault(); 
+                            e.stopPropagation();
 
-                        if (isTouchDevice()) {
-                            // Toggle the overlay-active class on the parent wrapper
                             const currentlyActive = wrapper.classList.contains('overlay-active');
-
-                            // Close all other active overlays first
                             miscImageWrappers.forEach(otherWrapper => {
                                 if (otherWrapper.classList.contains('overlay-active')) {
                                     otherWrapper.classList.remove('overlay-active');
-                                    const otherInfoIcon = otherWrapper.querySelector('.info-icon');
-                                    // Ensure info icon is visible when another overlay is closed
-                                    if (otherInfoIcon) otherInfoIcon.classList.remove('hidden'); 
                                 }
                             });
-
-                            // If this wrapper was not active, activate it
                             if (!currentlyActive) {
                                 wrapper.classList.add('overlay-active');
-                                // The info icon is no longer hidden on mobile when overlay is active
-                            } else {
-                                // If it was active, it's already closed by the loop above, just ensure icon is visible
-                                infoIcon.classList.remove('hidden');
                             }
+                        } else {
+                            // For other clicks within the wrapper (or if on touch and not clicking info icon),
+                            // store scroll position and allow default navigation.
+                            sessionStorage.setItem('lastVisitedPanelId', wrapper.id);
+                            sessionStorage.setItem('lastScrollY', window.scrollY);
+                            // Do not prevent default here, allow the <a> tag to navigate
                         }
                     });
+                }
 
-                    // Add desktop hover listeners ONLY if not a touch device
-                    if (!isTouchDevice()) {
+
+                // Add desktop hover listeners ONLY if not a touch device
+                if (!isTouchDevice()) {
+                    if (infoIcon) {
                         infoIcon.addEventListener('mouseenter', () => {
                             wrapper.classList.add('hover-active');
                         });
@@ -764,21 +768,7 @@
                             wrapper.classList.remove('hover-active');
                         });
                     }
-                }
-                if (muteButton) { 
-                    muteButton.addEventListener('click', (e) => {
-                        e.stopPropagation(); 
-                    });
-                }
-
-                // Store the ID of the current panel and scroll position in sessionStorage before navigation
-                if (isCaseStudyLink) {
-                    wrapper.addEventListener('mousedown', () => { // Use mousedown to capture scroll before navigation
-                        sessionStorage.setItem('lastVisitedPanelId', wrapper.id);
-                        sessionStorage.setItem('lastScrollY', window.scrollY); // Store current scroll position
-                    });
-                    // No need to preventDefault or manually set window.location.href here.
-                    // Let the browser handle the native <a> tag navigation.
+                    // Mute button hover effects are handled by CSS based on parent .hover-active
                 }
             });
 
@@ -790,10 +780,10 @@
                 const volumeOffIcon = document.getElementById(volumeOffId);
 
                 if (muteToggleButton && videoElement) {
-                    // On mobile, always muted, no toggle
+                    // Check if it's a touch device
                     if (isTouchDevice()) {
-                         videoElement.muted = true; // Ensure muted
-                         if (muteToggleButton) muteToggleButton.style.display = 'none'; // Hide mute button
+                         videoElement.muted = true; // Ensure video is muted on touch devices
+                         if (muteToggleButton) muteToggleButton.style.display = 'none'; // Hide mute button on touch devices
                     } else {
                         // Desktop mute/unmute logic
                         muteToggleButton.addEventListener('click', () => {
@@ -807,6 +797,14 @@
                                 if (volumeOffIcon) volumeOffIcon.classList.add('hidden');
                             }
                         });
+                        // Set initial icon state for desktop based on video's muted property
+                        if (videoElement.muted) {
+                            if (volumeOnIcon) volumeOnIcon.classList.add('hidden');
+                            if (volumeOffIcon) volumeOffIcon.classList.remove('hidden');
+                        } else {
+                            if (volumeOnIcon) volumeOnIcon.classList.remove('hidden');
+                            if (volumeOffIcon) volumeOffIcon.classList.add('hidden');
+                        }
                     }
                 }
             };
