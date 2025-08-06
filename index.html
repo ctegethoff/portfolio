@@ -354,6 +354,79 @@
         .misc-image-wrapper.the-end-graphic {
             background-color: #ffffff; /* Pure white background */
         }
+
+        /* New styles for the About Me Modal - Desktop Only */
+        @media (min-width: 768px) {
+            .about-me-modal-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.8); /* Darker overlay */
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 1000; /* Ensure it's on top of everything */
+                opacity: 0;
+                pointer-events: none; /* Hidden by default */
+                transition: opacity 0.3s ease;
+            }
+
+            .about-me-modal-overlay.active {
+                opacity: 1;
+                pointer-events: auto;
+            }
+
+            .about-me-modal-content {
+                background-color: #1a1a1a; /* Dark background for content */
+                color: white;
+                padding: 40px;
+                border-radius: 12px;
+                max-width: 700px; /* Max width for readability */
+                max-height: 90vh; /* Max height to allow scrolling on smaller desktops */
+                overflow-y: auto; /* Enable vertical scrolling */
+                position: relative;
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+                display: flex;
+                flex-direction: column;
+                align-items: center; /* Center content horizontally */
+                font-size: 1.1rem; /* Slightly larger text */
+                line-height: 1.6;
+                text-align: center; /* Center the text */
+            }
+
+            .about-me-modal-content img {
+                width: 150px; /* Profile image size */
+                height: 150px;
+                border-radius: 50%; /* Circular image */
+                object-fit: cover;
+                margin-bottom: 20px;
+                border: 3px solid #666; /* Subtle border */
+            }
+
+            .about-me-modal-content p {
+                text-align: left; /* Align the main text to the left for readability */
+                margin-bottom: 20px;
+            }
+
+            .about-me-modal-close-button {
+                position: absolute;
+                top: 15px;
+                right: 15px;
+                background: none;
+                border: none;
+                color: #aaa;
+                font-size: 2rem;
+                cursor: pointer;
+                padding: 5px;
+                transition: color 0.2s ease;
+            }
+
+            .about-me-modal-close-button:hover {
+                color: white;
+            }
+        }
     </style>
 </head>
 <body>
@@ -364,8 +437,8 @@
             <!-- Added px-4 for padding on smaller screens -->
             <div class="max-w-5xl mx-auto h-full flex items-center justify-between px-4">
                 <!-- Name and Title on the left -->
-                <!-- The "• Designer" part is now hidden on small screens -->
-                <span class="text-white text-2xl font-montserrat font-normal">Chris Tegethoff <span class="hidden md:inline">&bull; Designer</span></span>
+                <!-- Added ID and cursor-pointer for the new modal functionality -->
+                <span id="header-name-link" class="text-white text-2xl font-montserrat font-normal cursor-pointer">Chris Tegethoff <span class="hidden md:inline">&bull; Designer</span></span>
                 <!-- Resume link on the right -->
                 <a href="https://drive.google.com/file/d/1bOVBcVUzmDVa5FMh-eLXwv2CFx6ZV5Tc/view?usp=sharing" target="_blank" class="text-white text-2xl font-montserrat font-normal hover:opacity-75 transition-opacity">Resume</a>
             </div>
@@ -642,6 +715,19 @@
             </div>
         </main>
     </div>
+
+    <!-- About Me Modal Overlay (Desktop Only) -->
+    <div id="about-me-modal-overlay" class="about-me-modal-overlay">
+        <div class="about-me-modal-content">
+            <button id="about-me-modal-close-button" class="about-me-modal-close-button">&times;</button>
+            <img src="https://res.cloudinary.com/dr66vguof/image/upload/v1754503362/profile_chris_tegethoff_rjrjoe.webp" alt="Chris Tegethoff Profile" class="profile-image">
+            <p>I never planned to be a UX designer. Years ago, I was finishing a Bachelor of Science in Industrial Design at The Ohio State University when everything shifted during a solo trip through Europe.</p>
+            <p>With no idea where I was, no money, no phone, and no way to speak the language, I sat on a bench in a train station and people watched to kill time. Trains arrived and departed. People came and went. The longer I observed, the more patterns emerged. I started to feel like I could step into other people's perspectives, which felt strangely powerful and exciting.</p>
+            <p>That was when the idea for my senior thesis finally clicked. The project itself isn’t important, but it combined a user interface with a physical product. NCR saw past my average industrial design skills and brought me onto a small team as one of their first UI designers, working on early multimodal interactions. I didn’t even know what a UI designer was. That’s how I stumbled into UX.</p>
+            <p>Since then, I’ve built a career, or really multiple careers, designing clear, user focused experiences across TV, desktop, mobile, and emerging platforms. I’ve worked with innovation teams at Google, Microsoft, Intel, Nike, and NCR to turn complex technology into products people can actually use.</p>
+            <p>I’m drawn to clarity, structure, and the messy middle where problems live. Whether working independently or on a team, I lead with curiosity, rely on research, and keep the user at the center of everything I build.</p>
+        </div>
+    </div>
     
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -728,31 +814,39 @@
                 // Add a general click listener to the wrapper to handle navigation and button clicks
                 if (isCaseStudyLink) {
                     wrapper.addEventListener('click', (e) => {
-                        // If the click target is the info icon or the mute button, prevent default navigation
-                        // This applies only on non-touch devices where these buttons are interactive.
-                        if (!isTouchDevice() && ((infoIcon && infoIcon.contains(e.target)) || (muteButton && muteButton.contains(e.target)))) {
-                            e.preventDefault(); // Prevent the <a> tag from navigating
-                            e.stopPropagation(); // Stop the event from bubbling further
-                        } else if (isTouchDevice() && infoIcon && infoIcon.contains(e.target)) {
-                            // On touch, if info icon is clicked, prevent navigation and handle overlay toggle
-                            e.preventDefault(); 
-                            e.stopPropagation();
-
-                            const currentlyActive = wrapper.classList.contains('overlay-active');
-                            miscImageWrappers.forEach(otherWrapper => {
-                                if (otherWrapper.classList.contains('overlay-active')) {
-                                    otherWrapper.classList.remove('overlay-active');
-                                }
-                            });
-                            if (!currentlyActive) {
-                                wrapper.classList.add('overlay-active');
+                        // Handle desktop-specific click interactions
+                        if (!isTouchDevice()) {
+                            // If the click is on the info icon or mute button, prevent the parent link from navigating
+                            if ((infoIcon && infoIcon.contains(e.target)) || (muteButton && muteButton.contains(e.target))) {
+                                e.preventDefault();
+                                e.stopPropagation();
+                            } else {
+                                // For all other clicks on the wrapper, store the scroll position and allow navigation
+                                sessionStorage.setItem('lastVisitedPanelId', wrapper.id);
+                                sessionStorage.setItem('lastScrollY', window.scrollY);
+                                // Allow the default <a> navigation to proceed
                             }
                         } else {
-                            // For other clicks within the wrapper (or if on touch and not clicking info icon),
-                            // store scroll position and allow default navigation.
-                            sessionStorage.setItem('lastVisitedPanelId', wrapper.id);
-                            sessionStorage.setItem('lastScrollY', window.scrollY);
-                            // Do not prevent default here, allow the <a> tag to navigate
+                            // Touch device logic remains the same
+                            if (infoIcon && infoIcon.contains(e.target)) {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                // Toggle overlay logic
+                                const currentlyActive = wrapper.classList.contains('overlay-active');
+                                miscImageWrappers.forEach(otherWrapper => {
+                                    if (otherWrapper.classList.contains('overlay-active')) {
+                                        otherWrapper.classList.remove('overlay-active');
+                                    }
+                                });
+                                if (!currentlyActive) {
+                                    wrapper.classList.add('overlay-active');
+                                }
+                            } else {
+                                // For other clicks on touch, navigate
+                                sessionStorage.setItem('lastVisitedPanelId', wrapper.id);
+                                sessionStorage.setItem('lastScrollY', window.scrollY);
+                                // Allow the default <a> navigation to proceed
+                            }
                         }
                     });
                 }
@@ -840,7 +934,7 @@
                     } else {
                         playIcon.classList.add('hidden');
                         pauseIcon.classList.remove('hidden');
-                        playPauseButton.classList.add('hidden-on-play'); // Hide button if already playing (e.g. autoplay worked)
+                        playPauseButton.classList.add('hidden-on-on-play'); // Hide button if already playing (e.g. autoplay worked)
                     }
                     
                     // Add click listener to the play/pause button
@@ -890,6 +984,33 @@
             setupVideoPlayPause('rokuOsVideo', 'playPauseButtonRokuOs', 'playIconRokuOs', 'pauseIconRokuOs');
             // Setup play/pause for Settings Over Video
             setupVideoPlayPause('settingsOverVideo', 'playPauseButtonSettings', 'playIconSettings', 'pauseIconSettings');
+
+
+            // About Me Modal Logic (Desktop Only)
+            const headerNameLink = document.getElementById('header-name-link');
+            const aboutMeModalOverlay = document.getElementById('about-me-modal-overlay');
+            const aboutMeModalCloseButton = document.getElementById('about-me-modal-close-button');
+            const aboutMeModalContent = document.querySelector('.about-me-modal-content');
+
+
+            if (headerNameLink && aboutMeModalOverlay && aboutMeModalCloseButton && !isTouchDevice()) {
+                // Open modal when header name is clicked
+                headerNameLink.addEventListener('click', () => {
+                    aboutMeModalOverlay.classList.add('active');
+                });
+
+                // Close modal when close button is clicked
+                aboutMeModalCloseButton.addEventListener('click', () => {
+                    aboutMeModalOverlay.classList.remove('active');
+                });
+
+                // Close modal when clicking outside the content area
+                aboutMeModalOverlay.addEventListener('click', (e) => {
+                    if (!aboutMeModalContent.contains(e.target)) {
+                        aboutMeModalOverlay.classList.remove('active');
+                    }
+                });
+            }
 
 
             // Restore scroll position on initial page load
