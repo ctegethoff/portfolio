@@ -816,12 +816,12 @@
                     wrapper.addEventListener('click', (e) => {
                         // Handle desktop-specific click interactions
                         if (!isTouchDevice()) {
-                            // If the click is on the info icon or mute button, prevent the parent link from navigating
-                            if ((infoIcon && infoIcon.contains(e.target)) || (muteButton && muteButton.contains(e.target))) {
+                            // If the click is on the mute button, prevent the parent link from navigating
+                            if (muteButton && muteButton.contains(e.target)) {
                                 e.preventDefault();
                                 e.stopPropagation();
                             } else {
-                                // For all other clicks on the wrapper, store the scroll position and allow navigation
+                                // For all other clicks on the wrapper (including info icon), store the scroll position and allow navigation
                                 sessionStorage.setItem('lastVisitedPanelId', wrapper.id);
                                 sessionStorage.setItem('lastScrollY', window.scrollY);
                                 // Allow the default <a> navigation to proceed
@@ -934,7 +934,7 @@
                     } else {
                         playIcon.classList.add('hidden');
                         pauseIcon.classList.remove('hidden');
-                        playPauseButton.classList.add('hidden-on-on-play'); // Hide button if already playing (e.g. autoplay worked)
+                        playPauseButton.classList.add('hidden-on-play'); // Hide button if already playing (e.g. autoplay worked)
                     }
                     
                     // Add click listener to the play/pause button
