@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Case Study: AI Conversational Design</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Montserrat -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+        }
+        .container-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 0;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+            padding-left: 2rem;
+            padding-right: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .container-layout {
+                grid-template-columns: 1fr;
+            }
+            .container-layout > div {
+                border-left: none !important;
+                padding-left: 0 !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-white min-h-screen text-gray-800">
+
+    <!-- Top Cap Header -->
+    <header class="sticky top-0 h-20 w-full bg-black z-50">
+        <div class="max-w-[1200px] mx-auto h-full flex items-center px-8 md:px-16">
+            <a href="index.html" class="text-white hover:opacity-75 transition-opacity" aria-label="Back to Home">
+                <svg width="26" height="52" viewBox="0 0 26 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M25 51L1 26L25 1" stroke="currentColor" stroke-width="2"/>
+                </svg>
+            </a>
+        </div>
+    </header>
+
+    <!-- Top Header Metadata Section -->
+    <div class="container-layout">
+        <!-- Section Title -->
+        <div class="col-span-1 pr-8 py-2">
+            <h1 class="text-6xl font-thin leading-tight mb-8">
+                AI <br> Conversational <br> Design
+            </h1>
+        </div>
+
+        <!-- My Role(s) -->
+        <div class="col-span-1 py-2 border-l border-gray-200 pl-8 pr-8">
+            <h2 class="text-xl font-medium mb-2">My Role(s)</h2>
+            <ul class="list-disc list-inside text-gray-700 space-y-1">
+                <li>AI Product Strategy</li>
+                <li>Conversational AI Design</li>
+                <li>Cross-functional alignment</li>
+                <li>Research & Validation</li>
+                <li>AI Design System Creation</li>
+            </ul>
+        </div>
+
+        <!-- Key Learning -->
+        <div class="col-span-1 py-2 border-l border-gray-200 pl-8">
+            <h2 class="text-xl font-medium mb-2">Key Learning</h2>
+            <p class="text-gray-700">
+                We learned that conversational AI must match its response to customer intent and perceived risk, knowing when to guide, when to act, and when to simply provide data.
+            </p>
+        </div>
+    </div>
+
+    <!-- Main Content Section: Image & Narrative -->
+    <div class="max-w-[1200px] mx-auto px-4 py-8 grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+        <!-- Main Graphic Asset -->
+        <div class="md:col-span-1 flex justify-center items-center">
+            <img src="https://res.cloudinary.com/dr66vguof/image/upload/v1791144728/Life_sciences_lead_in_Image_d5ye9q.png"
+                 alt="AI Conversational Design - Life Sciences Visualization"
+                 class="max-w-full h-auto"
+                 onerror="this.onerror=null;this.src='https://placehold.co/600x400/cccccc/333333?text=Image+Not+Found'">
+        </div>
+
+        <!-- Text Block Column -->
+        <div class="md:col-span-1 space-y-8">
+            <div>
+                <h2 class="text-2xl font-light mb-2">Context</h2>
+                <p class="text-gray-700">
+                    In life sciences AI is changing the customer expectation from "show me where to go" to "help me get this done."
+                </p>
+            </div>
+            <div>
+                <h2 class="text-2xl font-light mb-2">Problem / Opportunity</h2>
+                <p class="text-gray-700">
+                    Our customers are forced to think in terms of which products do what rather than what they're trying to accomplish, because data, workflows, and capabilities are fragmented across disconnected products, requiring them to repeatedly relearn where to go and how to adapt their workflows to different UX.
+                </p>
+            </div>
+            <div>
+                <h2 class="text-2xl font-light mb-2">Contribution</h2>
+                <p class="text-gray-700">
+                    Led the platform-wide AI UX strategy from vision through execution, unifying the MC suite across products, data, and workflows through a single entry point while consolidating a dozen single-purpose AI experiences into one cohesive orchestration layer. <a href="#" class="text-blue-600 hover:underline">See my process</a>
+                </p>
+            </div>
+            <div>
+                <h2 class="text-2xl font-light mb-2">2nd Order Impact</h2>
+                <p class="text-gray-700">
+                    Built the framework and design system to scale AI across siloed products, shifting from isolated features to a unified system.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Applied UX Laws Section -->
+    <div class="max-w-[1200px] mx-auto px-4 py-8 mt-12">
+        <h2 class="text-6xl font-thin mb-8">Applied UX Laws*</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+            <!-- UX Law 1: Hick's Law -->
+            <div class="flex items-start space-x-4">
+                <img src="https://res.cloudinary.com/dr66vguof/image/upload/v1753033688/sst_UXL_5_f7cpkw.webp"
+                     alt="Hick's Law Icon"
+                     class="w-20 h-20 flex-shrink-0"
+                     onerror="this.onerror=null;this.src='https://placehold.co/80x80/cccccc/333333?text=Icon'">
+                <div class="border-l border-gray-200 pl-4">
+                    <h3 class="text-xl font-medium mb-1">Hick's Law</h3>
+                    <p class="text-gray-700">
+                        The time it takes to make a decision increases with the number and complexity of choices.
+                    </p>
+                </div>
+            </div>
+
+            <!-- UX Law 2: Tesler's Law -->
+            <div class="flex items-start space-x-4">
+                <img src="https://res.cloudinary.com/dr66vguof/image/upload/v1753033687/iot_UXL_12_kouje3.webp"
+                     alt="Tesler's Law Icon"
+                     class="w-20 h-20 flex-shrink-0"
+                     onerror="this.onerror=null;this.src='https://placehold.co/80x80/cccccc/333333?text=Icon'">
+                <div>
+                    <h3 class="text-xl font-medium mb-1">Tesler's Law</h3>
+                    <p class="text-gray-700">
+                        The Law of Conservation of Complexity, states that for any system there is a certain amount of complexity which cannot be reduced.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Credits Section -->
+    <div class="max-w-[1200px] mx-auto px-4 py-8 text-sm text-gray-600 mt-12">
+        <p class="mb-2 font-medium">* Credits</p>
+        <ul class="list-disc list-inside space-y-1">
+            <li>Website - Yablonski, Jon. "Laws of UX." Laws of UX, Jon Yablonski, 2026, <a href="https://lawsofux.com/" class="text-blue-600 hover:underline" target="_blank">lawsofux.com/</a></li>
+            <li>Website - Yablonski, Jon. "Laws of UX." Laws of UX, Jon Yablonski, <a href="https://lawsofux.com/" class="text-blue-600 hover:underline" target="_blank">lawsofux.com/</a>. Accessed 9 Aug 2026.</li>
+        </ul>
+    </div>
+
+</body>
+</html>
